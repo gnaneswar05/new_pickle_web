@@ -4,8 +4,8 @@ import toast from 'react-hot-toast';
 import { Plus, Edit, Trash2, Download, Scale } from 'lucide-react';
 
 export default function AdminProducts() {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState(null);

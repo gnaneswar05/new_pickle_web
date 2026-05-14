@@ -7,8 +7,8 @@ import { useSearchParams } from 'next/navigation';
 import { ShoppingBasket, Star, ShieldCheck, Clock } from 'lucide-react';
 
 function ProductsContent() {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const category = searchParams.get('category');

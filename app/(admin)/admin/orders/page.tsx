@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { Download, ShoppingBag, Calendar, Truck, ChevronRight, Search, X, Package, CheckCircle2, Lock, ReceiptText, MapPin, Phone, Mail, User } from 'lucide-react';
 
 export default function AdminOrders() {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showShipModal, setShowShipModal] = useState(false);

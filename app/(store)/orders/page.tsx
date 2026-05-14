@@ -8,7 +8,7 @@ import Link from 'next/link';
 export default function CustomerOrders() {
   const { user } = useAuthStore();
   const router = useRouter();
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

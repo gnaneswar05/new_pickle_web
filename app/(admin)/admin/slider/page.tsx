@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { Plus, Trash2 } from 'lucide-react';
 
 export default function AdminSlider() {
-  const [sliders, setSliders] = useState([]);
+  const [sliders, setSliders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ title: '', subtitle: '', image: '', link: '' });
   const [showModal, setShowModal] = useState(false);

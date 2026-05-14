@@ -5,9 +5,9 @@ import { useCartStore } from '@/lib/store';
 import toast from 'react-hot-toast';
 
 export default function Home() {
-  const [sliders, setSliders] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [topSelling, setTopSelling] = useState([]);
+  const [sliders, setSliders] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [topSelling, setTopSelling] = useState<any[]>([]);
   const addItem = useCartStore((state) => state.addItem);
 
   useEffect(() => {

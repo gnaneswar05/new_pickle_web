@@ -4,7 +4,7 @@ import { Search, Download, User as UserIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function AdminCustomers() {
-  const [customers, setCustomers] = useState([]);
+  const [customers, setCustomers] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 

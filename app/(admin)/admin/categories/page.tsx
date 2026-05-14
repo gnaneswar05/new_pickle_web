@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { Plus, Trash2 } from 'lucide-react';
 
 export default function AdminCategories() {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ name: '', image: '', icon: '' });
   const [showModal, setShowModal] = useState(false);

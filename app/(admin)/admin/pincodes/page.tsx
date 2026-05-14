@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { Plus, Trash2, MapPin, X, Info } from 'lucide-react';
 
 export default function AdminPincodes() {
-  const [pincodes, setPincodes] = useState([]);
+  const [pincodes, setPincodes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ code: '', city: '', deliveryCharge: '' });
   const [showModal, setShowModal] = useState(false);

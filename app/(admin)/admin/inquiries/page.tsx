@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { MessageSquare, User, Phone, Mail, Clock } from 'lucide-react';
 
 export default function AdminInquiries() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
