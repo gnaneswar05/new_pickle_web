@@ -1,13 +1,41 @@
 'use client';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Upload } from 'lucide-react';
 
 export default function AdminCategories() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ name: '', image: '', icon: '' });
   const [showModal, setShowModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setForm({ ...form, image: data.url });
+        toast.success('Image uploaded');
+      } else {
+        toast.error(data.error || 'Upload failed');
+      }
+    } catch (error) {
+      toast.error('Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const fetchCategories = () => {
     fetch('/api/categories')
@@ -70,9 +98,20 @@ export default function AdminCategories() {
           <div className="card" style={{ width: '100%', maxWidth: '400px', margin: '20px' }}>
             <h2 className="text-2xl mb-4">Add Category</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <input required className="input" placeholder="Name (e.g. Mango)" value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
-              <input required className="input" placeholder="Icon (e.g. 🥭)" value={form.icon} onChange={e => setForm({...form, icon: e.target.value})} />
-              <input required className="input" placeholder="Image URL" value={form.image} onChange={e => setForm({...form, image: e.target.value})} />
+              <input required className="input" placeholder="Name (e.g. Mango)" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+              <input required className="input" placeholder="Icon (e.g. 🥭)" value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} />
+
+              <div className="space-y-1">
+                <div className="flex gap-2">
+                  <input className="input w-full" placeholder="Image URL" value={form.image} onChange={e => setForm({ ...form, image: e.target.value })} />
+                  <label className="btn btn-outline cursor-pointer flex items-center justify-center shrink-0" style={{ padding: '0 1rem' }}>
+                    <Upload size={18} />
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                  </label>
+                </div>
+                {uploading && <p className="text-xs text-blue-500">Uploading...</p>}
+                {form.image && <img src={form.image} alt="Preview" className="mt-2 w-16 h-16 object-cover rounded" />}
+              </div>
               <div className="flex justify-end gap-4">
                 <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Save</button>

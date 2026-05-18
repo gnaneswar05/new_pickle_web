@@ -9,7 +9,8 @@ import {
   Save, 
   Globe,
   ImageIcon,
-  Type
+  Type,
+  Upload
 } from 'lucide-react';
 
 export default function AdminSettings() {
@@ -22,6 +23,34 @@ export default function AdminSettings() {
     defaultProductImage: '',
     topBannerText: 'Authentic Godavari Heritage • Global Shipping Available'
   });
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setForm({ ...form, defaultProductImage: data.url });
+        toast.success('Image uploaded');
+      } else {
+        toast.error(data.error || 'Upload failed');
+      }
+    } catch (error) {
+      toast.error('Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   useEffect(() => {
     fetch('/api/settings').then(res => res.json()).then(data => {
@@ -175,7 +204,14 @@ export default function AdminSettings() {
 
               <div className="input-group">
                 <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Globe size={16} /> Default Product Image</label>
-                <input className="custom-input" value={form.defaultProductImage} onChange={e => setForm({...form, defaultProductImage: e.target.value})} placeholder="https://..." />
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <input className="custom-input" value={form.defaultProductImage} onChange={e => setForm({...form, defaultProductImage: e.target.value})} placeholder="https://..." />
+                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', border: '2px solid #e2e8f0', padding: '0 15px', borderRadius: '16px', cursor: 'pointer', color: '#64748b', transition: '0.2s' }} onMouseOver={e => e.currentTarget.style.borderColor = '#059669'} onMouseOut={e => e.currentTarget.style.borderColor = '#e2e8f0'}>
+                    <Upload size={20} />
+                    <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
+                  </label>
+                </div>
+                {uploading && <p style={{ fontSize: '0.75rem', color: '#3b82f6', marginTop: '5px' }}>Uploading...</p>}
                 {form.defaultProductImage && <img src={form.defaultProductImage} alt="Preview" style={{ marginTop: '15px', width: '120px', height: '120px', objectFit: 'cover', borderRadius: '16px', border: '1px solid #f1f5f9' }} />}
               </div>
               

@@ -13,7 +13,7 @@ export default function AddMoneyPage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch('/api/settings').then(res => res.json()).then(data => setRazorpayKeyId(data.razorpayKeyId));
+    fetch('/api/settings').then(res => res.json()).then(data => setRazorpayKeyId(data.razorpayKeyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || ''));
   }, []);
 
   if (!user) return null;
@@ -103,24 +103,24 @@ export default function AddMoneyPage() {
             <label className="block text-sm font-bold text-slate-600 mb-2">Amount to Add (₹)</label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">₹</span>
-              <input 
-                required 
-                type="number" 
+              <input
+                required
+                type="number"
                 min="10"
-                className="input pl-8" 
+                className="input pl-8"
                 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}
-                placeholder="0.00" 
-                value={amount} 
-                onChange={(e) => setAmount(e.target.value)} 
+                placeholder="0.00"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
               />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3">
             {[100, 500, 1000].map(val => (
-              <button 
-                key={val} 
-                type="button" 
-                onClick={() => setAmount(val.toString())} 
+              <button
+                key={val}
+                type="button"
+                onClick={() => setAmount(val.toString())}
                 className="p-3 rounded-xl border-2 border-slate-100 hover:border-emerald-500 hover:bg-emerald-50 transition-all font-bold text-slate-600"
               >
                 +₹{val}

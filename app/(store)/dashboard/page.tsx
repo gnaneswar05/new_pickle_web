@@ -25,13 +25,25 @@ export default function UserDashboard() {
     } catch (e) { console.error(e); }
   };
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      const timer = setTimeout(() => {
+        const currentUser = useAuthStore.getState().user;
+        if (!currentUser) {
+          router.push('/login');
+          return;
+        }
+        fetchBalance();
+      }, 100);
+      return () => clearTimeout(timer);
     }
-    fetchBalance();
-  }, [user, router]);
+  }, [mounted, router]);
 
   const handleAddFunds = async () => {
     if (!addAmount || isNaN(Number(addAmount)) || Number(addAmount) <= 0) {
@@ -52,7 +64,7 @@ export default function UserDashboard() {
       const settings = await settingsRes.json();
 
       const options = {
-        key: settings.razorpayKeyId || "rzp_test_zHwXkL3v9v9v9v",
+        key: settings.razorpayKeyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_zHwXkL3v9v9v9v",
         amount: order.amount,
         currency: "INR",
         name: "Kanvi Wallet",

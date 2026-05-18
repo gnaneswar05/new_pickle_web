@@ -11,18 +11,34 @@ export default function CustomerOrders() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      const timer = setTimeout(() => {
+        const currentUser = useAuthStore.getState().user;
+        if (!currentUser) {
+          router.push('/login');
+        }
+      }, 100);
+      return () => clearTimeout(timer);
     }
-    fetch(`/api/orders?userId=${user.id}`)
-      .then(res => res.json())
-      .then(data => {
-        setOrders(data);
-        setLoading(false);
-      });
-  }, [user, router]);
+  }, [mounted, router]);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetch(`/api/orders?userId=${user.id}`)
+        .then(res => res.json())
+        .then(data => {
+          setOrders(data);
+          setLoading(false);
+        });
+    }
+  }, [user]);
 
   if (!user) return null;
 

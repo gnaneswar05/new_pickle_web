@@ -18,7 +18,7 @@ export default function CheckoutPage() {
   const [useWallet, setUseWallet] = useState(false);
   const [isServiceable, setIsServiceable] = useState(false);
   const [cityName, setCityName] = useState('');
-  
+
   const [form, setForm] = useState({
     customerName: '',
     email: '',
@@ -26,13 +26,19 @@ export default function CheckoutPage() {
     address: ''
   });
 
-  const [taxSettings, setTaxSettings] = useState({ 
+  const [taxSettings, setTaxSettings] = useState({
     cgst: 0, sgst: 0, igst: 0, platformFee: 0, maxCodAmount: 2000,
     razorpayKeyId: '', razorpayKeySecret: '',
     isCodEnabled: true, isRazorpayEnabled: true
   });
   const [paymentMethod, setPaymentMethod] = useState('');
   const [walletBalance, setWalletBalance] = useState(0);
+
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // PRE-FILL USER PHONE
   useEffect(() => {
@@ -42,10 +48,17 @@ export default function CheckoutPage() {
   }, [user]);
 
   useEffect(() => {
-    if (!user && typeof window !== 'undefined') {
-      router.push('/login');
+    if (mounted && typeof window !== 'undefined') {
+      // Small delay to ensure Zustand persist has fully hydrated
+      const timer = setTimeout(() => {
+        const currentUser = useAuthStore.getState().user;
+        if (!currentUser) {
+          router.push('/login');
+        }
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [user, router]);
+  }, [mounted, router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,12 +71,12 @@ export default function CheckoutPage() {
           igst: Number(data.igst) || 0,
           platformFee: Number(data.platformFee) || 0,
           maxCodAmount: Number(data.maxCodAmount) || 2000,
-          razorpayKeyId: data.razorpayKeyId || '',
+          razorpayKeyId: data.razorpayKeyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
           razorpayKeySecret: data.razorpayKeySecret || '',
           isCodEnabled: data.isCodEnabled ?? true,
           isRazorpayEnabled: data.isRazorpayEnabled ?? true
         });
-        
+
         if (data.isRazorpayEnabled) setPaymentMethod('Razorpay');
         else if (data.isCodEnabled) setPaymentMethod('COD');
         else setPaymentMethod('Wallet');
@@ -124,7 +137,7 @@ export default function CheckoutPage() {
       });
       const order = await res.json();
       if (order.error) throw new Error(order.error);
-      
+
       const options = {
         key: taxSettings.razorpayKeyId,
         amount: order.amount,
@@ -133,16 +146,16 @@ export default function CheckoutPage() {
         description: "Order Checkout",
         order_id: order.id,
         handler: async function (response: any) {
-          submitOrder(finalPayable === 0 ? 'Wallet' : `Wallet + Razorpay`, response.razorpay_payment_id);
+          submitOrder(useWallet ? 'Wallet + Razorpay' : 'Razorpay', response.razorpay_payment_id);
         },
         prefill: { name: form.customerName, email: form.email, contact: form.phone },
         theme: { color: "#059669" },
       };
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
-    } catch (err: any) { 
-      toast.error(err.message || "Payment gateway error"); 
-      setLoading(false); 
+    } catch (err: any) {
+      toast.error(err.message || "Payment gateway error");
+      setLoading(false);
     }
   };
 
@@ -202,7 +215,7 @@ export default function CheckoutPage() {
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" onLoad={() => setIsRazorpayLoaded(true)} />
-      
+
       <div style={{ marginBottom: '60px' }}>
         <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif' }}>
           Secure <span style={{ color: '#059669' }}>Checkout</span>
@@ -211,7 +224,7 @@ export default function CheckoutPage() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '50px', alignItems: 'flex-start' }}>
-        
+
         {/* Delivery Form */}
         <div style={{ background: 'white', padding: '50px', borderRadius: '48px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
           <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '40px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -222,18 +235,18 @@ export default function CheckoutPage() {
               <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Full Name</label>
               <div style={{ position: 'relative' }}>
                 <UserIcon size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#cbd5e1' }} />
-                <input required style={{ width: '100%', padding: '16px 16px 16px 45px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none', transition: '0.2s' }} value={form.customerName} onChange={e => setForm({...form, customerName: e.target.value})} placeholder="Who is receiving?" />
+                <input required style={{ width: '100%', padding: '16px 16px 16px 45px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none', transition: '0.2s' }} value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })} placeholder="Who is receiving?" />
               </div>
             </div>
-            
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Email</label>
-                <input required type="email" style={{ padding: '16px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none' }} value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="order@example.com" />
+                <input required type="email" style={{ padding: '16px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none' }} value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="order@example.com" />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Phone</label>
-                <input required style={{ padding: '16px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none' }} value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} placeholder="Mobile No." />
+                <input required style={{ padding: '16px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none' }} value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="Mobile No." />
               </div>
             </div>
 
@@ -252,14 +265,14 @@ export default function CheckoutPage() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Detailed Address</label>
-              <textarea required style={{ padding: '18px', borderRadius: '20px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none', minHeight: '120px', resize: 'none', lineHeight: 1.6 }} value={form.address} onChange={e => setForm({...form, address: e.target.value})} placeholder="Street name, Landmark, House details..." />
+              <textarea required style={{ padding: '18px', borderRadius: '20px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none', minHeight: '120px', resize: 'none', lineHeight: 1.6 }} value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} placeholder="Street name, Landmark, House details..." />
             </div>
           </form>
         </div>
 
         {/* Totals & Payments */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-          
+
           {walletBalance > 0 && (
             <div style={{ background: '#f0fdf4', padding: '30px', borderRadius: '32px', border: '2px solid #d1fae5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 10px 15px -3px rgba(5, 150, 105, 0.05)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
@@ -303,7 +316,7 @@ export default function CheckoutPage() {
                 <span>Subtotal</span>
                 <span style={{ color: 'white', fontWeight: '700' }}>₹{subtotal.toFixed(2)}</span>
               </div>
-              
+
               {deliveryCharge > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.95rem' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Truck size={16} /> Heritage Shipping {cityName && `(${cityName})`}</span>
