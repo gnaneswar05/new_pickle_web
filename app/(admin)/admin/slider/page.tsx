@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Upload } from 'lucide-react';
+import { Plus, Trash2, Edit2, Upload } from 'lucide-react';
 
 export default function AdminSlider() {
   const [sliders, setSliders] = useState<any[]>([]);
@@ -9,6 +9,7 @@ export default function AdminSlider() {
   const [form, setForm] = useState({ title: '', subtitle: '', image: '', link: '' });
   const [showModal, setShowModal] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -45,20 +46,43 @@ export default function AdminSlider() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await fetch('/api/sliders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    });
-    toast.success('Slider added');
-    setShowModal(false);
-    setForm({ title: '', subtitle: '', image: '', link: '' });
+    if (editId) {
+      await fetch(`/api/sliders/${editId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+      toast.success('Slider updated');
+    } else {
+      await fetch('/api/sliders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+      toast.success('Slider added');
+    }
+    closeModal();
     fetchSliders();
   };
 
+  const handleEdit = (slider: any) => {
+    setForm({ title: slider.title || '', subtitle: slider.subtitle || '', image: slider.image || '', link: slider.link || '' });
+    setEditId(slider._id);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setEditId(null);
+    setForm({ title: '', subtitle: '', image: '', link: '' });
+  };
+
   const handleDelete = async (id: string) => {
-    await fetch(`/api/sliders/${id}`, { method: 'DELETE' });
-    fetchSliders();
+    if (confirm('Delete this slider image?')) {
+      await fetch(`/api/sliders/${id}`, { method: 'DELETE' });
+      toast.success('Slider deleted');
+      fetchSliders();
+    }
   };
 
   return (
@@ -75,9 +99,14 @@ export default function AdminSlider() {
           <div key={s._id} className="card">
             <img src={s.image} alt={s.title} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px' }} />
             <h3 className="text-xl font-bold mt-4">{s.title}</h3>
-            <button onClick={() => handleDelete(s._id)} style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', marginTop: '1rem' }}>
-              <Trash2 size={18} />
-            </button>
+            <div style={{ display: 'flex', gap: '15px', marginTop: '1rem' }}>
+              <button onClick={() => handleEdit(s)} style={{ color: '#3b82f6', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Edit2 size={18} /> Edit
+              </button>
+              <button onClick={() => handleDelete(s._id)} style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Trash2 size={18} /> Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -85,7 +114,7 @@ export default function AdminSlider() {
       {showModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
           <div className="card" style={{ width: '100%', maxWidth: '400px', margin: '20px' }}>
-            <h2 className="text-2xl mb-4">Add Slide</h2>
+            <h2 className="text-2xl mb-4">{editId ? 'Edit Slide' : 'Add Slide'}</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <input required className="input" placeholder="Title" value={form.title} onChange={e => setForm({...form, title: e.target.value})} />
               <input className="input" placeholder="Subtitle" value={form.subtitle} onChange={e => setForm({...form, subtitle: e.target.value})} />
@@ -102,8 +131,8 @@ export default function AdminSlider() {
                 {form.image && <img src={form.image} alt="Preview" className="mt-2 w-full h-32 object-cover rounded" />}
               </div>
               <div className="flex justify-end gap-4">
-                <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="btn btn-primary">Save</button>
+                <button type="button" className="btn btn-outline" onClick={closeModal}>Cancel</button>
+                <button type="submit" className="btn btn-primary">{editId ? 'Update' : 'Save'}</button>
               </div>
             </form>
           </div>

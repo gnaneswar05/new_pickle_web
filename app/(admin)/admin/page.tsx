@@ -31,7 +31,7 @@ export default function AdminDashboard() {
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', marginBottom: '60px' }}>
         <div>
           <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-            Business <span style={{ color: '#059669' }}>Overview</span>
+            Business <span style={{ color: '#480D18' }}>Overview</span>
           </h1>
           <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Welcome back, Admin. Here's what's happening today.</p>
         </div>
@@ -46,10 +46,10 @@ export default function AdminDashboard() {
         {/* Revenue Card */}
         <div style={{ background: 'white', padding: '35px', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
-            <div style={{ width: '56px', height: '56px', background: '#ecfdf5', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#059669' }}>
+            <div style={{ width: '56px', height: '56px', background: '#ecfdf5', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#480D18' }}>
               <TrendingUp size={28} />
             </div>
-            <div style={{ background: '#ecfdf5', color: '#059669', height: 'fit-content', padding: '6px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: '900' }}>+12.5%</div>
+            <div style={{ background: '#ecfdf5', color: '#480D18', height: 'fit-content', padding: '6px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: '900' }}>+12.5%</div>
           </div>
           <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Revenue</p>
           <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', margin: '8px 0' }}>₹{stats.revenue.toLocaleString()}</h2>
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
         <div style={{ background: 'white', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
             <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>Recent Activity</h3>
-            <Link href="/admin/orders" style={{ fontSize: '0.85rem', fontWeight: '800', color: '#059669', textDecoration: 'none' }}>View All</Link>
+            <Link href="/admin/orders" style={{ fontSize: '0.85rem', fontWeight: '800', color: '#480D18', textDecoration: 'none' }}>View All</Link>
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
                 <span style={{ fontSize: '0.85rem', fontWeight: '900', color: '#1e293b' }}>92%</span>
               </div>
               <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '99px', overflow: 'hidden' }}>
-                <div style={{ width: '92%', height: '100%', background: '#059669', borderRadius: '99px' }}></div>
+                <div style={{ width: '92%', height: '100%', background: '#480D18', borderRadius: '99px' }}></div>
               </div>
             </div>
 
@@ -145,10 +145,10 @@ export default function AdminDashboard() {
             </div>
 
             <div style={{ marginTop: '10px', background: '#f8fafc', padding: '20px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '15px' }}>
-              <div style={{ width: '40px', height: '40px', background: '#ecfdf5', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#059669' }}>
+              <div style={{ width: '40px', height: '40px', background: '#ecfdf5', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#480D18' }}>
                 <ShieldCheck size={20} />
               </div>
-              <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: '#64748b' }}>Store systems are running at <span style={{ color: '#059669', fontWeight: '900' }}>100% capacity</span>.</p>
+              <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: '#64748b' }}>Store systems are running at <span style={{ color: '#480D18', fontWeight: '900' }}>100% capacity</span>.</p>
             </div>
           </div>
         </div>
@@ -157,3 +157,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

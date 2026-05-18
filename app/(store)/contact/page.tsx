@@ -56,7 +56,7 @@ export default function ContactPage() {
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', fontFamily: 'Inter, sans-serif' }}>
       <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Get in <span style={{ color: '#059669' }}>Touch</span></h1>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Get in <span style={{ color: '#480D18' }}>Touch</span></h1>
         <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '600px', margin: '0 auto' }}>Have a question about our heritage pickles or an order? We are here to help!</p>
       </div>
 
@@ -68,7 +68,7 @@ export default function ContactPage() {
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                <div style={{ width: '56px', height: '56px', background: '#ecfdf5', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#059669' }}>
+                <div style={{ width: '56px', height: '56px', background: '#ecfdf5', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#480D18' }}>
                   <Phone size={24} />
                 </div>
                 <div>
@@ -134,7 +134,7 @@ export default function ContactPage() {
             <div style={{ background: '#f8fafc', padding: '20px', borderRadius: '24px', border: '2px solid #f1f5f9' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '15px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#1e293b', fontWeight: '800' }}>
-                  <ShieldCheck size={18} color="#059669" />
+                  <ShieldCheck size={18} color="#480D18" />
                   <span>Security Verification</span>
                 </div>
                 <button type="button" onClick={generateCaptcha} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', fontWeight: '700' }}>
@@ -142,7 +142,7 @@ export default function ContactPage() {
                 </button>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                <div style={{ fontSize: '1.25rem', fontWeight: '900', color: '#059669', background: 'white', padding: '10px 20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: '900', color: '#480D18', background: 'white', padding: '10px 20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   {captcha.num1} + {captcha.num2} = ?
                 </div>
                 <input 
@@ -165,3 +165,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

@@ -7,11 +7,13 @@ import { useAuthStore } from '@/lib/authStore';
 import Script from 'next/script';
 import { ShieldCheck, Truck, CreditCard, Wallet, MapPin, ShoppingBag, AlertCircle, CheckCircle2, User as UserIcon } from 'lucide-react';
 
+import LoadingLogo from '../components/LoadingLogo';
+
 export default function CheckoutPage() {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const { items, getTotal, clearCart } = useCartStore();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [pincode, setPincode] = useState('');
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
@@ -54,6 +56,8 @@ export default function CheckoutPage() {
         const currentUser = useAuthStore.getState().user;
         if (!currentUser) {
           router.push('/login');
+        } else {
+            setLoading(false);
         }
       }, 100);
       return () => clearTimeout(timer);
@@ -149,7 +153,7 @@ export default function CheckoutPage() {
           submitOrder(useWallet ? 'Wallet + Razorpay' : 'Razorpay', response.razorpay_payment_id);
         },
         prefill: { name: form.customerName, email: form.email, contact: form.phone },
-        theme: { color: "#059669" },
+        theme: { color: "#480D18" },
       };
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
@@ -210,6 +214,8 @@ export default function CheckoutPage() {
     else submitOrder(useWallet ? (finalPayable === 0 ? 'Wallet' : `Wallet + ${paymentMethod}`) : paymentMethod);
   };
 
+  if (!mounted) return null;
+  if (loading) return <LoadingLogo message="Preparing checkout..." />;
   if (!user || items.length === 0) return null;
 
   return (
@@ -218,7 +224,7 @@ export default function CheckoutPage() {
 
       <div style={{ marginBottom: '60px' }}>
         <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif' }}>
-          Secure <span style={{ color: '#059669' }}>Checkout</span>
+          Secure <span style={{ color: '#480D18' }}>Checkout</span>
         </h1>
         <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Finalize your heritage pickle selection.</p>
       </div>
@@ -228,7 +234,7 @@ export default function CheckoutPage() {
         {/* Delivery Form */}
         <div style={{ background: 'white', padding: '50px', borderRadius: '48px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
           <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '40px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <MapPin size={24} color="#059669" /> Delivery Details
+            <MapPin size={24} color="#480D18" /> Delivery Details
           </h3>
           <form id="checkout-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -253,10 +259,10 @@ export default function CheckoutPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Delivery Pincode</label>
               <div style={{ position: 'relative' }}>
-                <input required maxLength={6} style={{ width: '100%', padding: '18px 16px 18px 45px', borderRadius: '18px', border: `2px solid ${pincode.length === 6 ? (isServiceable ? '#059669' : '#ef4444') : '#f1f5f9'}`, background: '#f8fafc', fontWeight: '900', fontSize: '1.2rem', letterSpacing: '0.1em', outline: 'none' }} value={pincode} onChange={e => handlePincodeChange(e.target.value)} placeholder="6 Digit Code" />
+                <input required maxLength={6} style={{ width: '100%', padding: '18px 16px 18px 45px', borderRadius: '18px', border: `2px solid ${pincode.length === 6 ? (isServiceable ? '#480D18' : '#ef4444') : '#f1f5f9'}`, background: '#f8fafc', fontWeight: '900', fontSize: '1.2rem', letterSpacing: '0.1em', outline: 'none' }} value={pincode} onChange={e => handlePincodeChange(e.target.value)} placeholder="6 Digit Code" />
                 <MapPin size={22} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                 {isServiceable && cityName && (
-                  <div style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.8rem', fontWeight: '900', background: '#ecfdf5', padding: '6px 12px', borderRadius: '10px' }}>
+                  <div style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '6px', color: '#480D18', fontSize: '0.8rem', fontWeight: '900', background: '#ecfdf5', padding: '6px 12px', borderRadius: '10px' }}>
                     <CheckCircle2 size={16} /> {cityName}
                   </div>
                 )}
@@ -274,17 +280,17 @@ export default function CheckoutPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
 
           {walletBalance > 0 && (
-            <div style={{ background: '#f0fdf4', padding: '30px', borderRadius: '32px', border: '2px solid #d1fae5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 10px 15px -3px rgba(5, 150, 105, 0.05)' }}>
+            <div style={{ background: '#f0fdf4', padding: '30px', borderRadius: '32px', border: '2px solid #d1fae5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.05)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
                 <div style={{ width: '50px', height: '50px', background: 'white', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-                  <Wallet size={24} color="#059669" />
+                  <Wallet size={24} color="#480D18" />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontWeight: '900', color: '#065f46', fontSize: '1rem' }}>Heritage Wallet</p>
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#059669', fontWeight: '700' }}>Balance: ₹{walletBalance.toFixed(2)}</p>
+                  <p style={{ margin: 0, fontWeight: '900', color: '#2b070d', fontSize: '1rem' }}>Heritage Wallet</p>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#480D18', fontWeight: '700' }}>Balance: ₹{walletBalance.toFixed(2)}</p>
                 </div>
               </div>
-              <input type="checkbox" checked={useWallet} onChange={e => setUseWallet(e.target.checked)} style={{ width: '24px', height: '24px', cursor: 'pointer', accentColor: '#059669' }} />
+              <input type="checkbox" checked={useWallet} onChange={e => setUseWallet(e.target.checked)} style={{ width: '24px', height: '24px', cursor: 'pointer', accentColor: '#480D18' }} />
             </div>
           )}
 
@@ -293,15 +299,15 @@ export default function CheckoutPage() {
               <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '25px' }}>Choose Payment</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {taxSettings.isRazorpayEnabled && (
-                  <div onClick={() => setPaymentMethod('Razorpay')} style={{ padding: '18px', borderRadius: '18px', border: '2px solid', borderColor: paymentMethod === 'Razorpay' ? '#059669' : '#f1f5f9', background: paymentMethod === 'Razorpay' ? '#ecfdf5' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', transition: '0.2s' }}>
-                    <CreditCard size={20} color={paymentMethod === 'Razorpay' ? '#059669' : '#94a3b8'} />
-                    <span style={{ fontWeight: '800', color: paymentMethod === 'Razorpay' ? '#065f46' : '#1e293b' }}>Pay Online Securely</span>
+                  <div onClick={() => setPaymentMethod('Razorpay')} style={{ padding: '18px', borderRadius: '18px', border: '2px solid', borderColor: paymentMethod === 'Razorpay' ? '#480D18' : '#f1f5f9', background: paymentMethod === 'Razorpay' ? '#ecfdf5' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', transition: '0.2s' }}>
+                    <CreditCard size={20} color={paymentMethod === 'Razorpay' ? '#480D18' : '#94a3b8'} />
+                    <span style={{ fontWeight: '800', color: paymentMethod === 'Razorpay' ? '#2b070d' : '#1e293b' }}>Pay Online Securely</span>
                   </div>
                 )}
                 {taxSettings.isCodEnabled && grossTotal <= taxSettings.maxCodAmount && (
-                  <div onClick={() => setPaymentMethod('COD')} style={{ padding: '18px', borderRadius: '18px', border: '2px solid', borderColor: paymentMethod === 'COD' ? '#059669' : '#f1f5f9', background: paymentMethod === 'COD' ? '#ecfdf5' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', transition: '0.2s' }}>
-                    <Truck size={20} color={paymentMethod === 'COD' ? '#059669' : '#94a3b8'} />
-                    <span style={{ fontWeight: '800', color: paymentMethod === 'COD' ? '#065f46' : '#1e293b' }}>Cash on Delivery</span>
+                  <div onClick={() => setPaymentMethod('COD')} style={{ padding: '18px', borderRadius: '18px', border: '2px solid', borderColor: paymentMethod === 'COD' ? '#480D18' : '#f1f5f9', background: paymentMethod === 'COD' ? '#ecfdf5' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', transition: '0.2s' }}>
+                    <Truck size={20} color={paymentMethod === 'COD' ? '#480D18' : '#94a3b8'} />
+                    <span style={{ fontWeight: '800', color: paymentMethod === 'COD' ? '#2b070d' : '#1e293b' }}>Cash on Delivery</span>
                   </div>
                 )}
               </div>
@@ -342,7 +348,7 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <button form="checkout-form" disabled={loading} style={{ width: '100%', background: '#059669', color: 'white', padding: '24px', borderRadius: '24px', border: 'none', fontWeight: '900', fontSize: '1.3rem', cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 15px 30px -10px rgba(5, 150, 105, 0.3)', transition: '0.3s', opacity: loading ? 0.7 : 1 }}>
+            <button form="checkout-form" disabled={loading} style={{ width: '100%', background: '#480D18', color: 'white', padding: '24px', borderRadius: '24px', border: 'none', fontWeight: '900', fontSize: '1.3rem', cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 15px 30px -10px rgba(72, 13, 24, 0.3)', transition: '0.3s', opacity: loading ? 0.7 : 1 }}>
               {loading ? (
                 <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                   <div style={{ width: '20px', height: '20px', border: '3px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}></div> Processing...
@@ -356,3 +362,4 @@ export default function CheckoutPage() {
     </div>
   );
 }
+

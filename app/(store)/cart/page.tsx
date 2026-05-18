@@ -8,7 +8,12 @@ export default function CartPage() {
   const [mounted, setMounted] = useState(false);
   const { items, removeItem, updateQuantity, getTotal } = useCartStore();
 
-  useEffect(() => setMounted(true), []);
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    fetch('/api/settings').then(res => res.json()).then(setSettings);
+  }, []);
 
   if (!mounted) return null;
 
@@ -20,7 +25,7 @@ export default function CartPage() {
         </div>
         <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '16px', fontFamily: 'Playfair Display, serif' }}>Basket is Empty</h1>
         <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '500px', margin: '0 auto 50px', lineHeight: 1.6 }}>Looks like you haven't added any handcrafted pickles to your cart yet. Explore our authentic collection!</p>
-        <Link href="/products" style={{ background: '#059669', color: 'white', padding: '20px 40px', borderRadius: '20px', textDecoration: 'none', fontWeight: '800', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 10px 15px -3px rgba(5, 150, 105, 0.2)' }}>
+        <Link href="/products" style={{ background: '#480D18', color: 'white', padding: '20px 40px', borderRadius: '20px', textDecoration: 'none', fontWeight: '800', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.2)' }}>
           Shop Collection <ArrowRight size={20} />
         </Link>
       </div>
@@ -31,7 +36,7 @@ export default function CartPage() {
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
       <div style={{ marginBottom: '60px' }}>
         <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-          Your <span style={{ color: '#059669' }}>Basket</span>
+          Your <span style={{ color: '#480D18' }}>Basket</span>
         </h1>
         <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Review your items and proceed to checkout.</p>
       </div>
@@ -43,13 +48,13 @@ export default function CartPage() {
           {items.map((item) => (
             <div key={item.id} style={{ background: 'white', borderRadius: '40px', padding: '25px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '30px', border: '1px solid #f1f5f9', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.02)' }}>
               <div style={{ width: '120px', height: '120px', borderRadius: '24px', overflow: 'hidden', flexShrink: 0, border: '4px solid #f8fafc' }}>
-                <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={item.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               
               <div style={{ flex: 1, minWidth: '200px' }}>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', margin: '0 0 4px 0', fontFamily: 'Playfair Display, serif' }}>{item.name}</h3>
                 <p style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>{item.selectedWeight || '250g'}</p>
-                <div style={{ fontSize: '1.5rem', fontWeight: '900', color: '#059669' }}>₹{item.price.toFixed(2)}</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '900', color: '#480D18' }}>₹{item.price.toFixed(2)}</div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -90,7 +95,7 @@ export default function CartPage() {
               </div>
             </div>
 
-            <Link href="/checkout" style={{ background: '#059669', color: 'white', padding: '22px', borderRadius: '24px', textDecoration: 'none', fontWeight: '900', fontSize: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', boxShadow: '0 20px 25px -5px rgba(5, 150, 105, 0.2)' }}>
+            <Link href="/checkout" style={{ background: '#480D18', color: 'white', padding: '22px', borderRadius: '24px', textDecoration: 'none', fontWeight: '900', fontSize: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', boxShadow: '0 20px 25px -5px rgba(72, 13, 24, 0.2)' }}>
               Checkout Now <ArrowRight size={24} />
             </Link>
 
@@ -113,3 +118,4 @@ export default function CartPage() {
     </div>
   );
 }
+

@@ -160,7 +160,7 @@ export default function AdminWalletManager() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <button 
                   onClick={() => handleUpdate('Credit')}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: '#ecfdf5', color: '#065f46', transition: 'all 0.2s' }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: '#ecfdf5', color: '#2b070d', transition: 'all 0.2s' }}
                   disabled={loading}
                 >
                   <ArrowDownCircle size={56} />
@@ -205,3 +205,4 @@ export default function AdminWalletManager() {
     </div>
   );
 }
+

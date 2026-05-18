@@ -18,6 +18,7 @@ export default function AdminProducts() {
     image: '', 
     category: '', 
     isTopSelling: false,
+    rating: '4.9',
     variants: [
       { weight: '250g', price: '' },
       { weight: '500g', price: '' },
@@ -72,6 +73,7 @@ export default function AdminProducts() {
       body: JSON.stringify({ 
         ...form, 
         price: Number(form.price),
+        rating: Number(form.rating),
         variants: cleanedVariants
       })
     });
@@ -97,6 +99,7 @@ export default function AdminProducts() {
       image: p.image,
       category: p.category,
       isTopSelling: !!p.isTopSelling,
+      rating: p.rating ? p.rating.toString() : '4.9',
       variants: [
         { weight: '250g', price: pVariants.find((v: any) => v.weight === '250g')?.price || '' },
         { weight: '500g', price: pVariants.find((v: any) => v.weight === '500g')?.price || '' },
@@ -275,10 +278,17 @@ export default function AdminProducts() {
                 <p className="text-[10px] text-slate-400 mt-2 italic">Note: If left empty, 250g price will be used as base.</p>
               </div>
 
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={form.isTopSelling} onChange={e => setForm({...form, isTopSelling: e.target.checked})} />
-                <span className="text-sm font-medium">Mark as Top Selling Delicacy</span>
-              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="flex items-center gap-2 cursor-pointer mt-4">
+                  <input type="checkbox" checked={form.isTopSelling} onChange={e => setForm({...form, isTopSelling: e.target.checked})} />
+                  <span className="text-sm font-medium">Mark as Top Selling</span>
+                </label>
+                
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-400">Product Rating (e.g. 4.9)</label>
+                  <input required type="number" step="0.1" min="0" max="5" className="input" placeholder="Rating (0 to 5)" value={form.rating} onChange={e => setForm({...form, rating: e.target.value})} />
+                </div>
+              </div>
 
               <div className="flex justify-end gap-4" style={{ marginTop: '1rem' }}>
                 <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>

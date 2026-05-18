@@ -3,51 +3,159 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/lib/store';
 import toast from 'react-hot-toast';
+import { ArrowRight, Star } from 'lucide-react';
+import ProductCard from './components/ProductCard';
 
 export default function Home() {
   const [sliders, setSliders] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [topSelling, setTopSelling] = useState<any[]>([]);
+  const [settings, setSettings] = useState<any>(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const addItem = useCartStore((state) => state.addItem);
 
   useEffect(() => {
     fetch('/api/sliders').then(res => res.json()).then(setSliders);
     fetch('/api/categories').then(res => res.json()).then(setCategories);
+    fetch('/api/settings').then(res => res.json()).then(data => setSettings(data));
     fetch('/api/products').then(res => res.json()).then(data => {
       setTopSelling(data.filter((p: any) => p.isTopSelling).slice(0, 4));
     });
   }, []);
 
+  useEffect(() => {
+    if (sliders.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentSlideIndex((prev) => (prev + 1) % sliders.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [sliders]);
+
+  const activeSlide = sliders.length > 0 ? sliders[currentSlideIndex] : null;
+
   return (
     <div>
-      {/* Dynamic Slider */}
-      <section className="hero" style={{ padding: 0, height: '500px', position: 'relative' }}>
-        {sliders.length > 0 ? (
-          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <img src={sliders[0].image} alt={sliders[0].title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: 'white', textAlign: 'center' }}>
-              <h1 style={{ fontSize: '4rem', marginBottom: '1rem' }}>{sliders[0].title}</h1>
-              <p style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>{sliders[0].subtitle}</p>
-              <Link href="/products" className="btn btn-primary" style={{ fontSize: '1.2rem', padding: '1rem 2rem' }}>Shop Now</Link>
+      {/* Dynamic Unique Hero */}
+      <section style={{ position: 'relative', overflow: 'hidden', padding: '120px 20px', background: '#0f172a', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
+        <style>{`
+          .hero-btn:hover { transform: translateY(-5px); box-shadow: 0 25px 30px -5px rgba(72, 13, 24, 0.5) !important; }
+          .hero-btn-alt:hover { background: rgba(255,255,255,0.2) !important; }
+          .hero-img { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+          .hero-img:hover { transform: scale(1.02) rotate(0deg) !important; }
+          .fade-transition { transition: opacity 0.5s ease-in-out; }
+        `}</style>
+        
+        {/* Glowing Orbs */}
+        <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: '600px', height: '600px', background: '#480D18', filter: 'blur(150px)', opacity: 0.35, borderRadius: '50%' }}></div>
+        <div style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '600px', height: '600px', background: '#e11d48', filter: 'blur(150px)', opacity: 0.15, borderRadius: '50%' }}></div>
+        
+        <div className="container" style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', gap: '80px', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 500px' }} className="fade-transition" key={activeSlide?._id || 'default'}>
+            <div style={{ display: 'inline-block', padding: '10px 20px', background: 'rgba(72, 13, 24, 0.15)', color: '#fda4af', borderRadius: '30px', fontSize: '0.85rem', fontWeight: '900', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '30px', border: '1px solid rgba(72, 13, 24, 0.5)' }}>
+              {activeSlide?.subtitle || '100% Authentic Godavari Recipe'}
+            </div>
+            <h1 style={{ fontSize: 'clamp(3.5rem, 6vw, 5.5rem)', fontWeight: '900', color: 'white', lineHeight: 1.1, fontFamily: 'Playfair Display, serif', marginBottom: '30px' }}>
+              {activeSlide?.title ? (
+                <>
+                  {activeSlide.title.split(' ').slice(0, -1).join(' ')}{' '}
+                  <span style={{ color: '#fda4af', fontStyle: 'italic' }}>{activeSlide.title.split(' ').slice(-1)}</span>
+                </>
+              ) : (
+                <>Taste the <span style={{ color: '#fda4af', fontStyle: 'italic' }}>Heritage</span> of India.</>
+              )}
+            </h1>
+            <p style={{ fontSize: '1.25rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '50px', maxWidth: '600px', fontWeight: '500' }}>
+              Handcrafted with premium ingredients and time-honored traditions. Experience the burst of authentic, bold flavors in every single bite.
+            </p>
+            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+              <Link href={activeSlide?.link || "/products"} className="hero-btn" style={{ background: '#480D18', color: 'white', padding: '22px 45px', borderRadius: '30px', textDecoration: 'none', fontWeight: '900', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 20px 25px -5px rgba(72, 13, 24, 0.3)', transition: 'all 0.3s' }}>
+                Shop Collection <ArrowRight size={20} />
+              </Link>
+              <Link href="/about" className="hero-btn-alt" style={{ background: 'rgba(255,255,255,0.05)', color: 'white', padding: '22px 45px', borderRadius: '30px', textDecoration: 'none', fontWeight: '800', fontSize: '1.1rem', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', transition: 'all 0.3s' }}>
+                Our Story
+              </Link>
             </div>
           </div>
-        ) : (
-          <div className="container animate-fade-in" style={{ padding: '6rem 0' }}>
-            <h1 className="text-4xl text-primary" style={{ marginBottom: '1rem', fontSize: '3.5rem' }}>Kanvi Pickles</h1>
-            <p className="text-2xl text-muted" style={{ marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>Experience the authentic taste of tradition.</p>
-            <Link href="/products" className="btn btn-primary">Explore All</Link>
+          
+          <div style={{ flex: '1 1 500px', position: 'relative', display: 'flex', justifyContent: 'center' }}>
+            <div className="hero-img fade-transition" key={activeSlide?.image || 'img'} style={{ position: 'relative', width: '100%', maxWidth: '450px', aspectRatio: '4/5', borderRadius: '48px', overflow: 'hidden', boxShadow: '0 30px 60px -15px rgba(0,0,0,0.8)', transform: 'rotate(2deg)' }}>
+              <img src={activeSlide?.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'} alt="Kanvi Premium Pickles" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0f172a, transparent 70%)' }}></div>
+              <div style={{ position: 'absolute', bottom: '40px', left: '40px', right: '40px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', padding: '20px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <div style={{ width: '50px', height: '50px', background: '#480D18', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                    <Star size={24} fill="currentColor" />
+                  </div>
+                  <div>
+                    <div style={{ color: 'white', fontWeight: '900', fontSize: '1.1rem' }}>Premium Quality</div>
+                    <div style={{ color: '#cbd5e1', fontSize: '0.85rem', fontWeight: '600' }}>Loved by 10,000+ families</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Slider Dots */}
+            {sliders.length > 1 && (
+              <div style={{ position: 'absolute', right: '-40px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {sliders.map((_, idx) => (
+                  <button 
+                    key={idx} 
+                    onClick={() => setCurrentSlideIndex(idx)}
+                    style={{ 
+                      width: '12px', height: '12px', borderRadius: '50%', border: 'none', cursor: 'pointer', transition: 'all 0.3s',
+                      background: currentSlideIndex === idx ? '#fda4af' : 'rgba(255,255,255,0.2)',
+                      transform: currentSlideIndex === idx ? 'scale(1.3)' : 'scale(1)'
+                    }} 
+                  />
+                ))}
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </section>
 
       {/* Dynamic Categories */}
-      <section className="container" style={{ padding: '4rem 20px' }}>
-        <h2 className="text-4xl text-center" style={{ marginBottom: '3rem' }}>Shop by Category</h2>
-        <div className="grid grid-cols-4 gap-8">
+      <section className="container" style={{ padding: '6rem 20px' }}>
+        <h2 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', marginBottom: '4rem', fontFamily: 'Playfair Display, serif', textAlign: 'center' }}>
+          Shop by <span style={{ color: '#480D18' }}>Category</span>
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '40px', justifyItems: 'center' }}>
           {categories.map((cat: any) => (
-            <Link href={`/products?category=${cat.name}`} key={cat._id} className="card text-center" style={{ padding: '2rem' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{cat.icon}</div>
-              <h3 className="text-2xl">{cat.name}</h3>
+            <Link 
+              href={`/products?category=${cat.name}`} 
+              key={cat._id} 
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}
+            >
+              <div style={{
+                width: '160px',
+                height: '160px',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                border: '6px solid white',
+                boxShadow: '0 20px 25px -5px rgba(72, 13, 24, 0.15)',
+                marginBottom: '20px',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                position: 'relative'
+              }}
+              onMouseOver={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = 'scale(1.05) translateY(-5px)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 25px 30px -5px rgba(72, 13, 24, 0.3)';
+                (e.currentTarget as HTMLElement).style.borderColor = '#480D18';
+              }}
+              onMouseOut={(e) => {
+                (e.currentTarget as HTMLElement).style.transform = 'scale(1) translateY(0)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 20px 25px -5px rgba(72, 13, 24, 0.15)';
+                (e.currentTarget as HTMLElement).style.borderColor = 'white';
+              }}
+              >
+                <img 
+                  src={cat.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'} 
+                  alt={cat.name} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', textAlign: 'center' }}>{cat.name}</h3>
             </Link>
           ))}
         </div>
@@ -59,26 +167,7 @@ export default function Home() {
           <h2 className="text-4xl text-center" style={{ marginBottom: '4rem' }}>Our Top Selling Delicacies</h2>
           <div className="grid grid-cols-4 gap-8">
             {topSelling.map((p: any) => (
-              <div key={p._id} className="card product-card" style={{ background: 'white' }}>
-                <Link href={`/products/${p._id}`}>
-                  <div className="product-img-wrapper" style={{ height: '250px', overflow: 'hidden', borderRadius: '8px', marginBottom: '1.5rem' }}>
-                    <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
-                  </div>
-                  <h3 className="text-xl font-bold" style={{ marginBottom: '0.5rem' }}>{p.name}</h3>
-                  <div className="flex justify-between items-center">
-                    <p className="text-primary font-bold text-xl">₹{p.price}</p>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>250g / 500g</span>
-                  </div>
-                </Link>
-                <button
-                  className="btn btn-primary"
-                  style={{ width: '100%', marginTop: '1.5rem', borderRadius: '50px' }}
-                  onClick={() => {
-                    addItem({ id: p._id, name: p.name, price: p.price, image: p.image });
-                    toast.success(`${p.name} added to cart`);
-                  }}
-                >Add to Cart</button>
-              </div>
+              <ProductCard key={p._id} p={p} defaultImage={settings?.defaultProductImage} />
             ))}
           </div>
           <div className="flex justify-center" style={{ marginTop: '4rem' }}>
@@ -107,3 +196,4 @@ export default function Home() {
     </div>
   );
 }
+

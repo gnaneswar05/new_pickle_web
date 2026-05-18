@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 :root {
-  --primary: #059669;
+  --primary: #480D18;
   --primary-hover: #047857;
   --secondary: #ecfdf5;
   --accent: #f59e0b;
@@ -216,7 +216,7 @@ a {
   letter-spacing: 0.05em;
 }
 
-.status-badge.delivered { background: #ecfdf5; color: #065f46; }
+.status-badge.delivered { background: #ecfdf5; color: #2b070d; }
 .status-badge.pending { background: #fffbeb; color: #92400e; }
 .status-badge.cancelled { background: #fff1f2; color: #9f1239; }
 
@@ -225,3 +225,4 @@ a {
   .admin-content { margin-left: 0; padding: 2rem; }
   .admin-sidebar { display: none; }
 }
+

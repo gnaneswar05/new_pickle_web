@@ -9,6 +9,7 @@ const productSchema = new Schema({
   stock: { type: Number, default: 0 },
   featured: { type: Boolean, default: false },
   isTopSelling: { type: Boolean, default: false },
+  rating: { type: Number, default: 4.9 },
   variants: [{
     weight: String,
     price: Number

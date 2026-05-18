@@ -6,23 +6,37 @@ import Link from 'next/link';
 import Script from 'next/script';
 import toast from 'react-hot-toast';
 import { Wallet, ShoppingBag, User as UserIcon, LogOut, ArrowRight, Clock, Star, ShieldCheck, MapPin, CreditCard, X, TrendingUp, History } from 'lucide-react';
+import LoadingLogo from '../components/LoadingLogo';
 
 export default function UserDashboard() {
-  const { user, logout } = useAuthStore();
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
+  
   const [balance, setBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]);
+  const [activeTab, setActiveTab] = useState('overview');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [addAmount, setAddAmount] = useState('');
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { logout } = useAuthStore();
 
   const fetchBalance = async () => {
-    if (!user) return;
     try {
+      if (!user?.id) return;
       const res = await fetch(`/api/wallet?userId=${user.id}`);
+      if (!res.ok) {
+        if (res.status === 404) {
+          useAuthStore.getState().logout();
+          router.push('/login');
+          toast.error("Session expired. Please log in again.");
+        }
+        return;
+      }
       const data = await res.json();
       setBalance(data.balance || 0);
-    } catch (e) { console.error(e); }
+      setTransactions(data.transactions || []);
+    } catch (err) { console.error(err); }
   };
 
   const [mounted, setMounted] = useState(false);
@@ -37,9 +51,9 @@ export default function UserDashboard() {
         const currentUser = useAuthStore.getState().user;
         if (!currentUser) {
           router.push('/login');
-          return;
+        } else {
+          fetchBalance().finally(() => setLoading(false));
         }
-        fetchBalance();
       }, 100);
       return () => clearTimeout(timer);
     }
@@ -91,7 +105,7 @@ export default function UserDashboard() {
           }
         },
         prefill: { contact: user?.phone },
-        theme: { color: "#059669" },
+        theme: { color: "#480D18" },
       };
 
       const rzp = new (window as any).Razorpay(options);
@@ -103,6 +117,8 @@ export default function UserDashboard() {
     }
   };
 
+  if (!mounted) return null;
+  if (loading) return <LoadingLogo message="Loading dashboard..." />;
   if (!user) return null;
 
   return (
@@ -113,7 +129,7 @@ export default function UserDashboard() {
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '20px', marginBottom: '60px' }}>
         <div>
           <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif' }}>
-            Hello, <span style={{ color: '#059669' }}>{user.phone}</span>
+            Hello, <span style={{ color: '#480D18' }}>{user.phone}</span>
           </h1>
           <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500' }}>Welcome back to your Godavari heritage dashboard.</p>
         </div>
@@ -133,7 +149,7 @@ export default function UserDashboard() {
           <p style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Heritage Credits</p>
           <h2 style={{ fontSize: '3.5rem', fontWeight: '900', margin: 0 }}>₹{balance.toFixed(2)}</h2>
           <div style={{ marginTop: '40px', display: 'flex', gap: '12px' }}>
-            <button onClick={() => setIsModalOpen(true)} style={{ flex: 1, background: '#059669', color: 'white', padding: '16px', borderRadius: '18px', border: 'none', fontWeight: '900', cursor: 'pointer', transition: '0.2s' }}>Add Funds</button>
+            <button onClick={() => setIsModalOpen(true)} style={{ flex: 1, background: '#480D18', color: 'white', padding: '16px', borderRadius: '18px', border: 'none', fontWeight: '900', cursor: 'pointer', transition: '0.2s' }}>Add Funds</button>
             <Link href="/wallet" style={{ flex: 1, background: 'rgba(255,255,255,0.05)', color: 'white', padding: '16px', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.1)', fontWeight: '900', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
               <History size={18} /> History
             </Link>
@@ -142,12 +158,12 @@ export default function UserDashboard() {
 
         {/* Orders Card */}
         <Link href="/orders" style={{ textDecoration: 'none', background: 'white', borderRadius: '40px', padding: '40px', border: '1px solid #f1f5f9', display: 'flex', flexDirection: 'column', gap: '20px', transition: 'transform 0.3s, box-shadow 0.3s' }}>
-          <div style={{ width: '56px', height: '56px', background: '#ecfdf5', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><ShoppingBag size={28} color="#059669" /></div>
+          <div style={{ width: '56px', height: '56px', background: '#ecfdf5', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><ShoppingBag size={28} color="#480D18" /></div>
           <div>
             <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', margin: '0 0 8px 0', fontFamily: 'Playfair Display, serif' }}>My Orders</h3>
             <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Track and manage your pickle history.</p>
           </div>
-          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '8px', color: '#059669', fontWeight: '800' }}>Manage Orders <ArrowRight size={18} /></div>
+          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '8px', color: '#480D18', fontWeight: '800' }}>Manage Orders <ArrowRight size={18} /></div>
         </Link>
       </div>
 
@@ -170,7 +186,7 @@ export default function UserDashboard() {
             <button 
               onClick={handleAddFunds}
               disabled={loading}
-              style={{ width: '100%', background: '#059669', color: 'white', padding: '20px', borderRadius: '22px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 10px 15px -3px rgba(5, 150, 105, 0.2)', opacity: loading ? 0.7 : 1 }}
+              style={{ width: '100%', background: '#480D18', color: 'white', padding: '20px', borderRadius: '22px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.2)', opacity: loading ? 0.7 : 1 }}
             >
               {loading ? 'Processing...' : 'Proceed to Pay'}
             </button>
@@ -180,3 +196,4 @@ export default function UserDashboard() {
     </div>
   );
 }
+

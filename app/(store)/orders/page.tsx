@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { ShoppingBag, Calendar, Package, ChevronRight, ArrowLeft, Truck, Clock, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
+import LoadingLogo from '../components/LoadingLogo';
+
 export default function CustomerOrders() {
   const { user } = useAuthStore();
   const router = useRouter();
@@ -40,7 +42,10 @@ export default function CustomerOrders() {
     }
   }, [user]);
 
+  if (!mounted) return null;
   if (!user) return null;
+
+  if (loading) return <LoadingLogo message="Loading your orders..." />;
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
@@ -51,22 +56,18 @@ export default function CustomerOrders() {
 
       <div style={{ marginBottom: '60px' }}>
         <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-          Your <span style={{ color: '#059669' }}>Orders</span>
+          Your <span style={{ color: '#480D18' }}>Orders</span>
         </h1>
         <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Track your Godavari pickle heritage.</p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '100px' }}>
-            <p style={{ color: '#94a3b8', fontWeight: '600' }}>Loading your orders...</p>
-          </div>
-        ) : orders.length === 0 ? (
+        {orders.length === 0 ? (
           <div style={{ background: 'white', padding: '80px 40px', borderRadius: '40px', textAlign: 'center', border: '1px solid #f1f5f9' }}>
             <ShoppingBag size={50} color="#cbd5e1" style={{ marginBottom: '20px' }} />
             <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '10px' }}>No orders yet</h3>
             <p style={{ color: '#64748b', marginBottom: '30px' }}>You haven't placed any orders yet. Ready to taste some pickles?</p>
-            <Link href="/products" style={{ background: '#059669', color: 'white', padding: '16px 32px', borderRadius: '16px', textDecoration: 'none', fontWeight: '800' }}>Browse Store</Link>
+            <Link href="/products" style={{ background: '#480D18', color: 'white', padding: '16px 32px', borderRadius: '16px', textDecoration: 'none', fontWeight: '800' }}>Browse Store</Link>
           </div>
         ) : (
           orders.map((order: any) => (
@@ -80,11 +81,11 @@ export default function CustomerOrders() {
                   </div>
                   <div>
                     <p style={{ margin: '0 0 4px 0', fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Total Amount</p>
-                    <p style={{ margin: 0, fontWeight: '800', color: '#059669', fontSize: '0.9rem' }}>₹{order.totalAmount.toFixed(2)}</p>
+                    <p style={{ margin: 0, fontWeight: '800', color: '#480D18', fontSize: '0.9rem' }}>₹{order.totalAmount.toFixed(2)}</p>
                   </div>
                   <div>
                     <p style={{ margin: '0 0 4px 0', fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Status</p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: order.status === 'Delivered' ? '#059669' : '#2563eb', fontWeight: '900', fontSize: '0.85rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: order.status === 'Delivered' ? '#480D18' : '#2563eb', fontWeight: '900', fontSize: '0.85rem' }}>
                       {order.status === 'Delivered' ? <CheckCircle2 size={16} /> : <Truck size={16} />}
                       {order.status}
                     </div>
@@ -120,3 +121,4 @@ export default function CustomerOrders() {
     </div>
   );
 }
+

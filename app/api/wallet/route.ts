@@ -15,6 +15,7 @@ export async function GET(req: Request) {
     if (!userId) return NextResponse.json({ error: 'User ID required' }, { status: 400 });
 
     const user = await User.findById(userId);
+    if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
     const transactions = await WalletTransaction.find({ userId })
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ balance: user.walletBalance });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to update wallet' }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: 'Failed to update wallet', details: error?.message || 'Unknown error' }, { status: 500 });
   }
 }

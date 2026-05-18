@@ -77,7 +77,7 @@ export default function LoginPage() {
     <div style={{ minHeight: '90vh', background: '#fafbfc', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', fontFamily: 'Inter, sans-serif', position: 'relative', overflow: 'hidden' }}>
       
       {/* Premium Background Elements */}
-      <div style={{ position: 'absolute', top: '-10%', left: '-5%', width: '40%', height: '40%', background: 'radial-gradient(circle, rgba(5, 150, 105, 0.08) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)' }}></div>
+      <div style={{ position: 'absolute', top: '-10%', left: '-5%', width: '40%', height: '40%', background: 'radial-gradient(circle, rgba(72, 13, 24, 0.08) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)' }}></div>
       <div style={{ position: 'absolute', bottom: '-10%', right: '-5%', width: '40%', height: '40%', background: 'radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)' }}></div>
 
       <div style={{ width: '100%', maxWidth: '480px', position: 'relative', zIndex: 1 }}>
@@ -87,7 +87,7 @@ export default function LoginPage() {
           
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '45px' }}>
-            <div style={{ width: '70px', height: '70px', background: '#059669', color: 'white', borderRadius: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 25px', fontSize: '2rem', fontWeight: '900', boxShadow: '0 20px 30px -10px rgba(5, 150, 105, 0.3)', transform: 'rotate(-5deg)' }}>
+            <div style={{ width: '70px', height: '70px', background: '#480D18', color: 'white', borderRadius: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 25px', fontSize: '2rem', fontWeight: '900', boxShadow: '0 20px 30px -10px rgba(72, 13, 24, 0.3)', transform: 'rotate(-5deg)' }}>
               K
             </div>
             <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '12px', fontFamily: 'Playfair Display, serif', letterSpacing: '-0.02em' }}>
@@ -108,7 +108,7 @@ export default function LoginPage() {
                 </label>
                 <div style={{ position: 'relative' }}>
                   <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid #e2e8f0', paddingRight: '12px' }}>
-                    <Phone size={18} color="#059669" />
+                    <Phone size={18} color="#480D18" />
                     <span style={{ fontWeight: '800', color: '#1e293b', fontSize: '0.95rem' }}>+91</span>
                   </div>
                   <input 
@@ -139,7 +139,7 @@ export default function LoginPage() {
                   Verification Code
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#059669' }} size={20} />
+                  <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#480D18' }} size={20} />
                   <input 
                     required 
                     maxLength={6}
@@ -153,7 +153,7 @@ export default function LoginPage() {
 
               <button 
                 disabled={loading}
-                style={{ background: '#059669', color: 'white', padding: '22px', borderRadius: '24px', border: 'none', fontSize: '1.1rem', fontWeight: '900', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', transition: '0.3s', boxShadow: '0 15px 30px -10px rgba(5, 150, 105, 0.3)', opacity: loading ? 0.7 : 1 }}
+                style={{ background: '#480D18', color: 'white', padding: '22px', borderRadius: '24px', border: 'none', fontSize: '1.1rem', fontWeight: '900', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', transition: '0.3s', boxShadow: '0 15px 30px -10px rgba(72, 13, 24, 0.3)', opacity: loading ? 0.7 : 1 }}
               >
                 {loading ? 'Verifying...' : 'Complete Sign In'} <ShieldCheck size={20} />
               </button>
@@ -192,9 +192,10 @@ export default function LoginPage() {
       </div>
 
       <style>{`
-        input:focus { border-color: #059669 !important; box-shadow: 0 10px 20px -5px rgba(5, 150, 105, 0.05); transform: translateY(-2px); }
+        input:focus { border-color: #480D18 !important; box-shadow: 0 10px 20px -5px rgba(72, 13, 24, 0.05); transform: translateY(-2px); }
         button:active { transform: scale(0.98); }
       `}</style>
     </div>
   );
 }
+

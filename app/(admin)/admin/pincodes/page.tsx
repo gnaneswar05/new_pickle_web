@@ -54,13 +54,13 @@ export default function AdminPincodes() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', marginBottom: '60px' }}>
         <div>
           <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-            Service <span style={{ color: '#059669' }}>Areas</span>
+            Service <span style={{ color: '#480D18' }}>Areas</span>
           </h1>
           <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Manage delivery zones and charges.</p>
         </div>
         <button 
           onClick={() => setShowModal(true)}
-          style={{ background: '#059669', color: 'white', padding: '14px 28px', borderRadius: '18px', border: 'none', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 15px -3px rgba(5, 150, 105, 0.2)' }}
+          style={{ background: '#480D18', color: 'white', padding: '14px 28px', borderRadius: '18px', border: 'none', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.2)' }}
         >
           <Plus size={20} /> Add Pincode
         </button>
@@ -100,7 +100,7 @@ export default function AdminPincodes() {
                 </td>
                 <td style={{ padding: '25px 30px', color: '#64748b', fontWeight: '600', textTransform: 'capitalize' }}>{p.city}</td>
                 <td style={{ padding: '25px 30px' }}>
-                  <span style={{ background: '#ecfdf5', color: '#059669', padding: '6px 14px', borderRadius: '12px', fontWeight: '900', fontSize: '0.9rem' }}>
+                  <span style={{ background: '#ecfdf5', color: '#480D18', padding: '6px 14px', borderRadius: '12px', fontWeight: '900', fontSize: '0.9rem' }}>
                     ₹{p.deliveryCharge}
                   </span>
                 </td>
@@ -146,7 +146,7 @@ export default function AdminPincodes() {
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Delivery Fee (₹)</label>
                 <input required type="number" style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.deliveryCharge} onChange={e => setForm({...form, deliveryCharge: e.target.value})} placeholder="0" />
               </div>
-              <button type="submit" style={{ marginTop: '10px', background: '#059669', color: 'white', padding: '20px', borderRadius: '20px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(5, 150, 105, 0.2)' }}>Save Delivery Area</button>
+              <button type="submit" style={{ marginTop: '10px', background: '#480D18', color: 'white', padding: '20px', borderRadius: '20px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.2)' }}>Save Delivery Area</button>
             </form>
           </div>
         </div>
@@ -154,3 +154,4 @@ export default function AdminPincodes() {
     </div>
   );
 }
+

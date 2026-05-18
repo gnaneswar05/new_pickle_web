@@ -23,7 +23,7 @@ export default function OrderTrackingPage() {
   if (loading) return (
     <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#059669', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }}></div>
+        <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#480D18', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }}></div>
         <p style={{ color: '#64748b', fontWeight: '600' }}>Locating your heritage package...</p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -35,7 +35,7 @@ export default function OrderTrackingPage() {
       <div style={{ textAlign: 'center', background: 'white', padding: '60px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
         <h2 style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b', marginBottom: '15px' }}>Order Not Found</h2>
         <p style={{ color: '#64748b', marginBottom: '30px' }}>We couldn't find an order with this ID.</p>
-        <button onClick={() => router.push('/orders')} style={{ background: '#059669', color: 'white', padding: '16px 32px', borderRadius: '16px', border: 'none', fontWeight: '800', cursor: 'pointer' }}>Back to My Orders</button>
+        <button onClick={() => router.push('/orders')} style={{ background: '#480D18', color: 'white', padding: '16px 32px', borderRadius: '16px', border: 'none', fontWeight: '800', cursor: 'pointer' }}>Back to My Orders</button>
       </div>
     </div>
   );
@@ -108,11 +108,11 @@ export default function OrderTrackingPage() {
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', marginBottom: '50px' }}>
         <div>
           <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-            Track <span style={{ color: '#059669' }}>Shipment</span>
+            Track <span style={{ color: '#480D18' }}>Shipment</span>
           </h1>
           <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Order ID: <span style={{ color: '#1e293b', fontWeight: '800' }}>#{order._id.toUpperCase()}</span></p>
         </div>
-        <div style={{ background: order.status === 'Delivered' ? '#ecfdf5' : '#eff6ff', color: order.status === 'Delivered' ? '#059669' : '#2563eb', padding: '12px 24px', borderRadius: '18px', fontWeight: '900', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        <div style={{ background: order.status === 'Delivered' ? '#ecfdf5' : '#eff6ff', color: order.status === 'Delivered' ? '#480D18' : '#2563eb', padding: '12px 24px', borderRadius: '18px', fontWeight: '900', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           {order.status}
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function OrderTrackingPage() {
                 const info = getStageInfo(stage.name);
                 return (
                   <div key={idx} style={{ display: 'flex', gap: '30px', position: 'relative', zIndex: 1, opacity: info.completed ? 1 : 0.4 }}>
-                    <div style={{ width: '50px', height: '50px', background: info.completed ? '#059669' : '#f8fafc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: info.completed ? 'white' : '#94a3b8', border: info.completed ? '5px solid #ecfdf5' : '3px solid #f1f5f9' }}>
+                    <div style={{ width: '50px', height: '50px', background: info.completed ? '#480D18' : '#f8fafc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: info.completed ? 'white' : '#94a3b8', border: info.completed ? '5px solid #ecfdf5' : '3px solid #f1f5f9' }}>
                       <stage.icon size={22} />
                     </div>
                     <div style={{ flex: 1 }}>
@@ -137,7 +137,7 @@ export default function OrderTrackingPage() {
                         <h4 style={{ margin: 0, fontWeight: '800', color: info.completed ? '#1e293b' : '#94a3b8', fontSize: '1.1rem' }}>{stage.label}</h4>
                         {info.completed && info.time && (
                           <div style={{ textAlign: 'right' }}>
-                            <p style={{ margin: 0, fontSize: '0.75rem', color: '#059669', fontWeight: '800' }}>{new Date(info.time).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</p>
+                            <p style={{ margin: 0, fontSize: '0.75rem', color: '#480D18', fontWeight: '800' }}>{new Date(info.time).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</p>
                             <p style={{ margin: 0, fontSize: '0.7rem', color: '#94a3b8', fontWeight: '700' }}>{new Date(info.time).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</p>
                           </div>
                         )}
@@ -156,7 +156,7 @@ export default function OrderTrackingPage() {
           
           <div style={{ background: 'white', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', marginBottom: '25px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <ReceiptText size={20} color="#059669" /> Order Receipt
+              <ReceiptText size={20} color="#480D18" /> Order Receipt
             </h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -176,7 +176,7 @@ export default function OrderTrackingPage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                 <span style={{ color: '#64748b', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                   <Truck size={14} color="#059669" /> Delivery Charges
+                   <Truck size={14} color="#480D18" /> Delivery Charges
                 </span>
                 <span style={{ fontWeight: '900', color: '#d97706' }}>
                   {displayDelivery > 0 ? `+ ₹${displayDelivery.toFixed(2)}` : 'FREE'}
@@ -185,17 +185,17 @@ export default function OrderTrackingPage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                 <span style={{ color: '#64748b', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                   <ShieldCheck size={14} color="#059669" /> Taxes & Fees
+                   <ShieldCheck size={14} color="#480D18" /> Taxes & Fees
                 </span>
                 <span style={{ fontWeight: '800', color: '#1e293b' }}>+ ₹{displayTaxAndFees.toFixed(2)}</span>
               </div>
 
               {walletDeduction > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', background: '#f0fdf4', padding: '12px 15px', borderRadius: '14px', border: '1px solid #d1fae5' }}>
-                  <span style={{ color: '#059669', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                     <Wallet size={14} color="#059669" /> Wallet Savings
+                  <span style={{ color: '#480D18', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                     <Wallet size={14} color="#480D18" /> Wallet Savings
                   </span>
-                  <span style={{ fontWeight: '900', color: '#059669' }}>− ₹{walletDeduction.toFixed(2)}</span>
+                  <span style={{ fontWeight: '900', color: '#480D18' }}>− ₹{walletDeduction.toFixed(2)}</span>
                 </div>
               )}
 
@@ -218,12 +218,12 @@ export default function OrderTrackingPage() {
           {/* Destination */}
           <div style={{ background: '#f8fafc', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', marginBottom: '30px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <MapPin size={20} color="#059669" /> Destination
+              <MapPin size={20} color="#480D18" /> Destination
             </h3>
             <div>
               <p style={{ margin: 0, fontWeight: '800', color: '#1e293b', fontSize: '1.05rem' }}>{order.customerName}</p>
               <p style={{ margin: '8px 0 0 0', fontWeight: '600', color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{order.address}</p>
-              <p style={{ margin: '4px 0 0 0', fontWeight: '800', color: '#059669', fontSize: '0.9rem' }}>Pincode: {order.pincode}</p>
+              <p style={{ margin: '4px 0 0 0', fontWeight: '800', color: '#480D18', fontSize: '0.9rem' }}>Pincode: {order.pincode}</p>
             </div>
           </div>
         </div>

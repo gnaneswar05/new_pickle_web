@@ -37,11 +37,11 @@ export default function WalletPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '50px', gap: '20px' }}>
           <div>
             <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-              Heritage <span style={{ color: '#059669' }}>Wallet</span>
+              Heritage <span style={{ color: '#480D18' }}>Wallet</span>
             </h1>
             <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Manage your funds for seamless heritage shopping.</p>
           </div>
-          <Link href="/wallet/add" style={{ background: '#059669', color: 'white', padding: '16px 28px', borderRadius: '18px', textDecoration: 'none', fontWeight: '800', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 20px -5px rgba(5, 150, 105, 0.3)', transition: '0.3s' }}>
+          <Link href="/wallet/add" style={{ background: '#480D18', color: 'white', padding: '16px 28px', borderRadius: '18px', textDecoration: 'none', fontWeight: '800', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 20px -5px rgba(72, 13, 24, 0.3)', transition: '0.3s' }}>
             <PlusCircle size={20} /> Add Funds
           </Link>
         </div>
@@ -50,7 +50,7 @@ export default function WalletPage() {
           
           {/* Balance Card */}
           <div style={{ position: 'sticky', top: '100px' }}>
-            <div style={{ background: 'linear-gradient(135deg, #059669 0%, #065f46 100%)', color: 'white', padding: '50px', borderRadius: '48px', position: 'relative', overflow: 'hidden', boxShadow: '0 30px 60px -15px rgba(5, 150, 105, 0.4)' }}>
+            <div style={{ background: 'linear-gradient(135deg, #480D18 0%, #2b070d 100%)', color: 'white', padding: '50px', borderRadius: '48px', position: 'relative', overflow: 'hidden', boxShadow: '0 30px 60px -15px rgba(72, 13, 24, 0.4)' }}>
               <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '150px', height: '150px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%' }}></div>
               <Wallet size={40} style={{ opacity: 0.3, marginBottom: '30px' }} />
               <p style={{ fontSize: '0.9rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8, marginBottom: '10px' }}>Available Balance</p>
@@ -64,12 +64,12 @@ export default function WalletPage() {
           {/* Transactions List */}
           <div style={{ background: 'white', padding: '50px 40px', borderRadius: '48px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
             <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '35px', display: 'flex', alignItems: 'center', gap: '12px', fontFamily: 'Playfair Display, serif' }}>
-              <History size={24} color="#059669" /> Transaction History
+              <History size={24} color="#480D18" /> Transaction History
             </h3>
             
             {loading ? (
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#059669', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }}></div>
+                <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#480D18', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }}></div>
                 <p style={{ color: '#94a3b8', fontWeight: '600' }}>Syncing your vault...</p>
               </div>
             ) : (
@@ -77,7 +77,7 @@ export default function WalletPage() {
                 {data.transactions.map((t: any) => (
                   <div key={t._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px', borderRadius: '24px', border: '1px solid #f8fafc', background: '#fafbfc' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-                      <div style={{ width: '45px', height: '45px', background: t.type === 'Credit' ? '#ecfdf5' : '#fff1f2', color: t.type === 'Credit' ? '#059669' : '#e11d48', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '45px', height: '45px', background: t.type === 'Credit' ? '#ecfdf5' : '#fff1f2', color: t.type === 'Credit' ? '#480D18' : '#e11d48', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         {t.type === 'Credit' ? <ArrowDownLeft size={22} /> : <ArrowUpRight size={22} />}
                       </div>
                       <div>
@@ -88,7 +88,7 @@ export default function WalletPage() {
                       </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <p style={{ margin: 0, fontWeight: '900', color: t.type === 'Credit' ? '#059669' : '#e11d48', fontSize: '1.1rem' }}>
+                      <p style={{ margin: 0, fontWeight: '900', color: t.type === 'Credit' ? '#480D18' : '#e11d48', fontSize: '1.1rem' }}>
                         {t.type === 'Credit' ? '+' : '-'}₹{Math.abs(t.amount).toFixed(2)}
                       </p>
                     </div>
@@ -136,3 +136,4 @@ export default function WalletPage() {
     </div>
   );
 }
+
