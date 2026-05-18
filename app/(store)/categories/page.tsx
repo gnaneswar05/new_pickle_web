@@ -31,7 +31,7 @@ export default function CategoriesPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '50px', justifyItems: 'center' }}>
         {categories.map((cat: any) => (
-          <Link href={`/products?category=${cat.name}`} key={cat._id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', group: 'true' }}>
+          <Link href={`/products?category=${cat.name}`} key={cat._id} className="group" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
             <div style={{
               width: '180px',
               height: '180px',
