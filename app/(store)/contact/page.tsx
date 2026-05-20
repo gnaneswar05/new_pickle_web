@@ -98,7 +98,11 @@ export default function ContactPage() {
                 <div>
                   <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Phone</p>
                   <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>
-                    {contactInfo.phone || <span style={{ color: '#cbd5e1' }}>Not set yet</span>}
+                    {contactInfo.phone ? (
+                      <a href={`tel:${contactInfo.phone.replace(/\s+/g, '')}`} style={{ color: 'inherit', textDecoration: 'none' }}>{contactInfo.phone}</a>
+                    ) : (
+                      <span style={{ color: '#cbd5e1' }}>Not set yet</span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -110,7 +114,11 @@ export default function ContactPage() {
                 <div>
                   <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Email</p>
                   <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>
-                    {contactInfo.email || <span style={{ color: '#cbd5e1' }}>Not set yet</span>}
+                    {contactInfo.email ? (
+                      <a href={`mailto:${contactInfo.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{contactInfo.email}</a>
+                    ) : (
+                      <span style={{ color: '#cbd5e1' }}>Not set yet</span>
+                    )}
                   </p>
                 </div>
               </div>

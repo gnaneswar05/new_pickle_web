@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/lib/store';
 import toast from 'react-hot-toast';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, Sparkles, Leaf, Truck } from 'lucide-react';
 import ProductCard from './components/ProductCard';
 
 export default function Home() {
@@ -62,7 +62,7 @@ export default function Home() {
                   <span style={{ color: '#ca8a04', fontStyle: 'italic' }}>{activeSlide.title.split(' ').slice(-1)}</span>
                 </>
               ) : (
-                <>Taste the <span style={{ color: '#ca8a04', fontStyle: 'italic' }}>Our Story</span> of India.</>
+                <>Taste the <span style={{ color: '#ca8a04', fontStyle: 'italic' }}>Tradition</span> of India.</>
               )}
             </h1>
             <p style={{ fontSize: '1.25rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '50px', maxWidth: '600px', fontWeight: '500' }}>
@@ -176,20 +176,93 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trust Section */}
-      <section style={{ background: 'var(--primary)', color: 'white', padding: '6rem 20px' }}>
-        <div className="container grid grid-cols-3 gap-12 text-center">
-          <div>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🏺</div>
-            <h3 className="text-2xl mb-4">Traditional Recipes</h3>
+      {/* Dynamic Trust Section */}
+      <section style={{ 
+        background: 'linear-gradient(180deg, #1b3d18 0%, #0c1a0c 100%)', 
+        color: 'white', 
+        padding: '100px 20px',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Glow Effects */}
+        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '400px', height: '400px', background: '#ca8a04', filter: 'blur(150px)', opacity: 0.1, borderRadius: '50%', pointerEvents: 'none' }}></div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.25em', color: '#ca8a04', display: 'inline-block', marginBottom: '12px' }}>
+              The Kanvi Promise
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: '900', fontFamily: 'Fraunces, serif', marginBottom: '20px', color: 'white' }}>
+              Why Choose Kanvi Pickles?
+            </h2>
+            <p style={{ color: '#94a3b8', maxWidth: '600px', margin: '0 auto', fontSize: '1.05rem', lineHeight: 1.6 }}>
+              We bring the authentic, sun-dried, traditional taste of Andhra pickles right to your dining table, crafted with love and absolute purity.
+            </p>
           </div>
-          <div>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🌿</div>
-            <h3 className="text-2xl mb-4">100% Natural</h3>
-          </div>
-          <div>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🚀</div>
-            <h3 className="text-2xl mb-4">Express Delivery</h3>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+            gap: '30px' 
+          }}>
+            <style>{`
+              .trust-card {
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                border-radius: 32px;
+                padding: 40px 30px;
+                text-align: center;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                backdrop-filter: blur(12px);
+              }
+              .trust-card:hover {
+                transform: translateY(-8px);
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(202, 138, 4, 0.4);
+                box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+              }
+              .trust-icon-box {
+                width: 72px;
+                height: 72px;
+                border-radius: 24px;
+                background: rgba(202, 138, 4, 0.1);
+                color: #ca8a04;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 24px auto;
+                transition: all 0.4s;
+              }
+              .trust-card:hover .trust-icon-box {
+                background: #ca8a04;
+                color: #1e293b;
+                transform: scale(1.1) rotate(5deg);
+              }
+            `}</style>
+
+            {(settings?.trustFeatures && settings.trustFeatures.length > 0 ? settings.trustFeatures : [
+              { icon: 'Sparkles', title: 'Traditional Recipes', description: 'Handed down through generations, cooked with authentic Godavari spices, sun-dried ingredients, and traditional cold-pressed oils.' },
+              { icon: 'Leaf', title: '100% Natural & Pure', description: 'No chemical preservatives, zero artificial colors, and no MSG. We only pack pure, wholesome flavor inspired by nature.' },
+              { icon: 'Truck', title: 'Express Fresh Delivery', description: 'Directly shipped from our kitchen in Visakhapatnam to your home. Double-sealed premium glass jars ensure freshness.' }
+            ]).map((feature: any, idx: number) => {
+              let IconComponent = Sparkles;
+              if (feature.icon === 'Leaf') IconComponent = Leaf;
+              else if (feature.icon === 'Truck') IconComponent = Truck;
+
+              return (
+                <div key={idx} className="trust-card">
+                  <div className="trust-icon-box">
+                    <IconComponent size={32} />
+                  </div>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: '800', fontFamily: 'Fraunces, serif', marginBottom: '12px', color: 'white' }}>
+                    {feature.title}
+                  </h3>
+                  <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                    {feature.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

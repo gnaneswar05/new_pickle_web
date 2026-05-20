@@ -27,9 +27,16 @@ export default function AdminLayout({
   const { isAdmin, logoutAdmin } = useAdminStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
 
   useEffect(() => {
     setMounted(true);
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        setLogoUrl(data.defaultProductImage || '');
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -45,8 +52,13 @@ export default function AdminLayout({
     <div className="admin-layout">
       {isAdmin && pathname !== '/admin/login' && (
         <aside className="admin-sidebar">
-          <div className="sidebar-logo">
-            Kanvi Admin
+          <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {logoUrl ? (
+              <img src={logoUrl} alt="Logo" style={{ height: '35px', width: '35px', objectFit: 'cover', borderRadius: '8px' }} />
+            ) : (
+              <div style={{ width: '35px', height: '35px', background: '#2d5a27', color: 'white', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: '900' }}>K</div>
+            )}
+            <span>Kanvi Admin</span>
           </div>
           <nav className="sidebar-nav">
             <Link href="/admin" className={pathname === '/admin' ? 'active' : ''}>

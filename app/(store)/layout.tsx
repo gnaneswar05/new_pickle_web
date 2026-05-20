@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
-import { ShoppingCart, Menu, X, Search, Phone, User as UserIcon, Loader2, Package } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, Phone, User as UserIcon, Loader2, Package, Heart } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
+import { useWishlistStore } from '@/lib/wishlistStore';
 import { useAuthStore } from '@/lib/authStore';
 import { useSettingsStore } from '@/lib/settingsStore';
 import { useState, useEffect, useRef } from 'react';
@@ -21,12 +22,15 @@ export default function StoreLayout({
   const [showResults, setShowResults] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [topBannerText, setTopBannerText] = useState('Authentic Godavari • Global Shipping Available');
+  const [settings, setSettings] = useState<any>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   const user = useAuthStore((state) => state.user);
   const items = useCartStore((state) => state.items);
+  const wishlistItems = useWishlistStore((state) => state.items);
   const { logoUrl, fetchSettings } = useSettingsStore();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
+  const wishlistCount = wishlistItems.length;
 
   useEffect(() => {
     setMounted(true);
@@ -35,6 +39,7 @@ export default function StoreLayout({
     fetch('/api/settings')
       .then(res => res.json())
       .then(data => {
+        setSettings(data);
         if (data.topBannerText) setTopBannerText(data.topBannerText);
       })
       .catch(err => console.error(err));
@@ -81,7 +86,7 @@ export default function StoreLayout({
   };
 
   const styles = {
-    topBanner: { background: '#0f172a', color: 'white', padding: '0.8rem 0', fontSize: '12px', fontWeight: '800', textTransform: 'uppercase' as const, letterSpacing: '0.15em', textAlign: 'center' as const, fontFamily: 'Fraunces, serif' },
+    topBanner: { background: '#0f172a', color: 'white', padding: '0.8rem 0', fontSize: '12px', fontWeight: '800', textTransform: 'uppercase' as const, letterSpacing: '0.15em', fontFamily: 'Fraunces, serif', overflow: 'hidden', whiteSpace: 'nowrap' as const, position: 'relative' as const, width: '100%' },
     header: { position: 'sticky' as const, top: 0, zIndex: 100, background: 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(15px)', borderBottom: '1px solid #f1f5f9', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' },
     container: { maxWidth: '1250px', margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '3rem' },
     logo: { display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' },
@@ -89,8 +94,9 @@ export default function StoreLayout({
     searchForm: { flex: 1, maxWidth: '450px', position: 'relative' as const },
     searchInput: { width: '100%', background: '#f8fafc', border: '2px solid transparent', padding: '1rem 1rem 1rem 3.5rem', borderRadius: '16px', fontSize: '1rem', fontWeight: '600', outline: 'none', transition: 'all 0.2s', color: '#1e293b', fontFamily: 'Fraunces, serif' },
     resultsDropdown: { position: 'absolute' as const, top: 'calc(100% + 15px)', left: 0, right: 0, background: 'white', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', border: '1px solid #f1f5f9', overflow: 'hidden', zIndex: 1000 },
-    nav: { display: 'flex', alignItems: 'center', gap: '2.5rem', fontSize: '1rem', fontWeight: '800', color: '#475569', fontFamily: 'Fraunces, serif' },
+    nav: { alignItems: 'center', gap: '2.5rem', fontSize: '1rem', fontWeight: '800', color: '#475569', fontFamily: 'Fraunces, serif' },
     cartBtn: { position: 'relative' as const, width: '54px', height: '54px', background: '#f0f7f0', color: '#2d5a27', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid #e8f1e8' },
+    wishlistBtn: { position: 'relative' as const, width: '54px', height: '54px', background: '#fef2f2', color: '#ef4444', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid #fecaca' },
     badge: { position: 'absolute' as const, top: '-6px', right: '-6px', background: '#f43f5e', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '900', border: '3px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }
   };
 
@@ -103,11 +109,32 @@ export default function StoreLayout({
         .nav-link:hover::after, .nav-link.active::after { width: 100%; }
         .search-input:focus { border-color: #2d5a27 !important; background: white !important; box-shadow: 0 10px 15px -3px rgba(45, 90, 39, 0.1); }
         .result-item:hover { background: #f8fafc; }
+        .marquee-container {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .marquee-container::-webkit-scrollbar {
+          display: none;
+        }
+        .marquee-text {
+          display: inline-block;
+          animation: marquee-scroll 25s linear infinite;
+          padding-left: 100%;
+        }
+        @keyframes marquee-scroll {
+          0% { transform: translate3d(0%, 0, 0); }
+          100% { transform: translate3d(-100%, 0, 0); }
+        }
       `}</style>
 
       {/* DYNAMIC TOP BANNER */}
-      <div style={styles.topBanner}>
-        {topBannerText}
+      <div style={styles.topBanner} className="marquee-container">
+        <span className="marquee-text">
+          {topBannerText}
+        </span>
       </div>
 
       <header style={styles.header}>
@@ -134,7 +161,7 @@ export default function StoreLayout({
             <Link href="/contact" className={`nav-link ${pathname === '/contact' ? 'active' : ''}`}>Contact Us</Link>
           </nav>
 
-          <div style={styles.searchForm} ref={searchRef}>
+          <div className="hidden md:block" style={styles.searchForm} ref={searchRef}>
             <form onSubmit={handleSearchSubmit}>
               <Search style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} size={20} />
               <input
@@ -190,7 +217,7 @@ export default function StoreLayout({
             )}
           </div>
 
-          <nav className="hidden lg:flex" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <nav className="hidden lg:flex" style={{ alignItems: 'center', gap: '1.5rem' }}>
             {mounted && user ? (
               <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1e293b', background: '#f8fafc', padding: '0.7rem 1.4rem', borderRadius: '14px', border: '1px solid #e2e8f0', textDecoration: 'none', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
                 <UserIcon size={16} color="#2d5a27" />
@@ -202,6 +229,13 @@ export default function StoreLayout({
               </Link>
             )}
 
+            <Link href="/wishlist" style={styles.wishlistBtn}>
+              <Heart size={22} />
+              {mounted && wishlistCount > 0 && (
+                <span style={styles.badge}>{wishlistCount}</span>
+              )}
+            </Link>
+
             <Link href="/cart" style={styles.cartBtn}>
               <ShoppingCart size={22} />
               {mounted && itemCount > 0 && (
@@ -209,6 +243,34 @@ export default function StoreLayout({
               )}
             </Link>
           </nav>
+
+          {/* Mobile Right Nav */}
+          <div className="flex lg:!hidden" style={{ alignItems: 'center', gap: '0.75rem' }}>
+            <Link href="/wishlist" style={styles.wishlistBtn}>
+              <Heart size={22} />
+              {mounted && wishlistCount > 0 && (
+                <span style={styles.badge}>{wishlistCount}</span>
+              )}
+            </Link>
+
+            <Link href="/cart" style={styles.cartBtn}>
+              <ShoppingCart size={22} />
+              {mounted && itemCount > 0 && (
+                <span style={styles.badge}>{itemCount}</span>
+              )}
+            </Link>
+            
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)} 
+              style={{ 
+                width: '54px', height: '54px', background: '#f8fafc', color: '#1e293b', 
+                borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                border: '1px solid #e2e8f0', cursor: 'pointer' 
+              }}
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -229,7 +291,45 @@ export default function StoreLayout({
                 <span style={{ fontSize: '1.5rem', fontWeight: '900', color: 'white', fontFamily: 'Fraunces, serif' }}>Kanvi Pickles</span>
               )}
             </div>
-            <p style={{ color: '#f1f5f9', fontSize: '0.875rem', lineHeight: 1.6 }}>Bringing the authentic taste of Godavari home. Handcrafted recipes passed down through generations.</p>
+            <p style={{ color: '#f1f5f9', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>Bringing the authentic taste of Godavari home. Handcrafted recipes passed down through generations.</p>
+            
+            {/* Social Media Links */}
+            <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+              {(settings?.instagramUrl || 'https://instagram.com/kanvipickles') && (
+                <a 
+                  href={settings?.instagramUrl || 'https://instagram.com/kanvipickles'} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  style={{ 
+                    width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', transition: 'all 0.2s' 
+                  }}
+                  onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+                  onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" style={{ width: '18px', height: '18px' }}>
+                    <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9s-58-34.5-93.9-36.2c-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.8 9.9 67.6 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2s34.5-58 36.2-93.9c2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                  </svg>
+                </a>
+              )}
+              {(settings?.whatsappUrl || 'https://wa.me/918247812474') && (
+                <a 
+                  href={settings?.whatsappUrl || 'https://wa.me/918247812474'} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  style={{ 
+                    width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', transition: 'all 0.2s' 
+                  }}
+                  onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+                  onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" style={{ width: '18px', height: '18px' }}>
+                    <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+                  </svg>
+                </a>
+              )}
+            </div>
           </div>
           <div>
             <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Account</h4>
@@ -240,11 +340,15 @@ export default function StoreLayout({
             </div>
           </div>
           <div>
-            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Support</h4>
+            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Contact Details</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: '#e2e8f0' }}>
-              <Link href="/about" style={{ color: 'inherit', textDecoration: 'none' }}>Our Story</Link>
-              <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</Link>
-              <Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
+              <a href={`tel:${(settings?.contactPhone || '+91 8247812474').replace(/\s+/g, '')}`} style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'inherit', textDecoration: 'none' }}>
+                📞 {settings?.contactPhone || '+91 8247812474'}
+              </a>
+              <a href={`mailto:${settings?.contactEmail || 'support@kanvipickles.com'}`} style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'inherit', textDecoration: 'none' }}>
+                ✉️ {settings?.contactEmail || 'support@kanvipickles.com'}
+              </a>
+              <span style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', lineHeight: 1.4 }}>📍 {settings?.contactAddress || 'Dabagardense, visakhapatnam, Andhra Pradesh'}</span>
             </div>
           </div>
           <div>
@@ -253,13 +357,106 @@ export default function StoreLayout({
               <Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
               <Link href="/legal/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link>
               <Link href="/legal/refund" style={{ color: 'inherit', textDecoration: 'none' }}>Return & Refund</Link>
+              <Link href="/legal/cancellation" style={{ color: 'inherit', textDecoration: 'none' }}>Cancellation Policy</Link>
             </div>
           </div>
         </div>
-        <div style={{ textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: '2rem', fontSize: '0.625rem', fontWeight: '700', color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          © 2024 Kanvi India • All Rights Reserved.
+        <div style={{ textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: '2rem', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ fontSize: '0.625rem', fontWeight: '700', color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            © 2026 Kanvi India • All Rights Reserved.
+          </div>
+          {(settings?.fssaiNumber || '23324010000854') && (
+            <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#f1f5f9', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(0,0,0,0.15)', padding: '6px 16px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <span>🍃 FSSAI License No: {settings?.fssaiNumber || '23324010000854'}</span>
+            </div>
+          )}
         </div>
       </footer>
+
+      {/* Mobile Drawer Overlay */}
+      {isMenuOpen && (
+        <div 
+          onClick={() => setIsMenuOpen(false)}
+          style={{ 
+            position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', 
+            backdropFilter: 'blur(8px)', zIndex: 999 
+          }}
+        />
+      )}
+
+      {/* Mobile Navigation Drawer */}
+      <div 
+        style={{ 
+          position: 'fixed', top: 0, right: 0, bottom: 0, width: '300px', 
+          background: 'white', zIndex: 1000, boxShadow: '-10px 0 30px rgba(0,0,0,0.1)', 
+          transform: isMenuOpen ? 'translateX(0)' : 'translateX(100%)', 
+          transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          display: 'flex', flexDirection: 'column', padding: '40px 30px', gap: '30px'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1e293b', fontFamily: 'Fraunces, serif' }}>Menu</span>
+          <button 
+            onClick={() => setIsMenuOpen(false)} 
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        {/* Search Bar in Mobile Menu */}
+        <div style={{ position: 'relative' }}>
+          <form onSubmit={handleSearchSubmit}>
+            <Search style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} size={20} />
+            <input
+              type="text"
+              placeholder="Search pickles..."
+              className="search-input"
+              style={{ ...styles.searchInput, padding: '0.8rem 1rem 0.8rem 3rem', fontSize: '0.9rem' }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </form>
+        </div>
+
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <Link href="/" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Home</Link>
+          <Link href="/products" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/products' || pathname?.startsWith('/product/') ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Pickles</Link>
+          <Link href="/categories" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/categories' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Categories</Link>
+          <Link href="/about" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/about' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Our Story</Link>
+          <Link href="/contact" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/contact' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Contact Us</Link>
+        </nav>
+
+        <div style={{ marginTop: 'auto', borderTop: '1px solid #f1f5f9', paddingTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          {mounted && user ? (
+            <Link 
+              href="/dashboard" 
+              onClick={() => setIsMenuOpen(false)} 
+              style={{ 
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', 
+                color: '#1e293b', background: '#f8fafc', padding: '16px', borderRadius: '16px', 
+                border: '1px solid #e2e8f0', textDecoration: 'none', fontWeight: '800', fontFamily: 'Fraunces, serif' 
+              }}
+            >
+              <UserIcon size={18} color="#2d5a27" />
+              <span>My Account</span>
+            </Link>
+          ) : (
+            <Link 
+              href="/login" 
+              onClick={() => setIsMenuOpen(false)} 
+              style={{ 
+                textDecoration: 'none', color: 'white', background: '#2d5a27', padding: '16px', 
+                borderRadius: '16px', fontWeight: '800', textAlign: 'center', fontFamily: 'Fraunces, serif',
+                display: 'block'
+              }}
+            >
+              Sign In
+            </Link>
+          )}
+        </div>
+      </div>
+
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );

@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-  title: 'Spicy Delights - Premium Pickles',
+  title: 'Kanvi Pickles - Premium Pickles',
   description: 'Authentic homemade pickles delivered to your doorstep.',
 };
 

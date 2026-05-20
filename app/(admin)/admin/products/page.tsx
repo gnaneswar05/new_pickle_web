@@ -1,7 +1,19 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
-import { Plus, Edit, Trash2, Download, Scale, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, Download, Scale, Upload, FileSpreadsheet } from 'lucide-react';
+
+function parseCSV(text: string): Record<string, string>[] {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+  return lines.slice(1).map(line => {
+    const values = line.split(',').map(v => v.trim());
+    const obj: Record<string, string> = {};
+    headers.forEach((h, i) => { obj[h] = values[i] || ''; });
+    return obj;
+  });
+}
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<any[]>([]);
@@ -10,6 +22,8 @@ export default function AdminProducts() {
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [bulkUploading, setBulkUploading] = useState(false);
+  const bulkFileRef = useRef<HTMLInputElement>(null);
   
   const initialForm = { 
     name: '', 
@@ -154,13 +168,88 @@ export default function AdminProducts() {
 
   if (loading) return <div className="p-8">Loading products...</div>;
 
+  const downloadTemplate = () => {
+    const csv = 'name,description,price,category,image,stock,isTopSelling,rating,price_250g,price_500g,price_1kg\nMango Pickle,Spicy mango pickle,199,Mango,https://example.com/img.jpg,100,false,4.9,199,379,699';
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'products-template.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportProducts = () => {
+    const csv = 'name,description,price,category,image,stock,isTopSelling,rating,price_250g,price_500g,price_1kg\n' + products.map(p => {
+      const v250 = (p.variants || []).find((v: any) => v.weight === '250g');
+      const v500 = (p.variants || []).find((v: any) => v.weight === '500g');
+      const v1kg = (p.variants || []).find((v: any) => v.weight === '1kg');
+      return `"${p.name}","${(p.description || '').replace(/"/g, '""')}",${p.price},"${p.category}","${p.image || ''}",${p.stock || 0},${!!p.isTopSelling},${p.rating || 4.9},${v250?.price || ''},${v500?.price || ''},${v1kg?.price || ''}`;
+    }).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'products-export.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setBulkUploading(true);
+    try {
+      const text = await file.text();
+      const data = parseCSV(text);
+      if (data.length === 0) { toast.error('No valid data in CSV'); setBulkUploading(false); return; }
+      const mapped = data.map(row => ({
+        name: row.name || '',
+        description: row.description || '',
+        price: Number(row.price) || 0,
+        category: row.category || '',
+        image: row.image || row.imageurl || row.image_url || '',
+        stock: Number(row.stock) || 0,
+        isTopSelling: (row.istopselling || row.topselling || 'false') === 'true',
+        featured: (row.featured || 'false') === 'true',
+        rating: Number(row.rating) || 4.9,
+        price_250g: Number(row.price_250g || row['price_250g']) || 0,
+        price_500g: Number(row.price_500g || row['price_500g']) || 0,
+        price_1kg: Number(row.price_1kg || row['price_1kg']) || 0,
+      }));
+      const res = await fetch('/api/products/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products: mapped })
+      });
+      const result = await res.json();
+      if (res.ok) {
+        toast.success(result.message);
+        if (result.errors?.length > 0) {
+          result.errors.slice(0, 5).forEach((err: string) => toast.error(err, { duration: 5000 }));
+        }
+        fetchData();
+      } else {
+        toast.error(result.error || 'Bulk upload failed');
+      }
+    } catch (err) { toast.error('Failed to process CSV'); }
+    setBulkUploading(false);
+    if (bulkFileRef.current) bulkFileRef.current.value = '';
+  };
+
   return (
     <div>
-      <div className="flex justify-between items-center" style={{ marginBottom: '2rem' }}>
+      <input type="file" accept=".csv" ref={bulkFileRef} onChange={handleBulkUpload} style={{ display: 'none' }} />
+      <div className="flex justify-between items-center" style={{ marginBottom: '2rem', flexWrap: 'wrap', gap: '15px' }}>
         <h1 className="text-4xl font-bold">Manage Products</h1>
-        <div className="flex gap-4">
-          <button onClick={exportToCSV} className="export-btn">
-            <Download size={20} /> Export to Excel
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <button onClick={downloadTemplate}
+            style={{ background: '#f8fafc', color: '#64748b', padding: '10px 18px', borderRadius: '12px', border: '1px solid #e2e8f0', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+            <FileSpreadsheet size={16} /> Template
+          </button>
+          <button onClick={exportProducts}
+            style={{ background: '#f8fafc', color: '#64748b', padding: '10px 18px', borderRadius: '12px', border: '1px solid #e2e8f0', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+            <Download size={16} /> Export
+          </button>
+          <button onClick={() => bulkFileRef.current?.click()} disabled={bulkUploading}
+            style={{ background: '#1e40af', color: 'white', padding: '10px 18px', borderRadius: '12px', border: 'none', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', opacity: bulkUploading ? 0.7 : 1 }}>
+            <Upload size={16} /> {bulkUploading ? 'Uploading...' : 'Bulk Upload'}
           </button>
           <button className="btn btn-primary" onClick={() => { setEditId(null); setForm(initialForm); setShowModal(true); }}>
             <Plus size={20} /> Add New Product

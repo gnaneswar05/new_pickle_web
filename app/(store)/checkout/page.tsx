@@ -106,22 +106,23 @@ export default function CheckoutPage() {
   const finalPayable = grossTotal - walletDeduction;
 
   const handlePincodeChange = async (val: string) => {
+    // Only allow digits
+    val = val.replace(/\D/g, '').slice(0, 6);
     setPincode(val);
     if (val.length === 6) {
       try {
-        const res = await fetch('/api/pincodes');
-        const pincodes = await res.json();
-        const pinData = pincodes.find((p: any) => p.code === val);
-        if (pinData) {
+        const res = await fetch(`/api/pincodes/check?code=${val}`);
+        const data = await res.json();
+        if (data.available) {
           setIsServiceable(true);
-          setDeliveryCharge(Number(pinData.deliveryCharge) || 0);
-          setCityName(pinData.city || '');
-          toast.success(`Delivery available in ${pinData.city}!`);
+          setDeliveryCharge(Number(data.deliveryCharge) || 0);
+          setCityName(data.city || '');
+          toast.success(`Delivery available in ${data.city}!`);
         } else {
           setIsServiceable(false);
           setDeliveryCharge(0);
           setCityName('');
-          toast.error('Sorry, we do not deliver here yet.');
+          toast.error(data.message || 'Sorry, we do not deliver here yet.');
         }
       } catch (e) { console.error(e); }
     } else {

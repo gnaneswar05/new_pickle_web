@@ -139,6 +139,9 @@ a {
   position: fixed;
   height: 100vh;
   padding: 2rem 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-logo {

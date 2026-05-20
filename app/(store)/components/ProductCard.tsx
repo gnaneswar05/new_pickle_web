@@ -3,13 +3,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/lib/store';
+import { useWishlistStore } from '@/lib/wishlistStore';
 import toast from 'react-hot-toast';
-import { ShoppingBasket, Star, Check } from 'lucide-react';
+import { ShoppingBasket, Star, Check, Heart } from 'lucide-react';
 
 export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?: string }) {
   const [selectedWeight, setSelectedWeight] = useState('250g');
   const addItem = useCartStore((state) => state.addItem);
   const items = useCartStore((state) => state.items);
+  const toggleWishlist = useWishlistStore((state) => state.toggleItem);
+  const wishlistItems = useWishlistStore((state) => state.items);
+  const isWishlisted = wishlistItems.some(item => item.id === p._id);
   const router = useRouter();
 
   const getPrice = () => {
@@ -65,6 +69,45 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
               {p.category}
             </div>
           )}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleWishlist({
+                id: p._id,
+                name: p.name,
+                price: p.price,
+                image: p.image || defaultImage || '',
+                category: p.category,
+                rating: p.rating,
+              });
+              toast.success(isWishlisted ? `${p.name} removed from wishlist` : `${p.name} added to wishlist`);
+            }}
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '12px',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: isWishlisted ? '#fee2e2' : 'rgba(255,255,255,0.9)',
+              backdropFilter: 'blur(10px)',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            }}
+          >
+            <Heart
+              size={18}
+              fill={isWishlisted ? '#ef4444' : 'none'}
+              color={isWishlisted ? '#ef4444' : '#94a3b8'}
+              style={{ transition: 'all 0.3s' }}
+            />
+          </button>
         </div>
         <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '8px', fontFamily: 'Fraunces, serif' }}>{p.name}</h3>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '16px' }}>
