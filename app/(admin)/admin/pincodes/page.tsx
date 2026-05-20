@@ -49,18 +49,18 @@ export default function AdminPincodes() {
   };
 
   return (
-    <div style={{ padding: '20px 0', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ padding: '20px 0', fontFamily: 'Fraunces, serif' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', marginBottom: '60px' }}>
         <div>
-          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-            Service <span style={{ color: '#480D18' }}>Areas</span>
+          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif', lineHeight: 1.1 }}>
+            Service <span style={{ color: '#2d5a27' }}>Areas</span>
           </h1>
           <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Manage delivery zones and charges.</p>
         </div>
         <button 
           onClick={() => setShowModal(true)}
-          style={{ background: '#480D18', color: 'white', padding: '14px 28px', borderRadius: '18px', border: 'none', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.2)' }}
+          style={{ background: '#2d5a27', color: 'white', padding: '14px 28px', borderRadius: '18px', border: 'none', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 15px -3px rgba(45, 90, 39, 0.2)' }}
         >
           <Plus size={20} /> Add Pincode
         </button>
@@ -100,7 +100,7 @@ export default function AdminPincodes() {
                 </td>
                 <td style={{ padding: '25px 30px', color: '#64748b', fontWeight: '600', textTransform: 'capitalize' }}>{p.city}</td>
                 <td style={{ padding: '25px 30px' }}>
-                  <span style={{ background: '#ecfdf5', color: '#480D18', padding: '6px 14px', borderRadius: '12px', fontWeight: '900', fontSize: '0.9rem' }}>
+                  <span style={{ background: '#f0f7f0', color: '#2d5a27', padding: '6px 14px', borderRadius: '12px', fontWeight: '900', fontSize: '0.9rem' }}>
                     ₹{p.deliveryCharge}
                   </span>
                 </td>
@@ -130,7 +130,7 @@ export default function AdminPincodes() {
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px', backdropFilter: 'blur(4px)' }}>
           <div style={{ background: 'white', padding: '40px', borderRadius: '40px', width: '100%', maxWidth: '450px', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
             <button onClick={() => setShowModal(false)} style={{ position: 'absolute', right: '30px', top: '30px', background: '#f8fafc', border: 'none', padding: '10px', borderRadius: '12px', cursor: 'pointer' }}><X size={20} /></button>
-            <h2 style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b', marginBottom: '12px', fontFamily: 'Playfair Display, serif' }}>Add Delivery Zone</h2>
+            <h2 style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b', marginBottom: '12px', fontFamily: 'Fraunces, serif' }}>Add Delivery Zone</h2>
             <p style={{ color: '#64748b', marginBottom: '35px', fontWeight: '500' }}>Define a new serviceable pincode and fee.</p>
             
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -146,7 +146,7 @@ export default function AdminPincodes() {
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Delivery Fee (₹)</label>
                 <input required type="number" style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.deliveryCharge} onChange={e => setForm({...form, deliveryCharge: e.target.value})} placeholder="0" />
               </div>
-              <button type="submit" style={{ marginTop: '10px', background: '#480D18', color: 'white', padding: '20px', borderRadius: '20px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.2)' }}>Save Delivery Area</button>
+              <button type="submit" style={{ marginTop: '10px', background: '#2d5a27', color: 'white', padding: '20px', borderRadius: '20px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(45, 90, 39, 0.2)' }}>Save Delivery Area</button>
             </form>
           </div>
         </div>

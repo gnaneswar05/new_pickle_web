@@ -6,10 +6,17 @@ import { Mail, Phone, MapPin, Send, ShieldCheck, RefreshCw } from 'lucide-react'
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [loading, setLoading] = useState(false);
-  
+
+  // Dynamic contact info from admin settings
+  const [contactInfo, setContactInfo] = useState({
+    phone: '',
+    email: '',
+    address: ''
+  });
+
   // CAPTCHA State
   const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, userAnswer: '' });
-  
+
   const generateCaptcha = () => {
     setCaptcha({
       num1: Math.floor(Math.random() * 10) + 1,
@@ -20,11 +27,28 @@ export default function ContactPage() {
 
   useEffect(() => {
     generateCaptcha();
+    // Fetch contact info from admin settings
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        setContactInfo({
+          phone: data.contactPhone || '+91 8247812474',
+          email: data.contactEmail || 'support@kanvipickles.com',
+          address: data.contactAddress || 'Dabagardense,visakhapatnam, Andhra Pradesh'
+        });
+      })
+      .catch(() => {
+        setContactInfo({
+          phone: '+91 8247812474',
+          email: 'support@kanvipickles.com',
+          address: 'Dabagardense,visakhapatnam, Andhra Pradesh'
+        });
+      });
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate CAPTCHA
     if (parseInt(captcha.userAnswer) !== (captcha.num1 + captcha.num2)) {
       toast.error('Incorrect CAPTCHA answer. Please try again.');
@@ -54,46 +78,52 @@ export default function ContactPage() {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', fontFamily: 'Fraunces, serif' }}>
       <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif' }}>Get in <span style={{ color: '#480D18' }}>Touch</span></h1>
-        <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '600px', margin: '0 auto' }}>Have a question about our heritage pickles or an order? We are here to help!</p>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '1.5rem', fontFamily: 'Fraunces, serif' }}>Get in <span style={{ color: '#2d5a27' }}>Touch</span></h1>
+        <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '600px', margin: '0 auto' }}>Have a question about our pickles or an order? We are here to help!</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '60px' }}>
         {/* Contact Info */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
           <div style={{ background: 'white', padding: '40px', borderRadius: '40px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '30px', color: '#1e293b', fontFamily: 'Playfair Display, serif' }}>Contact Information</h3>
-            
+            <h3 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '30px', color: '#1e293b', fontFamily: 'Fraunces, serif' }}>Contact Information</h3>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                <div style={{ width: '56px', height: '56px', background: '#ecfdf5', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#480D18' }}>
+                <div style={{ width: '56px', height: '56px', background: '#f0f7f0', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2d5a27' }}>
                   <Phone size={24} />
                 </div>
                 <div>
                   <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Phone</p>
-                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>+91 98765 43210</p>
+                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>
+                    {contactInfo.phone || <span style={{ color: '#cbd5e1' }}>Not set yet</span>}
+                  </p>
                 </div>
               </div>
-              
+
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                 <div style={{ width: '56px', height: '56px', background: '#eff6ff', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
                   <Mail size={24} />
                 </div>
                 <div>
                   <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Email</p>
-                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>support@kanvipickles.com</p>
+                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>
+                    {contactInfo.email || <span style={{ color: '#cbd5e1' }}>Not set yet</span>}
+                  </p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                <div style={{ width: '56px', height: '56px', background: '#fff1f2', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e11d48' }}>
+                <div style={{ width: '56px', height: '56px', background: '#f0f7f0', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b91c1c' }}>
                   <MapPin size={24} />
                 </div>
                 <div>
                   <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Location</p>
-                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>Godavari Region, Andhra Pradesh</p>
+                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>
+                    {contactInfo.address || <span style={{ color: '#cbd5e1' }}>Not set yet</span>}
+                  </p>
                 </div>
               </div>
             </div>
@@ -106,35 +136,35 @@ export default function ContactPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Name</label>
-                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="Full Name" />
+                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Full Name" />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Email</label>
-                <input required type="email" style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="email@example.com" />
+                <input required type="email" style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="email@example.com" />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Phone</label>
-                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} placeholder="Mobile Number" />
+                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="Mobile Number" />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Subject</label>
-                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.subject} onChange={e => setForm({...form, subject: e.target.value})} placeholder="How can we help?" />
+                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder="How can we help?" />
               </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Message</label>
-              <textarea required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600', minHeight: '120px', resize: 'none' }} value={form.message} onChange={e => setForm({...form, message: e.target.value})} placeholder="Your inquiry..." />
+              <textarea required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600', minHeight: '120px', resize: 'none' }} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Your inquiry..." />
             </div>
 
             {/* MATH CAPTCHA SECTION */}
             <div style={{ background: '#f8fafc', padding: '20px', borderRadius: '24px', border: '2px solid #f1f5f9' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '15px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#1e293b', fontWeight: '800' }}>
-                  <ShieldCheck size={18} color="#480D18" />
+                  <ShieldCheck size={18} color="#2d5a27" />
                   <span>Security Verification</span>
                 </div>
                 <button type="button" onClick={generateCaptcha} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', fontWeight: '700' }}>
@@ -142,14 +172,14 @@ export default function ContactPage() {
                 </button>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                <div style={{ fontSize: '1.25rem', fontWeight: '900', color: '#480D18', background: 'white', padding: '10px 20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: '900', color: '#2d5a27', background: 'white', padding: '10px 20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   {captcha.num1} + {captcha.num2} = ?
                 </div>
-                <input 
+                <input
                   required
-                  type="number" 
-                  value={captcha.userAnswer} 
-                  onChange={e => setCaptcha({...captcha, userAnswer: e.target.value})}
+                  type="number"
+                  value={captcha.userAnswer}
+                  onChange={e => setCaptcha({ ...captcha, userAnswer: e.target.value })}
                   placeholder="Answer"
                   style={{ flex: 1, padding: '12px 16px', borderRadius: '12px', border: '2px solid #e2e8f0', outline: 'none', fontWeight: '800', fontSize: '1.1rem', textAlign: 'center' }}
                 />

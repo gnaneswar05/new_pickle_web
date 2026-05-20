@@ -39,7 +39,7 @@ export default function Home() {
       {/* Dynamic Unique Hero */}
       <section style={{ position: 'relative', overflow: 'hidden', padding: '120px 20px', background: '#0f172a', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
         <style>{`
-          .hero-btn:hover { transform: translateY(-5px); box-shadow: 0 25px 30px -5px rgba(72, 13, 24, 0.5) !important; }
+          .hero-btn:hover { transform: translateY(-5px); box-shadow: 0 25px 30px -5px rgba(45, 90, 39, 0.5) !important; }
           .hero-btn-alt:hover { background: rgba(255,255,255,0.2) !important; }
           .hero-img { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
           .hero-img:hover { transform: scale(1.02) rotate(0deg) !important; }
@@ -47,29 +47,29 @@ export default function Home() {
         `}</style>
         
         {/* Glowing Orbs */}
-        <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: '600px', height: '600px', background: '#480D18', filter: 'blur(150px)', opacity: 0.35, borderRadius: '50%' }}></div>
-        <div style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '600px', height: '600px', background: '#e11d48', filter: 'blur(150px)', opacity: 0.15, borderRadius: '50%' }}></div>
+        <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: '600px', height: '600px', background: '#2d5a27', filter: 'blur(150px)', opacity: 0.35, borderRadius: '50%' }}></div>
+        <div style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '600px', height: '600px', background: '#b91c1c', filter: 'blur(150px)', opacity: 0.15, borderRadius: '50%' }}></div>
         
         <div className="container" style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', gap: '80px', flexWrap: 'wrap' }}>
           <div style={{ flex: '1 1 500px' }} className="fade-transition" key={activeSlide?._id || 'default'}>
-            <div style={{ display: 'inline-block', padding: '10px 20px', background: 'rgba(72, 13, 24, 0.15)', color: '#fda4af', borderRadius: '30px', fontSize: '0.85rem', fontWeight: '900', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '30px', border: '1px solid rgba(72, 13, 24, 0.5)' }}>
+            <div style={{ display: 'inline-block', padding: '10px 20px', background: 'rgba(45, 90, 39, 0.15)', color: '#ca8a04', borderRadius: '30px', fontSize: '0.85rem', fontWeight: '900', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '30px', border: '1px solid rgba(45, 90, 39, 0.5)' }}>
               {activeSlide?.subtitle || '100% Authentic Godavari Recipe'}
             </div>
-            <h1 style={{ fontSize: 'clamp(3.5rem, 6vw, 5.5rem)', fontWeight: '900', color: 'white', lineHeight: 1.1, fontFamily: 'Playfair Display, serif', marginBottom: '30px' }}>
+            <h1 style={{ fontSize: 'clamp(3.5rem, 6vw, 5.5rem)', fontWeight: '900', color: 'white', lineHeight: 1.1, fontFamily: 'Fraunces, serif', marginBottom: '30px' }}>
               {activeSlide?.title ? (
                 <>
                   {activeSlide.title.split(' ').slice(0, -1).join(' ')}{' '}
-                  <span style={{ color: '#fda4af', fontStyle: 'italic' }}>{activeSlide.title.split(' ').slice(-1)}</span>
+                  <span style={{ color: '#ca8a04', fontStyle: 'italic' }}>{activeSlide.title.split(' ').slice(-1)}</span>
                 </>
               ) : (
-                <>Taste the <span style={{ color: '#fda4af', fontStyle: 'italic' }}>Heritage</span> of India.</>
+                <>Taste the <span style={{ color: '#ca8a04', fontStyle: 'italic' }}>Our Story</span> of India.</>
               )}
             </h1>
             <p style={{ fontSize: '1.25rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '50px', maxWidth: '600px', fontWeight: '500' }}>
               Handcrafted with premium ingredients and time-honored traditions. Experience the burst of authentic, bold flavors in every single bite.
             </p>
             <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-              <Link href={activeSlide?.link || "/products"} className="hero-btn" style={{ background: '#480D18', color: 'white', padding: '22px 45px', borderRadius: '30px', textDecoration: 'none', fontWeight: '900', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 20px 25px -5px rgba(72, 13, 24, 0.3)', transition: 'all 0.3s' }}>
+              <Link href={activeSlide?.link || "/products"} className="hero-btn" style={{ background: '#2d5a27', color: 'white', padding: '22px 45px', borderRadius: '30px', textDecoration: 'none', fontWeight: '900', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 20px 25px -5px rgba(45, 90, 39, 0.3)', transition: 'all 0.3s' }}>
                 Shop Collection <ArrowRight size={20} />
               </Link>
               <Link href="/about" className="hero-btn-alt" style={{ background: 'rgba(255,255,255,0.05)', color: 'white', padding: '22px 45px', borderRadius: '30px', textDecoration: 'none', fontWeight: '800', fontSize: '1.1rem', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', transition: 'all 0.3s' }}>
@@ -84,7 +84,7 @@ export default function Home() {
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0f172a, transparent 70%)' }}></div>
               <div style={{ position: 'absolute', bottom: '40px', left: '40px', right: '40px' }}>
                 <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', padding: '20px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <div style={{ width: '50px', height: '50px', background: '#480D18', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                  <div style={{ width: '50px', height: '50px', background: '#2d5a27', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                     <Star size={24} fill="currentColor" />
                   </div>
                   <div>
@@ -104,7 +104,7 @@ export default function Home() {
                     onClick={() => setCurrentSlideIndex(idx)}
                     style={{ 
                       width: '12px', height: '12px', borderRadius: '50%', border: 'none', cursor: 'pointer', transition: 'all 0.3s',
-                      background: currentSlideIndex === idx ? '#fda4af' : 'rgba(255,255,255,0.2)',
+                      background: currentSlideIndex === idx ? '#ca8a04' : 'rgba(255,255,255,0.2)',
                       transform: currentSlideIndex === idx ? 'scale(1.3)' : 'scale(1)'
                     }} 
                   />
@@ -117,8 +117,8 @@ export default function Home() {
 
       {/* Dynamic Categories */}
       <section className="container" style={{ padding: '6rem 20px' }}>
-        <h2 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', marginBottom: '4rem', fontFamily: 'Playfair Display, serif', textAlign: 'center' }}>
-          Shop by <span style={{ color: '#480D18' }}>Category</span>
+        <h2 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', marginBottom: '4rem', fontFamily: 'Fraunces, serif', textAlign: 'center' }}>
+          Shop by <span style={{ color: '#2d5a27' }}>Category</span>
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '40px', justifyItems: 'center' }}>
           {categories.map((cat: any) => (
@@ -133,19 +133,19 @@ export default function Home() {
                 borderRadius: '50%',
                 overflow: 'hidden',
                 border: '6px solid white',
-                boxShadow: '0 20px 25px -5px rgba(72, 13, 24, 0.15)',
+                boxShadow: '0 20px 25px -5px rgba(45, 90, 39, 0.15)',
                 marginBottom: '20px',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 position: 'relative'
               }}
               onMouseOver={(e) => {
                 (e.currentTarget as HTMLElement).style.transform = 'scale(1.05) translateY(-5px)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 25px 30px -5px rgba(72, 13, 24, 0.3)';
-                (e.currentTarget as HTMLElement).style.borderColor = '#480D18';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 25px 30px -5px rgba(45, 90, 39, 0.3)';
+                (e.currentTarget as HTMLElement).style.borderColor = '#2d5a27';
               }}
               onMouseOut={(e) => {
                 (e.currentTarget as HTMLElement).style.transform = 'scale(1) translateY(0)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 20px 25px -5px rgba(72, 13, 24, 0.15)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 20px 25px -5px rgba(45, 90, 39, 0.15)';
                 (e.currentTarget as HTMLElement).style.borderColor = 'white';
               }}
               >
@@ -155,7 +155,7 @@ export default function Home() {
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                 />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', textAlign: 'center' }}>{cat.name}</h3>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif', textAlign: 'center' }}>{cat.name}</h3>
             </Link>
           ))}
         </div>

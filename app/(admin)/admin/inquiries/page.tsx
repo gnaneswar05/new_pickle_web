@@ -20,7 +20,7 @@ export default function AdminInquiries() {
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
-        <div style={{ width: '3rem', height: '3rem', background: '#ecfdf5', color: '#480D18', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '3rem', height: '3rem', background: '#f0f7f0', color: '#2d5a27', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <MessageSquare size={24} />
         </div>
         <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b' }}>Customer Inquiries</h1>
@@ -56,7 +56,7 @@ export default function AdminInquiries() {
               </div>
 
               <div>
-                <h4 style={{ fontSize: '0.75rem', fontWeight: '900', color: '#480D18', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Subject: {m.subject}</h4>
+                <h4 style={{ fontSize: '0.75rem', fontWeight: '900', color: '#2d5a27', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Subject: {m.subject}</h4>
                 <p style={{ color: '#334155', lineHeight: 1.6, fontWeight: '500' }}>{m.message}</p>
               </div>
             </div>

@@ -15,8 +15,11 @@ const settingsSchema = new Schema({
   razorpayKeySecret: { type: String, default: '' },
   isCodEnabled: { type: Boolean, default: true },
   isRazorpayEnabled: { type: Boolean, default: true },
-  topBannerText: { type: String, default: 'Authentic Godavari Heritage • Global Shipping Available' },
+  topBannerText: { type: String, default: 'Authentic Godavari • Global Shipping Available' },
   defaultProductImage: { type: String, default: 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000' },
+  contactPhone: { type: String, default: '' },
+  contactEmail: { type: String, default: '' },
+  contactAddress: { type: String, default: '' },
 }, { timestamps: true });
 
 export const Settings = models.Settings || model('Settings', settingsSchema);

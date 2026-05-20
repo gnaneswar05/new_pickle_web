@@ -70,7 +70,7 @@ export default function AdminOrders() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Delivered': return { bg: '#ecfdf5', text: '#480D18', dot: '#10b981' };
+      case 'Delivered': return { bg: '#f0f7f0', text: '#2d5a27', dot: '#16a34a' };
       case 'Processing': return { bg: '#eff6ff', text: '#2563eb', dot: '#3b82f6' };
       case 'Shipped': return { bg: '#fef3c7', text: '#d97706', dot: '#f59e0b' };
       case 'Cancelled': return { bg: '#fef2f2', text: '#dc2626', dot: '#ef4444' };
@@ -84,12 +84,12 @@ export default function AdminOrders() {
   );
 
   return (
-    <div style={{ padding: '20px 0', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ padding: '20px 0', fontFamily: 'Fraunces, serif' }}>
       {/* Header Area */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', marginBottom: '60px' }}>
         <div>
-          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif' }}>
-            Order <span style={{ color: '#480D18' }}>Vault</span>
+          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif' }}>
+            Order <span style={{ color: '#2d5a27' }}>Vault</span>
           </h1>
           <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500' }}>Manage shipments and customer fulfillment.</p>
         </div>
@@ -134,7 +134,7 @@ export default function AdminOrders() {
                     <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{o.phone}</div>
                   </td>
                   <td style={{ padding: '25px 30px' }}>
-                    <div style={{ fontWeight: '900', color: isLocked ? '#94a3b8' : '#480D18', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ fontWeight: '900', color: isLocked ? '#94a3b8' : '#2d5a27', display: 'flex', alignItems: 'center', gap: '8px' }}>
                       ₹{(o.totalAmount || 0).toFixed(2)}
                       {(o.deliveryCharge || 0) > 0 && (
                         <span style={{ fontSize: '0.65rem', background: '#fef3c7', color: '#d97706', padding: '2px 6px', borderRadius: '6px' }}>
@@ -182,14 +182,14 @@ export default function AdminOrders() {
             <button onClick={() => setShowDetailsModal(false)} style={{ position: 'absolute', right: '40px', top: '40px', background: '#f8fafc', border: 'none', padding: '12px', borderRadius: '16px', cursor: 'pointer' }}><X size={24} /></button>
             
             <div style={{ marginBottom: '40px' }}>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', fontFamily: 'Playfair Display, serif', margin: 0 }}>Order Details</h2>
+              <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', fontFamily: 'Fraunces, serif', margin: 0 }}>Order Details</h2>
               <p style={{ color: '#64748b', fontWeight: '600' }}>ID: #{selectedOrder?._id?.toUpperCase()}</p>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', marginBottom: '40px' }}>
               {/* Customer Info */}
               <div style={{ background: '#f8fafc', padding: '30px', borderRadius: '32px' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><User size={18} color="#480D18" /> Customer</h3>
+                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><User size={18} color="#2d5a27" /> Customer</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={{ fontWeight: '800', color: '#1e293b' }}>{selectedOrder?.customerName}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#64748b' }}>
@@ -203,17 +203,17 @@ export default function AdminOrders() {
 
               {/* Shipping Info */}
               <div style={{ background: '#f8fafc', padding: '30px', borderRadius: '32px' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><MapPin size={18} color="#480D18" /> Delivery</h3>
+                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><MapPin size={18} color="#2d5a27" /> Delivery</h3>
                 <p style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: '600', lineHeight: 1.6, margin: 0 }}>
                   {selectedOrder?.address}<br />
-                  <span style={{ color: '#480D18', fontWeight: '800' }}>Pincode: {selectedOrder?.pincode}</span>
+                  <span style={{ color: '#2d5a27', fontWeight: '800' }}>Pincode: {selectedOrder?.pincode}</span>
                 </p>
               </div>
             </div>
 
             {/* Products List */}
             <div style={{ marginBottom: '40px' }}>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', fontFamily: 'Playfair Display, serif' }}>Ordered Items</h3>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', fontFamily: 'Fraunces, serif' }}>Ordered Items</h3>
               <div style={{ border: '1px solid #f1f5f9', borderRadius: '24px', overflow: 'hidden' }}>
                 {selectedOrder?.products?.map((p: any, idx: number) => (
                   <div key={idx} style={{ padding: '20px 30px', background: idx % 2 === 0 ? 'white' : '#f8fafc', borderBottom: idx === (selectedOrder.products.length - 1) ? 'none' : '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -221,7 +221,7 @@ export default function AdminOrders() {
                       <div style={{ fontWeight: '800', color: '#1e293b' }}>{p.name}</div>
                       <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Qty: {p.quantity} × ₹{p.price}</div>
                     </div>
-                    <div style={{ fontWeight: '900', color: '#480D18' }}>₹{(p.price * p.quantity).toFixed(2)}</div>
+                    <div style={{ fontWeight: '900', color: '#2d5a27' }}>₹{(p.price * p.quantity).toFixed(2)}</div>
                   </div>
                 ))}
               </div>
@@ -232,7 +232,7 @@ export default function AdminOrders() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#94a3b8' }}>
                   <span>Delivery Charge</span>
-                  <span style={{ color: '#fbbf24', fontWeight: '800' }}>+ ₹{(selectedOrder?.deliveryCharge || 0).toFixed(2)}</span>
+                  <span style={{ color: '#ca8a04', fontWeight: '800' }}>+ ₹{(selectedOrder?.deliveryCharge || 0).toFixed(2)}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#94a3b8' }}>
                   <span>Payment Method</span>
@@ -250,7 +250,7 @@ export default function AdminOrders() {
               {selectedOrder?.status !== 'Shipped' && selectedOrder?.status !== 'Delivered' && (
                 <button 
                   onClick={() => { setShowDetailsModal(false); setShowShipModal(true); }}
-                  style={{ flex: 1, background: '#480D18', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', cursor: 'pointer' }}
+                  style={{ flex: 1, background: '#2d5a27', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', cursor: 'pointer' }}
                 >
                   Mark as Shipped
                 </button>
@@ -258,7 +258,7 @@ export default function AdminOrders() {
               {selectedOrder?.status === 'Shipped' && (
                 <button 
                   onClick={() => updateStatus(selectedOrder._id, 'Delivered')}
-                  style={{ flex: 1, background: '#480D18', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', cursor: 'pointer' }}
+                  style={{ flex: 1, background: '#2d5a27', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', cursor: 'pointer' }}
                 >
                   Confirm Delivery
                 </button>
@@ -274,10 +274,10 @@ export default function AdminOrders() {
           <div style={{ background: 'white', padding: '40px', borderRadius: '40px', width: '100%', maxWidth: '450px', position: 'relative' }}>
             <button onClick={() => setShowShipModal(false)} style={{ position: 'absolute', right: '30px', top: '30px', background: '#f8fafc', border: 'none', padding: '10px', borderRadius: '12px', cursor: 'pointer' }}><X size={20} /></button>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <div style={{ width: '60px', height: '60px', background: '#ecfdf5', color: '#480D18', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <div style={{ width: '60px', height: '60px', background: '#f0f7f0', color: '#2d5a27', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
                 <Truck size={30} />
               </div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#1e293b', fontFamily: 'Playfair Display, serif' }}>Shipping Details</h2>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#1e293b', fontFamily: 'Fraunces, serif' }}>Shipping Details</h2>
             </div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -301,7 +301,7 @@ export default function AdminOrders() {
               </div>
               <button 
                 onClick={() => updateStatus(selectedOrder._id, 'Shipped', courierInfo)}
-                style={{ background: '#480D18', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer' }}
+                style={{ background: '#2d5a27', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer' }}
               >
                 Confirm Shipment
               </button>

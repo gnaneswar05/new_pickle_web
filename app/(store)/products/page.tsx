@@ -48,13 +48,13 @@ function ProductsContent() {
   }
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Fraunces, serif' }}>
       <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '1.5rem', fontFamily: 'Playfair Display, serif', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '1.5rem', fontFamily: 'Fraunces, serif', letterSpacing: '-0.02em' }}>
           {category ? `${category} Collection` : search ? `Search Results for "${search}"` : 'Our Collections'}
         </h1>
         <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6, fontWeight: '500' }}>
-          Traditional recipes, sun-dried ingredients, and the authentic taste of heritage Godavari pickles.
+          Traditional recipes, sun-dried ingredients, and the authentic taste of Godavari pickles.
         </p>
 
         {/* Category Quick Filter */}
@@ -68,11 +68,11 @@ function ProductsContent() {
               fontWeight: '800',
               textDecoration: 'none',
               transition: 'all 0.2s',
-              background: !category ? '#480D18' : 'white',
+              background: !category ? '#2d5a27' : 'white',
               color: !category ? 'white' : '#64748b',
               border: '1px solid',
-              borderColor: !category ? '#480D18' : '#e2e8f0',
-              boxShadow: !category ? '0 10px 15px -3px rgba(72, 13, 24, 0.2)' : 'none'
+              borderColor: !category ? '#2d5a27' : '#e2e8f0',
+              boxShadow: !category ? '0 10px 15px -3px rgba(45, 90, 39, 0.2)' : 'none'
             }}
           >
             All Pickles
@@ -90,11 +90,11 @@ function ProductsContent() {
                   fontWeight: '800',
                   textDecoration: 'none',
                   transition: 'all 0.2s',
-                  background: isSelected ? '#480D18' : 'white',
+                  background: isSelected ? '#2d5a27' : 'white',
                   color: isSelected ? 'white' : '#64748b',
                   border: '1px solid',
-                  borderColor: isSelected ? '#480D18' : '#e2e8f0',
-                  boxShadow: isSelected ? '0 10px 15px -3px rgba(72, 13, 24, 0.2)' : 'none'
+                  borderColor: isSelected ? '#2d5a27' : '#e2e8f0',
+                  boxShadow: isSelected ? '0 10px 15px -3px rgba(45, 90, 39, 0.2)' : 'none'
                 }}
               >
                 {cat.name}
@@ -107,7 +107,7 @@ function ProductsContent() {
       {filteredProducts.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '100px 20px', background: '#f8fafc', borderRadius: '40px', border: '2px dashed #e2e8f0' }}>
           <p style={{ fontSize: '1.5rem', fontWeight: '800', color: '#94a3b8' }}>No pickles found in this collection yet.</p>
-          <Link href="/products" style={{ color: '#480D18', fontWeight: '800', marginTop: '1.5rem', display: 'inline-block', textDecoration: 'none' }}>View All Products →</Link>
+          <Link href="/products" style={{ color: '#2d5a27', fontWeight: '800', marginTop: '1.5rem', display: 'inline-block', textDecoration: 'none' }}>View All Products →</Link>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
@@ -120,7 +120,7 @@ function ProductsContent() {
       {/* Trust Section */}
       <div style={{ marginTop: '100px', padding: '60px', background: 'white', borderRadius: '40px', border: '1px solid #f1f5f9', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ width: '48px', height: '48px', background: '#ecfdf5', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: '#480D18' }}>
+          <div style={{ width: '48px', height: '48px', background: '#f0f7f0', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: '#2d5a27' }}>
             <ShieldCheck size={24} />
           </div>
           <h4 style={{ fontWeight: '800', fontSize: '1rem', color: '#1e293b', marginBottom: '8px' }}>100% Natural</h4>

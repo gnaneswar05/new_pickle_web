@@ -21,28 +21,28 @@ export default function OrderTrackingPage() {
   }, [id]);
 
   if (loading) return (
-    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Fraunces, serif' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#480D18', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }}></div>
-        <p style={{ color: '#64748b', fontWeight: '600' }}>Locating your heritage package...</p>
+        <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#2d5a27', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }}></div>
+        <p style={{ color: '#64748b', fontWeight: '600' }}>Locating your package...</p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     </div>
   );
 
   if (!order || order.error) return (
-    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif', padding: '20px' }}>
+    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Fraunces, serif', padding: '20px' }}>
       <div style={{ textAlign: 'center', background: 'white', padding: '60px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
         <h2 style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b', marginBottom: '15px' }}>Order Not Found</h2>
         <p style={{ color: '#64748b', marginBottom: '30px' }}>We couldn't find an order with this ID.</p>
-        <button onClick={() => router.push('/orders')} style={{ background: '#480D18', color: 'white', padding: '16px 32px', borderRadius: '16px', border: 'none', fontWeight: '800', cursor: 'pointer' }}>Back to My Orders</button>
+        <button onClick={() => router.push('/orders')} style={{ background: '#2d5a27', color: 'white', padding: '16px 32px', borderRadius: '16px', border: 'none', fontWeight: '800', cursor: 'pointer' }}>Back to My Orders</button>
       </div>
     </div>
   );
 
   const allStages = [
     { name: 'Pending', label: 'Order Placed', icon: Clock, desc: 'We have received your order.' },
-    { name: 'Processing', label: 'In Preparation', icon: Package, desc: 'Our chefs are preparing your heritage pickles.' },
+    { name: 'Processing', label: 'In Preparation', icon: Package, desc: 'Our chefs are preparing your pickles.' },
     { 
       name: 'Shipped', 
       label: 'In Transit', 
@@ -100,19 +100,19 @@ export default function OrderTrackingPage() {
   const netPayable = grossTotal - walletDeduction;
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Fraunces, serif' }}>
       <Link href="/orders" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', textDecoration: 'none', fontWeight: '700', fontSize: '0.9rem', marginBottom: '40px' }}>
         <ArrowLeft size={18} /> Back to My Orders
       </Link>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', marginBottom: '50px' }}>
         <div>
-          <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-            Track <span style={{ color: '#480D18' }}>Shipment</span>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif', lineHeight: 1.1 }}>
+            Track <span style={{ color: '#2d5a27' }}>Shipment</span>
           </h1>
           <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Order ID: <span style={{ color: '#1e293b', fontWeight: '800' }}>#{order._id.toUpperCase()}</span></p>
         </div>
-        <div style={{ background: order.status === 'Delivered' ? '#ecfdf5' : '#eff6ff', color: order.status === 'Delivered' ? '#480D18' : '#2563eb', padding: '12px 24px', borderRadius: '18px', fontWeight: '900', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        <div style={{ background: order.status === 'Delivered' ? '#f0f7f0' : '#eff6ff', color: order.status === 'Delivered' ? '#2d5a27' : '#2563eb', padding: '12px 24px', borderRadius: '18px', fontWeight: '900', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           {order.status}
         </div>
       </div>
@@ -121,7 +121,7 @@ export default function OrderTrackingPage() {
         
         {/* Timeline */}
         <div style={{ background: 'white', padding: '50px 40px', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '40px', fontFamily: 'Playfair Display, serif' }}>Delivery History</h3>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '40px', fontFamily: 'Fraunces, serif' }}>Delivery History</h3>
           <div style={{ position: 'relative' }}>
             <div style={{ position: 'absolute', left: '23px', top: '20px', bottom: '20px', width: '3px', background: '#f1f5f9' }}></div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '45px' }}>
@@ -129,7 +129,7 @@ export default function OrderTrackingPage() {
                 const info = getStageInfo(stage.name);
                 return (
                   <div key={idx} style={{ display: 'flex', gap: '30px', position: 'relative', zIndex: 1, opacity: info.completed ? 1 : 0.4 }}>
-                    <div style={{ width: '50px', height: '50px', background: info.completed ? '#480D18' : '#f8fafc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: info.completed ? 'white' : '#94a3b8', border: info.completed ? '5px solid #ecfdf5' : '3px solid #f1f5f9' }}>
+                    <div style={{ width: '50px', height: '50px', background: info.completed ? '#2d5a27' : '#f8fafc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: info.completed ? 'white' : '#94a3b8', border: info.completed ? '5px solid #f0f7f0' : '3px solid #f1f5f9' }}>
                       <stage.icon size={22} />
                     </div>
                     <div style={{ flex: 1 }}>
@@ -137,7 +137,7 @@ export default function OrderTrackingPage() {
                         <h4 style={{ margin: 0, fontWeight: '800', color: info.completed ? '#1e293b' : '#94a3b8', fontSize: '1.1rem' }}>{stage.label}</h4>
                         {info.completed && info.time && (
                           <div style={{ textAlign: 'right' }}>
-                            <p style={{ margin: 0, fontSize: '0.75rem', color: '#480D18', fontWeight: '800' }}>{new Date(info.time).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</p>
+                            <p style={{ margin: 0, fontSize: '0.75rem', color: '#2d5a27', fontWeight: '800' }}>{new Date(info.time).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</p>
                             <p style={{ margin: 0, fontSize: '0.7rem', color: '#94a3b8', fontWeight: '700' }}>{new Date(info.time).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</p>
                           </div>
                         )}
@@ -156,7 +156,7 @@ export default function OrderTrackingPage() {
           
           <div style={{ background: 'white', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', marginBottom: '25px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <ReceiptText size={20} color="#480D18" /> Order Receipt
+              <ReceiptText size={20} color="#2d5a27" /> Order Receipt
             </h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -176,7 +176,7 @@ export default function OrderTrackingPage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                 <span style={{ color: '#64748b', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                   <Truck size={14} color="#480D18" /> Delivery Charges
+                   <Truck size={14} color="#2d5a27" /> Delivery Charges
                 </span>
                 <span style={{ fontWeight: '900', color: '#d97706' }}>
                   {displayDelivery > 0 ? `+ ₹${displayDelivery.toFixed(2)}` : 'FREE'}
@@ -185,17 +185,17 @@ export default function OrderTrackingPage() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                 <span style={{ color: '#64748b', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                   <ShieldCheck size={14} color="#480D18" /> Taxes & Fees
+                   <ShieldCheck size={14} color="#2d5a27" /> Taxes & Fees
                 </span>
                 <span style={{ fontWeight: '800', color: '#1e293b' }}>+ ₹{displayTaxAndFees.toFixed(2)}</span>
               </div>
 
               {walletDeduction > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', background: '#f0fdf4', padding: '12px 15px', borderRadius: '14px', border: '1px solid #d1fae5' }}>
-                  <span style={{ color: '#480D18', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                     <Wallet size={14} color="#480D18" /> Wallet Savings
+                  <span style={{ color: '#2d5a27', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                     <Wallet size={14} color="#2d5a27" /> Wallet Savings
                   </span>
-                  <span style={{ fontWeight: '900', color: '#480D18' }}>− ₹{walletDeduction.toFixed(2)}</span>
+                  <span style={{ fontWeight: '900', color: '#2d5a27' }}>− ₹{walletDeduction.toFixed(2)}</span>
                 </div>
               )}
 
@@ -218,12 +218,12 @@ export default function OrderTrackingPage() {
           {/* Destination */}
           <div style={{ background: '#f8fafc', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#1e293b', marginBottom: '30px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <MapPin size={20} color="#480D18" /> Destination
+              <MapPin size={20} color="#2d5a27" /> Destination
             </h3>
             <div>
               <p style={{ margin: 0, fontWeight: '800', color: '#1e293b', fontSize: '1.05rem' }}>{order.customerName}</p>
               <p style={{ margin: '8px 0 0 0', fontWeight: '600', color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{order.address}</p>
-              <p style={{ margin: '4px 0 0 0', fontWeight: '800', color: '#480D18', fontSize: '0.9rem' }}>Pincode: {order.pincode}</p>
+              <p style={{ margin: '4px 0 0 0', fontWeight: '800', color: '#2d5a27', fontSize: '0.9rem' }}>Pincode: {order.pincode}</p>
             </div>
           </div>
         </div>

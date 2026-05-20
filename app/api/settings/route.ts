@@ -12,7 +12,7 @@ export async function GET() {
         aboutUs: '', termsConditions: '', cancellationPolicy: '', refundPolicy: '', privacyPolicy: '', 
         maxCodAmount: 2000, razorpayKeyId: '', razorpayKeySecret: '',
         isCodEnabled: true, isRazorpayEnabled: true,
-        topBannerText: 'Authentic Godavari Heritage • Global Shipping Available'
+        topBannerText: 'Authentic Godavari • Global Shipping Available'
       });
     }
     return NextResponse.json(settings);

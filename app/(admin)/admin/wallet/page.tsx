@@ -62,7 +62,7 @@ export default function AdminWalletManager() {
   };
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', fontFamily: 'system-ui, -apple-system, sans-serif', padding: '20px' }}>
+    <div style={{ maxWidth: '1100px', margin: '0 auto', fontFamily: 'Fraunces, serif', padding: '20px' }}>
       <div style={{ marginBottom: '3rem' }}>
         <h1 style={{ fontSize: '3rem', fontWeight: '800', color: '#1e293b', letterSpacing: '-0.02em', margin: 0 }}>Wallet Manager</h1>
         <p style={{ fontSize: '1.1rem', color: '#64748b', marginTop: '0.5rem' }}>Centralized manual control for customer balances.</p>
@@ -73,7 +73,7 @@ export default function AdminWalletManager() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           <div style={{ background: 'white', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)', border: '1px solid #f1f5f9' }}>
             <h3 style={{ fontWeight: '800', color: '#1e293b', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.25rem' }}>
-              <Search size={24} color="#10b981" /> Find Profile
+              <Search size={24} color="#16a34a" /> Find Profile
             </h3>
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>Customer Phone</label>
@@ -160,7 +160,7 @@ export default function AdminWalletManager() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <button 
                   onClick={() => handleUpdate('Credit')}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: '#ecfdf5', color: '#2b070d', transition: 'all 0.2s' }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: '#f0f7f0', color: '#142911', transition: 'all 0.2s' }}
                   disabled={loading}
                 >
                   <ArrowDownCircle size={56} />
@@ -171,7 +171,7 @@ export default function AdminWalletManager() {
                 </button>
                 <button 
                   onClick={() => handleUpdate('Debit')}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: '#fff1f2', color: '#9f1239', transition: 'all 0.2s' }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: '#f0f7f0', color: '#9f1239', transition: 'all 0.2s' }}
                   disabled={loading}
                 >
                   <ArrowUpCircle size={56} />

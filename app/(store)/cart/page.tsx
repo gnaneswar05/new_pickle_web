@@ -19,13 +19,13 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '120px 20px', textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '120px 20px', textAlign: 'center', fontFamily: 'Fraunces, serif' }}>
         <div style={{ width: '100px', height: '100px', background: '#f8fafc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 40px', color: '#cbd5e1' }}>
           <ShoppingBag size={48} />
         </div>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '16px', fontFamily: 'Playfair Display, serif' }}>Basket is Empty</h1>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '16px', fontFamily: 'Fraunces, serif' }}>Basket is Empty</h1>
         <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '500px', margin: '0 auto 50px', lineHeight: 1.6 }}>Looks like you haven't added any handcrafted pickles to your cart yet. Explore our authentic collection!</p>
-        <Link href="/products" style={{ background: '#480D18', color: 'white', padding: '20px 40px', borderRadius: '20px', textDecoration: 'none', fontWeight: '800', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.2)' }}>
+        <Link href="/products" style={{ background: '#2d5a27', color: 'white', padding: '20px 40px', borderRadius: '20px', textDecoration: 'none', fontWeight: '800', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 10px 15px -3px rgba(45, 90, 39, 0.2)' }}>
           Shop Collection <ArrowRight size={20} />
         </Link>
       </div>
@@ -33,10 +33,10 @@ export default function CartPage() {
   }
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Fraunces, serif' }}>
       <div style={{ marginBottom: '60px' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-          Your <span style={{ color: '#480D18' }}>Basket</span>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif', lineHeight: 1.1 }}>
+          Your <span style={{ color: '#2d5a27' }}>Basket</span>
         </h1>
         <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Review your items and proceed to checkout.</p>
       </div>
@@ -52,9 +52,9 @@ export default function CartPage() {
               </div>
               
               <div style={{ flex: 1, minWidth: '200px' }}>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', margin: '0 0 4px 0', fontFamily: 'Playfair Display, serif' }}>{item.name}</h3>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', margin: '0 0 4px 0', fontFamily: 'Fraunces, serif' }}>{item.name}</h3>
                 <p style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>{item.selectedWeight || '250g'}</p>
-                <div style={{ fontSize: '1.5rem', fontWeight: '900', color: '#480D18' }}>₹{item.price.toFixed(2)}</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '900', color: '#2d5a27' }}>₹{item.price.toFixed(2)}</div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -78,7 +78,7 @@ export default function CartPage() {
         {/* Right: Order Summary */}
         <div style={{ position: 'sticky', top: '120px' }}>
           <div style={{ background: '#0f172a', padding: '50px', borderRadius: '40px', color: 'white', boxShadow: '0 25px 50px -12px rgba(15, 23, 42, 0.3)' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: '900', margin: '0 0 40px 0', fontFamily: 'Playfair Display, serif' }}>Order Summary</h2>
+            <h2 style={{ fontSize: '2rem', fontWeight: '900', margin: '0 0 40px 0', fontFamily: 'Fraunces, serif' }}>Order Summary</h2>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '40px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontWeight: '600' }}>
@@ -95,7 +95,7 @@ export default function CartPage() {
               </div>
             </div>
 
-            <Link href="/checkout" style={{ background: '#480D18', color: 'white', padding: '22px', borderRadius: '24px', textDecoration: 'none', fontWeight: '900', fontSize: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', boxShadow: '0 20px 25px -5px rgba(72, 13, 24, 0.2)' }}>
+            <Link href="/checkout" style={{ background: '#2d5a27', color: 'white', padding: '22px', borderRadius: '24px', textDecoration: 'none', fontWeight: '900', fontSize: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', boxShadow: '0 20px 25px -5px rgba(45, 90, 39, 0.2)' }}>
               Checkout Now <ArrowRight size={24} />
             </Link>
 

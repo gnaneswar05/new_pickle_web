@@ -64,7 +64,7 @@ export default function ProductDetailPage() {
   const weights = ['250g', '500g', '1kg'];
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Fraunces, serif' }}>
       <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', fontWeight: '800', marginBottom: '40px', fontSize: '0.875rem' }}>
         <ArrowLeft size={18} /> BACK TO COLLECTION
       </button>
@@ -84,8 +84,8 @@ export default function ProductDetailPage() {
         {/* Right: Info */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ marginBottom: '32px' }}>
-            <span style={{ fontSize: '0.7rem', fontWeight: '900', color: '#480D18', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Handcrafted Heritage</span>
-            <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginTop: '8px', fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: '900', color: '#2d5a27', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Handcrafted</span>
+            <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginTop: '8px', fontFamily: 'Fraunces, serif', lineHeight: 1.1 }}>
               {product.name}
             </h1>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '16px' }}>
@@ -99,9 +99,9 @@ export default function ProductDetailPage() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px' }}>
-            <span style={{ fontSize: '3rem', fontWeight: '900', color: '#480D18' }}>₹{currentPrice.toFixed(2)}</span>
+            <span style={{ fontSize: '3rem', fontWeight: '900', color: '#2d5a27' }}>₹{currentPrice.toFixed(2)}</span>
             {selectedWeight !== '250g' && (
-              <span style={{ background: '#ecfdf5', color: '#480D18', padding: '4px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800' }}>BEST VALUE</span>
+              <span style={{ background: '#f0f7f0', color: '#2d5a27', padding: '4px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800' }}>BEST VALUE</span>
             )}
           </div>
 
@@ -118,8 +118,8 @@ export default function ProductDetailPage() {
                     padding: '16px',
                     borderRadius: '16px',
                     border: '2px solid',
-                    borderColor: selectedWeight === w ? '#480D18' : '#f1f5f9',
-                    background: selectedWeight === w ? '#480D18' : 'white',
+                    borderColor: selectedWeight === w ? '#2d5a27' : '#f1f5f9',
+                    background: selectedWeight === w ? '#2d5a27' : 'white',
                     color: selectedWeight === w ? 'white' : '#1e293b',
                     fontWeight: '800',
                     cursor: 'pointer',
@@ -138,7 +138,7 @@ export default function ProductDetailPage() {
           </div>
 
           <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 1.7, marginBottom: '40px' }}>
-            {product.description || "Indulge in the true heritage of Indian flavors. Our pickles are crafted using traditional family recipes, premium quality spices, and the freshest ingredients."}
+            {product.description || "Indulge in the true essence of Indian flavors. Our pickles are crafted using traditional family recipes, premium quality spices, and the freshest ingredients."}
           </p>
 
           <div style={{ display: 'flex', gap: '16px', marginBottom: '48px' }}>
@@ -151,7 +151,7 @@ export default function ProductDetailPage() {
             {items.some(i => i.id === `${product._id}-${selectedWeight}`) ? (
               <button 
                 onClick={() => router.push('/cart')}
-                style={{ flex: 1, background: '#480D18', color: 'white', border: 'none', borderRadius: '20px', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', boxShadow: '0 10px 15px -3px rgba(72, 13, 24, 0.2)' }}
+                style={{ flex: 1, background: '#2d5a27', color: 'white', border: 'none', borderRadius: '20px', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', boxShadow: '0 10px 15px -3px rgba(45, 90, 39, 0.2)' }}
               >
                 <Check size={24} /> Go to Cart
               </button>
@@ -168,15 +168,15 @@ export default function ProductDetailPage() {
           {/* Trust Factors */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', paddingTop: '40px', borderTop: '2px solid #f8fafc' }}>
             <div style={{ textAlign: 'center' }}>
-              <ShieldCheck size={24} color="#480D18" style={{ marginBottom: '8px' }} />
+              <ShieldCheck size={24} color="#2d5a27" style={{ marginBottom: '8px' }} />
               <p style={{ fontSize: '0.6rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>100% Pure</p>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <Truck size={24} color="#480D18" style={{ marginBottom: '8px' }} />
+              <Truck size={24} color="#2d5a27" style={{ marginBottom: '8px' }} />
               <p style={{ fontSize: '0.6rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Express Delivery</p>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <RotateCcw size={24} color="#480D18" style={{ marginBottom: '8px' }} />
+              <RotateCcw size={24} color="#2d5a27" style={{ marginBottom: '8px' }} />
               <p style={{ fontSize: '0.6rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Easy Returns</p>
             </div>
           </div>

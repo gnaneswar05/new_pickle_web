@@ -66,12 +66,12 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
             </div>
           )}
         </div>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '8px', fontFamily: 'Playfair Display, serif' }}>{p.name}</h3>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '8px', fontFamily: 'Fraunces, serif' }}>{p.name}</h3>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '16px' }}>
           {[1, 2, 3, 4, 5].map((s) => <Star key={s} size={12} fill="#f59e0b" color="#f59e0b" />)}
           <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', marginLeft: '4px' }}>({p.rating || 4.9}/5)</span>
         </div>
-        <p style={{ fontSize: '1.75rem', fontWeight: '900', color: '#480D18', marginBottom: '16px' }}>₹{currentPrice.toFixed(2)}</p>
+        <p style={{ fontSize: '1.75rem', fontWeight: '900', color: '#2d5a27', marginBottom: '16px' }}>₹{currentPrice.toFixed(2)}</p>
       </Link>
 
       {/* Weight Selector */}
@@ -88,8 +88,8 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
               flex: 1,
               padding: '8px 4px',
               borderRadius: '12px',
-              border: `2px solid ${selectedWeight === w ? '#480D18' : '#f1f5f9'}`,
-              background: selectedWeight === w ? '#480D18' : 'white',
+              border: `2px solid ${selectedWeight === w ? '#2d5a27' : '#f1f5f9'}`,
+              background: selectedWeight === w ? '#2d5a27' : 'white',
               color: selectedWeight === w ? 'white' : '#64748b',
               fontSize: '0.75rem',
               fontWeight: '800',
@@ -107,7 +107,7 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
           marginTop: 'auto', 
           width: '100%', 
           padding: '16px', 
-          background: isInCart ? '#480D18' : '#0f172a', 
+          background: isInCart ? '#2d5a27' : '#0f172a', 
           color: 'white', 
           border: 'none', 
           borderRadius: '18px', 

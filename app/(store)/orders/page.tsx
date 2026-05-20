@@ -48,17 +48,17 @@ export default function CustomerOrders() {
   if (loading) return <LoadingLogo message="Loading your orders..." />;
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Fraunces, serif' }}>
       {/* Back Button */}
       <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', textDecoration: 'none', fontWeight: '700', fontSize: '0.9rem', marginBottom: '40px' }}>
         <ArrowLeft size={18} /> Back to Dashboard
       </Link>
 
       <div style={{ marginBottom: '60px' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Playfair Display, serif', lineHeight: 1.1 }}>
-          Your <span style={{ color: '#480D18' }}>Orders</span>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif', lineHeight: 1.1 }}>
+          Your <span style={{ color: '#2d5a27' }}>Orders</span>
         </h1>
-        <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Track your Godavari pickle heritage.</p>
+        <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Track your Godavari pickles.</p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
@@ -67,7 +67,7 @@ export default function CustomerOrders() {
             <ShoppingBag size={50} color="#cbd5e1" style={{ marginBottom: '20px' }} />
             <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '10px' }}>No orders yet</h3>
             <p style={{ color: '#64748b', marginBottom: '30px' }}>You haven't placed any orders yet. Ready to taste some pickles?</p>
-            <Link href="/products" style={{ background: '#480D18', color: 'white', padding: '16px 32px', borderRadius: '16px', textDecoration: 'none', fontWeight: '800' }}>Browse Store</Link>
+            <Link href="/products" style={{ background: '#2d5a27', color: 'white', padding: '16px 32px', borderRadius: '16px', textDecoration: 'none', fontWeight: '800' }}>Browse Store</Link>
           </div>
         ) : (
           orders.map((order: any) => (
@@ -81,11 +81,11 @@ export default function CustomerOrders() {
                   </div>
                   <div>
                     <p style={{ margin: '0 0 4px 0', fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Total Amount</p>
-                    <p style={{ margin: 0, fontWeight: '800', color: '#480D18', fontSize: '0.9rem' }}>₹{order.totalAmount.toFixed(2)}</p>
+                    <p style={{ margin: 0, fontWeight: '800', color: '#2d5a27', fontSize: '0.9rem' }}>₹{order.totalAmount.toFixed(2)}</p>
                   </div>
                   <div>
                     <p style={{ margin: '0 0 4px 0', fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Status</p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: order.status === 'Delivered' ? '#480D18' : '#2563eb', fontWeight: '900', fontSize: '0.85rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: order.status === 'Delivered' ? '#2d5a27' : '#2563eb', fontWeight: '900', fontSize: '0.85rem' }}>
                       {order.status === 'Delivered' ? <CheckCircle2 size={16} /> : <Truck size={16} />}
                       {order.status}
                     </div>

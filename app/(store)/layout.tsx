@@ -5,7 +5,7 @@ import { useCartStore } from '@/lib/store';
 import { useAuthStore } from '@/lib/authStore';
 import { useSettingsStore } from '@/lib/settingsStore';
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function StoreLayout({
   children,
@@ -13,13 +13,14 @@ export default function StoreLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [topBannerText, setTopBannerText] = useState('Authentic Heritage • Global Shipping Available');
+  const [topBannerText, setTopBannerText] = useState('Authentic Godavari • Global Shipping Available');
   const searchRef = useRef<HTMLDivElement>(null);
 
   const user = useAuthStore((state) => state.user);
@@ -80,27 +81,27 @@ export default function StoreLayout({
   };
 
   const styles = {
-    topBanner: { background: '#0f172a', color: 'white', padding: '0.8rem 0', fontSize: '12px', fontWeight: '800', textTransform: 'uppercase' as const, letterSpacing: '0.15em', textAlign: 'center' as const },
+    topBanner: { background: '#0f172a', color: 'white', padding: '0.8rem 0', fontSize: '12px', fontWeight: '800', textTransform: 'uppercase' as const, letterSpacing: '0.15em', textAlign: 'center' as const, fontFamily: 'Fraunces, serif' },
     header: { position: 'sticky' as const, top: 0, zIndex: 100, background: 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(15px)', borderBottom: '1px solid #f1f5f9', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' },
     container: { maxWidth: '1250px', margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '3rem' },
     logo: { display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' },
-    logoBox: { width: '55px', height: '55px', background: '#480D18', color: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', fontWeight: '900' },
+    logoBox: { width: '55px', height: '55px', background: '#2d5a27', color: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', fontWeight: '900' },
     searchForm: { flex: 1, maxWidth: '450px', position: 'relative' as const },
-    searchInput: { width: '100%', background: '#f8fafc', border: '2px solid transparent', padding: '1rem 1rem 1rem 3.5rem', borderRadius: '16px', fontSize: '1rem', fontWeight: '600', outline: 'none', transition: 'all 0.2s', color: '#1e293b' },
+    searchInput: { width: '100%', background: '#f8fafc', border: '2px solid transparent', padding: '1rem 1rem 1rem 3.5rem', borderRadius: '16px', fontSize: '1rem', fontWeight: '600', outline: 'none', transition: 'all 0.2s', color: '#1e293b', fontFamily: 'Fraunces, serif' },
     resultsDropdown: { position: 'absolute' as const, top: 'calc(100% + 15px)', left: 0, right: 0, background: 'white', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', border: '1px solid #f1f5f9', overflow: 'hidden', zIndex: 1000 },
-    nav: { display: 'flex', alignItems: 'center', gap: '2.5rem', fontSize: '1rem', fontWeight: '800', color: '#475569' },
-    cartBtn: { position: 'relative' as const, width: '54px', height: '54px', background: '#fff1f2', color: '#480D18', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid #ffe4e6' },
+    nav: { display: 'flex', alignItems: 'center', gap: '2.5rem', fontSize: '1rem', fontWeight: '800', color: '#475569', fontFamily: 'Fraunces, serif' },
+    cartBtn: { position: 'relative' as const, width: '54px', height: '54px', background: '#f0f7f0', color: '#2d5a27', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid #e8f1e8' },
     badge: { position: 'absolute' as const, top: '-6px', right: '-6px', background: '#f43f5e', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '900', border: '3px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#fafbfc' }}>
-      <style jsx>{`
-        .nav-link { text-decoration: none; color: #475569; transition: all 0.2s; position: relative; padding: 0.5rem 0; }
-        .nav-link:hover { color: #480D18 !important; }
-        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: #480D18; transition: width 0.3s; borderRadius: 3px; }
-        .nav-link:hover::after { width: 100%; }
-        .search-input:focus { border-color: #480D18 !important; background: white !important; box-shadow: 0 10px 15px -3px rgba(72, 13, 24, 0.1); }
+      <style>{`
+        .nav-link { text-decoration: none; color: #475569; transition: all 0.2s; position: relative; padding: 0.5rem 0; font-family: Fraunces, serif; }
+        .nav-link:hover, .nav-link.active { color: #2d5a27 !important; }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: #2d5a27; transition: width 0.3s; border-radius: 3px; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .search-input:focus { border-color: #2d5a27 !important; background: white !important; box-shadow: 0 10px 15px -3px rgba(45, 90, 39, 0.1); }
         .result-item:hover { background: #f8fafc; }
       `}</style>
 
@@ -119,17 +120,18 @@ export default function StoreLayout({
             )}
             {!logoUrl && (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '1.8rem', fontWeight: '900', color: '#1e293b', lineHeight: 1, fontFamily: 'Playfair Display, serif' }}>Kanvi</span>
-                <span style={{ fontSize: '10px', fontWeight: '800', color: '#480D18', textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: '4px' }}>The Pickle Hub</span>
+                <span style={{ fontSize: '1.8rem', fontWeight: '900', color: '#1e293b', lineHeight: 1, fontFamily: 'Fraunces, serif' }}>Kanvi</span>
+                <span style={{ fontSize: '10px', fontWeight: '800', color: '#2d5a27', textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: '4px' }}>The Pickle Hub</span>
               </div>
             )}
           </Link>
 
           <nav className="hidden lg:flex" style={styles.nav}>
-            <Link href="/" className="nav-link">Home</Link>
-            <Link href="/products" className="nav-link">Pickles</Link>
-            <Link href="/categories" className="nav-link">Categories</Link>
-            <Link href="/about" className="nav-link">Our Story</Link>
+            <Link href="/" className={`nav-link ${pathname === '/' ? 'active' : ''}`}>Home</Link>
+            <Link href="/products" className={`nav-link ${pathname === '/products' || pathname?.startsWith('/product/') ? 'active' : ''}`}>Pickles</Link>
+            <Link href="/categories" className={`nav-link ${pathname === '/categories' ? 'active' : ''}`}>Categories</Link>
+            <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`}>Our Story</Link>
+            <Link href="/contact" className={`nav-link ${pathname === '/contact' ? 'active' : ''}`}>Contact Us</Link>
           </nav>
 
           <div style={styles.searchForm} ref={searchRef}>
@@ -145,7 +147,7 @@ export default function StoreLayout({
                 onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
               />
               {isSearching && (
-                <Loader2 style={{ position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#480D18', animation: 'spin 1s linear infinite' }} size={20} />
+                <Loader2 style={{ position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#2d5a27', animation: 'spin 1s linear infinite' }} size={20} />
               )}
             </form>
 
@@ -167,14 +169,14 @@ export default function StoreLayout({
                         </div>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.9rem' }}>{p.name}</div>
-                          <div style={{ fontSize: '0.75rem', color: '#480D18', fontWeight: '800' }}>₹{p.price}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#2d5a27', fontWeight: '800' }}>₹{p.price}</div>
                         </div>
                       </Link>
                     ))}
                     <Link
                       href={`/products?search=${searchQuery}`}
                       onClick={() => setShowResults(false)}
-                      style={{ display: 'block', padding: '15px', textAlign: 'center', fontSize: '0.85rem', fontWeight: '800', color: '#480D18', textDecoration: 'none', background: '#f0fdf4' }}
+                      style={{ display: 'block', padding: '15px', textAlign: 'center', fontSize: '0.85rem', fontWeight: '800', color: '#2d5a27', textDecoration: 'none', background: '#f0fdf4' }}
                     >
                       View All Results
                     </Link>
@@ -190,12 +192,12 @@ export default function StoreLayout({
 
           <nav className="hidden lg:flex" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             {mounted && user ? (
-              <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1e293b', background: '#f8fafc', padding: '0.7rem 1.4rem', borderRadius: '14px', border: '1px solid #e2e8f0', textDecoration: 'none', fontWeight: '800', fontSize: '0.85rem' }}>
-                <UserIcon size={16} color="#480D18" />
+              <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1e293b', background: '#f8fafc', padding: '0.7rem 1.4rem', borderRadius: '14px', border: '1px solid #e2e8f0', textDecoration: 'none', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
+                <UserIcon size={16} color="#2d5a27" />
                 <span>Account</span>
               </Link>
             ) : (
-              <Link href="/login" style={{ textDecoration: 'none', color: 'white', background: '#480D18', padding: '0.7rem 1.4rem', borderRadius: '14px', fontWeight: '800', fontSize: '0.85rem' }}>
+              <Link href="/login" style={{ textDecoration: 'none', color: 'white', background: '#2d5a27', padding: '0.7rem 1.4rem', borderRadius: '14px', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
                 Sign In
               </Link>
             )}
@@ -214,23 +216,23 @@ export default function StoreLayout({
         {children}
       </main>
 
-      <footer style={{ background: '#480D18', color: 'white', padding: '5rem 0 2rem 0', marginTop: 'auto' }}>
+      <footer style={{ background: '#2d5a27', color: 'white', padding: '5rem 0 2rem 0', marginTop: 'auto' }}>
         <div style={{ ...styles.container, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '4rem', marginBottom: '4rem' }}>
           <div>
             <div style={{ ...styles.logo, marginBottom: '1.5rem' }}>
               {logoUrl ? (
                 <img src={logoUrl} alt="Kanvi Pickles" style={{ height: '55px', objectFit: 'contain' }} />
               ) : (
-                <div style={{ ...styles.logoBox, width: '35px', height: '35px', fontSize: '1.2rem', background: 'white', color: '#480D18' }}>K</div>
+                <div style={{ ...styles.logoBox, width: '35px', height: '35px', fontSize: '1.2rem', background: 'white', color: '#2d5a27' }}>K</div>
               )}
               {!logoUrl && (
-                <span style={{ fontSize: '1.5rem', fontWeight: '900', color: 'white', fontFamily: 'Playfair Display, serif' }}>Kanvi Pickles</span>
+                <span style={{ fontSize: '1.5rem', fontWeight: '900', color: 'white', fontFamily: 'Fraunces, serif' }}>Kanvi Pickles</span>
               )}
             </div>
-            <p style={{ color: '#f1f5f9', fontSize: '0.875rem', lineHeight: 1.6 }}>Bringing the authentic heritage of Godavari home. Handcrafted recipes passed down through generations.</p>
+            <p style={{ color: '#f1f5f9', fontSize: '0.875rem', lineHeight: 1.6 }}>Bringing the authentic taste of Godavari home. Handcrafted recipes passed down through generations.</p>
           </div>
           <div>
-            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#fda4af', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Account</h4>
+            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Account</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: '#e2e8f0' }}>
               <Link href="/orders" style={{ color: 'inherit', textDecoration: 'none' }}>Order Tracking</Link>
               <Link href="/dashboard" style={{ color: 'inherit', textDecoration: 'none' }}>Wallet Manage</Link>
@@ -238,7 +240,7 @@ export default function StoreLayout({
             </div>
           </div>
           <div>
-            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#fda4af', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Support</h4>
+            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Support</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: '#e2e8f0' }}>
               <Link href="/about" style={{ color: 'inherit', textDecoration: 'none' }}>Our Story</Link>
               <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</Link>
@@ -246,7 +248,7 @@ export default function StoreLayout({
             </div>
           </div>
           <div>
-            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#fda4af', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Policies</h4>
+            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Policies</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: '#e2e8f0' }}>
               <Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
               <Link href="/legal/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link>
@@ -255,7 +257,7 @@ export default function StoreLayout({
           </div>
         </div>
         <div style={{ textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: '2rem', fontSize: '0.625rem', fontWeight: '700', color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          © 2024 Kanvi Heritage India • All Rights Reserved.
+          © 2024 Kanvi India • All Rights Reserved.
         </div>
       </footer>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>

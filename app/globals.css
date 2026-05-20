@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --primary: #480D18;
-  --primary-hover: #047857;
-  --secondary: #ecfdf5;
+  --primary: #2d5a27;
+  --primary-hover: #1b4316;
+  --secondary: #f0f7f0;
   --accent: #f59e0b;
   --background: #ffffff;
   --surface: #ffffff;
-  --text-main: #064e3b;
+  --text-main: #142911;
   --text-muted: #64748b;
   --border: #f1f5f9;
   --radius: 16px;
@@ -32,14 +32,14 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Fraunces', serif;
   background-color: #fafbfc;
   color: var(--text-main);
   line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Fraunces', serif;
   font-weight: 700;
   color: #1e293b;
 }
@@ -142,7 +142,7 @@ a {
 }
 
 .sidebar-logo {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Fraunces', serif;
   font-size: 1.5rem;
   font-weight: 900;
   color: var(--primary);
@@ -216,9 +216,9 @@ a {
   letter-spacing: 0.05em;
 }
 
-.status-badge.delivered { background: #ecfdf5; color: #2b070d; }
+.status-badge.delivered { background: #f0f7f0; color: #142911; }
 .status-badge.pending { background: #fffbeb; color: #92400e; }
-.status-badge.cancelled { background: #fff1f2; color: #9f1239; }
+.status-badge.cancelled { background: #f0f7f0; color: #9f1239; }
 
 /* Responsive */
 @media (max-width: 1024px) {

@@ -49,10 +49,10 @@ export default function AdminCustomers() {
   if (loading) return <div className="p-8 text-slate-500">Loading customer base...</div>;
 
   return (
-    <div>
+    <div style={{ fontFamily: 'Fraunces, serif' }}>
       <div className="flex justify-between items-end mb-10">
         <div>
-          <h1 className="text-4xl font-extrabold text-slate-800" style={{ fontFamily: 'Playfair Display, serif' }}>Customers</h1>
+          <h1 className="text-4xl font-extrabold text-slate-800" style={{ fontFamily: 'Fraunces, serif' }}>Customers</h1>
           <p className="text-slate-500 mt-2">Managing {customers.length} registered users.</p>
         </div>
         <div className="flex gap-4">

@@ -26,7 +26,7 @@ export default function LoadingLogo({ message = "Loading..." }: { message?: stri
           style={{ width: '80px', height: '80px', objectFit: 'contain', animation: 'pulse-logo 1.5s infinite ease-in-out', marginBottom: '20px' }} 
         />
       ) : (
-        <div style={{ width: '60px', height: '60px', background: '#480D18', color: 'white', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: '900', animation: 'pulse-logo 1.5s infinite ease-in-out', marginBottom: '20px' }}>
+        <div style={{ width: '60px', height: '60px', background: '#2d5a27', color: 'white', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: '900', animation: 'pulse-logo 1.5s infinite ease-in-out', marginBottom: '20px' }}>
           K
         </div>
       )}

@@ -17,18 +17,18 @@ export default function AboutPage() {
 
   if (loading) return (
     <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#480D18', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+      <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#2d5a27', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 
   return (
-    <div style={{ fontFamily: 'Inter, sans-serif', color: '#1e293b' }}>
+    <div style={{ fontFamily: 'Fraunces, serif', color: '#1e293b' }}>
       {/* Hero Section */}
       <section style={{ background: '#0f172a', color: 'white', padding: '120px 20px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, background: 'radial-gradient(circle at center, #480D18 0%, transparent 70%)' }}></div>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, background: 'radial-gradient(circle at center, #2d5a27 0%, transparent 70%)' }}></div>
         <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <h1 style={{ fontSize: 'clamp(3rem, 8vw, 4.5rem)', fontWeight: '900', fontFamily: 'Playfair Display, serif', marginBottom: '20px' }}>Our <span style={{ color: '#480D18' }}>Heritage</span></h1>
+          <h1 style={{ fontSize: 'clamp(3rem, 8vw, 4.5rem)', fontWeight: '900', fontFamily: 'Fraunces, serif', marginBottom: '20px' }}>Our <span style={{ color: '#2d5a27' }}>Our Story</span></h1>
           <p style={{ fontSize: '1.25rem', color: '#94a3b8', lineHeight: 1.6 }}>Bringing the authentic, sun-dried flavors of the Godavari delta to the global stage.</p>
         </div>
       </section>
@@ -37,12 +37,12 @@ export default function AboutPage() {
       <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 20px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '80px', alignItems: 'center' }}>
           <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#ecfdf5', color: '#480D18', padding: '8px 16px', borderRadius: '12px', fontWeight: '800', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '25px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#f0f7f0', color: '#2d5a27', padding: '8px 16px', borderRadius: '12px', fontWeight: '800', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '25px' }}>
               <Heart size={16} /> Our Story
             </div>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '30px', fontFamily: 'Playfair Display, serif' }}>Handcrafted with Love for Generations</h2>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '30px', fontFamily: 'Fraunces, serif' }}>Handcrafted with Love for Generations</h2>
             <div style={{ fontSize: '1.1rem', lineHeight: 1.8, color: '#64748b', whiteSpace: 'pre-wrap' }}>
-              {content || "Kanvi Pickles began as a small family kitchen in the heart of Godavari. We take pride in our age-old recipes, where every jar is a labor of love, sun-dried to perfection and spiced with heritage."}
+              {content || "Kanvi Pickles began as a small family kitchen in the heart of Godavari. We take pride in our age-old recipes, where every jar is a labor of love, sun-dried to perfection and spiced with care."}
             </div>
           </div>
           
@@ -50,19 +50,19 @@ export default function AboutPage() {
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#eff6ff', color: '#2563eb', padding: '8px 16px', borderRadius: '12px', fontWeight: '800', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '25px' }}>
               <Target size={16} /> Our Mission
             </div>
-            <h3 style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', fontFamily: 'Playfair Display, serif' }}>Taste the Tradition</h3>
+            <h3 style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', fontFamily: 'Fraunces, serif' }}>Taste the Tradition</h3>
             <p style={{ fontSize: '1.05rem', lineHeight: 1.7, color: '#64748b', marginBottom: '30px' }}>
               Our mission is to preserve the authentic flavors of Godavari and deliver them to pickle lovers across the globe. We believe in quality without compromise, using only the finest ingredients sourced directly from local farmers.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#1e293b', fontWeight: '700' }}>
-                <ShieldCheck size={20} color="#480D18" /> 100% Pure & Preservative Free
+                <ShieldCheck size={20} color="#2d5a27" /> 100% Pure & Preservative Free
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#1e293b', fontWeight: '700' }}>
-                <Leaf size={20} color="#480D18" /> Sustainably Sourced Ingredients
+                <Leaf size={20} color="#2d5a27" /> Sustainably Sourced Ingredients
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#1e293b', fontWeight: '700' }}>
-                <Award size={20} color="#480D18" /> Traditional Stone-Ground Spices
+                <Award size={20} color="#2d5a27" /> Traditional Stone-Ground Spices
               </div>
             </div>
           </div>
@@ -73,13 +73,13 @@ export default function AboutPage() {
       <section style={{ background: '#f1f5f9', padding: '100px 20px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: '900', fontFamily: 'Playfair Display, serif' }}>Why Pickle Lovers <span style={{ color: '#480D18' }}>Trust Us</span></h2>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: '900', fontFamily: 'Fraunces, serif' }}>Why Pickle Lovers <span style={{ color: '#2d5a27' }}>Trust Us</span></h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
             {[
-              { title: 'Authentic Recipes', desc: 'Passed down through 3 generations of Godavari heritage.', icon: Users, color: '#480D18', bg: '#ecfdf5' },
+              { title: 'Authentic Recipes', desc: 'Passed down through 3 generations of Godavari tradition.', icon: Users, color: '#2d5a27', bg: '#f0f7f0' },
               { title: 'Premium Quality', desc: 'We use the finest seasonal fruits and high-grade oils.', icon: Award, color: '#2563eb', bg: '#eff6ff' },
-              { title: 'Safe Delivery', desc: 'Secure packaging to ensure leak-proof global transit.', icon: ShieldCheck, color: '#e11d48', bg: '#fff1f2' }
+              { title: 'Safe Delivery', desc: 'Secure packaging to ensure leak-proof global transit.', icon: ShieldCheck, color: '#b91c1c', bg: '#f0f7f0' }
             ].map((item, i) => (
               <div key={i} style={{ background: 'white', padding: '40px', borderRadius: '32px', textAlign: 'center', border: '1px solid #e2e8f0' }}>
                 <div style={{ width: '64px', height: '64px', background: item.bg, color: item.color, borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 25px' }}>

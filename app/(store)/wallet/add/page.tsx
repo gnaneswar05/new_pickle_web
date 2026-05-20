@@ -97,7 +97,7 @@ export default function AddMoneyPage() {
     <div className="container" style={{ padding: '6rem 20px', maxWidth: '400px' }}>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="card shadow-2xl" style={{ borderRadius: '24px' }}>
-        <h1 className="text-3xl font-bold text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>Top Up Wallet</h1>
+        <h1 className="text-3xl font-bold text-center mb-8" style={{ fontFamily: 'Fraunces, serif' }}>Top Up Wallet</h1>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div>
             <label className="block text-sm font-bold text-slate-600 mb-2">Amount to Add (₹)</label>
