@@ -154,18 +154,18 @@ export default function AdminCategories() {
     <div style={{ fontFamily: 'Fraunces, serif' }}>
       <input type="file" accept=".csv" ref={fileInputRef} onChange={handleBulkUpload} style={{ display: 'none' }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '15px' }}>
-        <h1 className="text-4xl font-bold">Categories</h1>
+        <h1 className="text-4xl font-bold" style={{ color: 'var(--text-main)' }}>Categories</h1>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button onClick={downloadTemplate}
-            style={{ background: '#f8fafc', color: '#64748b', padding: '10px 18px', borderRadius: '12px', border: '1px solid #e2e8f0', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+            style={{ background: 'var(--surface)', color: 'var(--text-muted)', padding: '10px 18px', borderRadius: '12px', border: '1px solid var(--border)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
             <FileSpreadsheet size={16} /> Template
           </button>
           <button onClick={exportCategories}
-            style={{ background: '#f8fafc', color: '#64748b', padding: '10px 18px', borderRadius: '12px', border: '1px solid #e2e8f0', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+            style={{ background: 'var(--surface)', color: 'var(--text-muted)', padding: '10px 18px', borderRadius: '12px', border: '1px solid var(--border)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
             <Download size={16} /> Export
           </button>
           <button onClick={() => fileInputRef.current?.click()} disabled={bulkUploading}
-            style={{ background: '#1e40af', color: 'white', padding: '10px 18px', borderRadius: '12px', border: 'none', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', opacity: bulkUploading ? 0.7 : 1 }}>
+            style={{ background: 'var(--secondary)', color: 'var(--primary)', padding: '10px 18px', borderRadius: '12px', border: '1px solid var(--primary)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', opacity: bulkUploading ? 0.7 : 1 }}>
             <Upload size={16} /> {bulkUploading ? 'Uploading...' : 'Bulk Upload'}
           </button>
           <button className="btn btn-primary" onClick={() => { setEditId(null); setForm({ name: '', image: '', icon: '' }); setShowModal(true); }}>
@@ -175,18 +175,18 @@ export default function AdminCategories() {
       </div>
 
       {loading ? (
-        <div style={{ padding: '4rem', textAlign: 'center', color: '#94a3b8' }}>Loading categories...</div>
+        <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading categories...</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {categories.map((c: any) => (
-            <div key={c._id} className="card text-center" style={{ background: 'white', padding: '30px', borderRadius: '30px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div key={c._id} className="card text-center" style={{ background: 'var(--surface)', padding: '30px', borderRadius: '30px', border: '1px solid var(--border)', boxShadow: 'var(--shadow)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div style={{ fontSize: '3.5rem', marginBottom: '15px' }}>{c.icon}</div>
-              <h3 className="text-xl font-bold" style={{ color: '#1e293b', marginBottom: '20px' }}>{c.name}</h3>
+              <h3 className="text-xl font-bold" style={{ color: 'var(--text-main)', marginBottom: '20px' }}>{c.name}</h3>
               <div className="flex gap-2 w-full justify-center">
-                <button onClick={() => handleEdit(c)} className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '0.85rem' }}>
+                <button onClick={() => handleEdit(c)} className="btn" style={{ background: 'var(--secondary)', color: 'var(--primary)', border: '1px solid var(--primary)', display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '0.85rem', borderRadius: '10px', cursor: 'pointer' }}>
                   <Edit size={14} /> Edit
                 </button>
-                <button onClick={() => handleDelete(c._id)} style={{ background: '#fef2f2', color: '#ef4444', border: 'none', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <button onClick={() => handleDelete(c._id)} style={{ background: 'var(--secondary)', color: 'var(--primary)', border: 'none', width: '38px', height: '38px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Trash2 size={16} />
                 </button>
               </div>
@@ -197,24 +197,24 @@ export default function AdminCategories() {
 
       {showModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(4px)' }}>
-          <div className="card" style={{ width: '100%', maxWidth: '400px', margin: '20px', background: 'white', padding: '40px', borderRadius: '30px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-            <h2 className="text-2xl font-bold mb-6" style={{ color: '#1e293b' }}>{editId ? 'Edit Category' : 'Add Category'}</h2>
+          <div className="card" style={{ width: '100%', maxWidth: '400px', margin: '20px', background: 'var(--surface)', padding: '40px', borderRadius: '30px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid var(--border)' }}>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-main)' }}>{editId ? 'Edit Category' : 'Add Category'}</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Category Name</label>
-                <input required className="input" placeholder="Name (e.g. Mango)" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={{ padding: '12px 16px', borderRadius: '12px', border: '2px solid #f1f5f9', outline: 'none' }} />
+                <label className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Category Name</label>
+                <input required className="input" placeholder="Name (e.g. Mango)" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={{ padding: '12px 16px', borderRadius: '12px', outline: 'none' }} />
               </div>
               
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Icon (Emoji)</label>
-                <input required className="input" placeholder="Icon (e.g. 🥭)" value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} style={{ padding: '12px 16px', borderRadius: '12px', border: '2px solid #f1f5f9', outline: 'none' }} />
+                <label className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Icon (Emoji)</label>
+                <input required className="input" placeholder="Icon (e.g. 🥭)" value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} style={{ padding: '12px 16px', borderRadius: '12px', outline: 'none' }} />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Image (Upload or URL)</label>
+                <label className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Image (Upload or URL)</label>
                 <div className="flex gap-2">
-                  <input className="input w-full" placeholder="Image URL" value={form.image} onChange={e => setForm({ ...form, image: e.target.value })} style={{ padding: '12px 16px', borderRadius: '12px', border: '2px solid #f1f5f9', outline: 'none' }} />
-                  <label className="btn btn-outline cursor-pointer flex items-center justify-center shrink-0" style={{ padding: '0 1rem', borderRadius: '12px', border: '2px solid #f1f5f9' }}>
+                  <input className="input w-full" placeholder="Image URL" value={form.image} onChange={e => setForm({ ...form, image: e.target.value })} style={{ padding: '12px 16px', borderRadius: '12px', outline: 'none' }} />
+                  <label className="btn cursor-pointer flex items-center justify-center shrink-0" style={{ padding: '0 1rem', borderRadius: '12px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-muted)' }}>
                     <Upload size={18} />
                     <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                   </label>
@@ -224,7 +224,7 @@ export default function AdminCategories() {
               </div>
 
               <div className="flex justify-end gap-4" style={{ marginTop: '1rem' }}>
-                <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)} style={{ padding: '10px 20px', borderRadius: '12px' }}>Cancel</button>
+                <button type="button" className="btn" onClick={() => setShowModal(false)} style={{ background: 'var(--secondary)', color: 'var(--text-main)', border: '1px solid var(--border)', padding: '10px 20px', borderRadius: '12px' }}>Cancel</button>
                 <button type="submit" className="btn btn-primary" style={{ padding: '10px 20px', borderRadius: '12px' }}>{editId ? 'Update' : 'Save'}</button>
               </div>
             </form>

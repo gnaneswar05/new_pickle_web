@@ -166,7 +166,7 @@ export default function AdminProducts() {
     }
   };
 
-  if (loading) return <div className="p-8">Loading products...</div>;
+  if (loading) return <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading products...</div>;
 
   const downloadTemplate = () => {
     const csv = 'name,description,price,category,image,stock,isTopSelling,rating,price_250g,price_500g,price_1kg\nMango Pickle,Spicy mango pickle,199,Mango,https://example.com/img.jpg,100,false,4.9,199,379,699';
@@ -237,18 +237,18 @@ export default function AdminProducts() {
     <div>
       <input type="file" accept=".csv" ref={bulkFileRef} onChange={handleBulkUpload} style={{ display: 'none' }} />
       <div className="flex justify-between items-center" style={{ marginBottom: '2rem', flexWrap: 'wrap', gap: '15px' }}>
-        <h1 className="text-4xl font-bold">Manage Products</h1>
+        <h1 className="text-4xl font-bold" style={{ color: 'var(--text-main)' }}>Manage Products</h1>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button onClick={downloadTemplate}
-            style={{ background: '#f8fafc', color: '#64748b', padding: '10px 18px', borderRadius: '12px', border: '1px solid #e2e8f0', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+            style={{ background: 'var(--surface)', color: 'var(--text-muted)', padding: '10px 18px', borderRadius: '12px', border: '1px solid var(--border)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
             <FileSpreadsheet size={16} /> Template
           </button>
           <button onClick={exportProducts}
-            style={{ background: '#f8fafc', color: '#64748b', padding: '10px 18px', borderRadius: '12px', border: '1px solid #e2e8f0', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+            style={{ background: 'var(--surface)', color: 'var(--text-muted)', padding: '10px 18px', borderRadius: '12px', border: '1px solid var(--border)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
             <Download size={16} /> Export
           </button>
           <button onClick={() => bulkFileRef.current?.click()} disabled={bulkUploading}
-            style={{ background: '#1e40af', color: 'white', padding: '10px 18px', borderRadius: '12px', border: 'none', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', opacity: bulkUploading ? 0.7 : 1 }}>
+            style={{ background: 'var(--secondary)', color: 'var(--primary)', padding: '10px 18px', borderRadius: '12px', border: '1px solid var(--primary)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', opacity: bulkUploading ? 0.7 : 1 }}>
             <Upload size={16} /> {bulkUploading ? 'Uploading...' : 'Bulk Upload'}
           </button>
           <button className="btn btn-primary" onClick={() => { setEditId(null); setForm(initialForm); setShowModal(true); }}>
@@ -280,7 +280,7 @@ export default function AdminProducts() {
                 <td>
                   <div className="flex gap-1">
                     {(p.variants || []).map((v: any) => (
-                      <span key={v.weight} style={{ fontSize: '10px', background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span key={v.weight} style={{ fontSize: '10px', background: 'var(--border)', color: 'var(--text-main)', padding: '2px 6px', borderRadius: '4px' }}>
                         {v.weight}: ₹{v.price}
                       </span>
                     ))}
@@ -288,8 +288,8 @@ export default function AdminProducts() {
                 </td>
                 <td>{p.isTopSelling ? '✅' : '❌'}</td>
                 <td className="flex gap-2">
-                  <button onClick={() => handleEdit(p)} className="btn btn-outline" style={{ padding: '0.4rem' }}>Edit</button>
-                  <button onClick={() => handleDelete(p._id)} className="btn btn-outline" style={{ padding: '0.4rem', color: '#ef4444' }}>
+                  <button onClick={() => handleEdit(p)} className="btn" style={{ background: 'var(--secondary)', color: 'var(--text-main)', border: '1px solid var(--border)', padding: '0.4rem 0.8rem', fontSize: '0.85rem', cursor: 'pointer', borderRadius: '10px' }}>Edit</button>
+                  <button onClick={() => handleDelete(p._id)} className="btn" style={{ background: 'var(--secondary)', color: 'var(--primary)', border: 'none', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '10px' }}>
                     <Trash2 size={18} />
                   </button>
                 </td>
@@ -300,17 +300,17 @@ export default function AdminProducts() {
       </div>
 
       {showModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(4px)' }}>
           <div className="admin-card" style={{ width: '100%', maxWidth: '600px', margin: '20px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h2 className="text-2xl mb-6">{editId ? 'Edit Product' : 'Add New Product'}</h2>
+            <h2 className="text-2xl mb-6" style={{ color: 'var(--text-main)', fontWeight: 800 }}>{editId ? 'Edit Product' : 'Add New Product'}</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400">Name</label>
+                  <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Name</label>
                   <input required className="input" placeholder="Product Name" value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400">Category</label>
+                  <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Category</label>
                   <select required className="input" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
                     <option value="">Select Category</option>
                     {categories.map((cat: any) => (
@@ -321,20 +321,20 @@ export default function AdminProducts() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-400">Description</label>
+                <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Description</label>
                 <textarea required className="input" placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})} style={{ minHeight: '80px' }} />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400">Base Price (for 250g)</label>
+                  <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Base Price (for 250g)</label>
                   <input required type="number" step="0.01" className="input" placeholder="Price (₹)" value={form.price} onChange={e => setForm({...form, price: e.target.value})} />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400">Image (Upload or URL)</label>
+                  <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Image (Upload or URL)</label>
                   <div className="flex gap-2">
                     <input className="input" placeholder="Image URL" value={form.image} onChange={e => setForm({...form, image: e.target.value})} />
-                    <label className="btn btn-outline cursor-pointer flex items-center justify-center" style={{ padding: '0 0.5rem' }}>
+                    <label className="btn cursor-pointer flex items-center justify-center" style={{ padding: '0 1rem', borderRadius: '12px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-muted)' }}>
                       <Upload size={18} />
                       <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                     </label>
@@ -345,14 +345,14 @@ export default function AdminProducts() {
               </div>
 
               {/* Weight Pricing Section */}
-              <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                <h4 className="font-bold text-sm text-slate-700 mb-4 flex items-center gap-2">
+              <div style={{ background: 'var(--background)', padding: '1.5rem', borderRadius: '16px', border: '1px solid var(--border)' }}>
+                <h4 className="font-bold text-sm mb-4 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
                   <Scale size={16} /> Weight-Based Pricing (Addons)
                 </h4>
                 <div className="grid grid-cols-3 gap-4">
                   {form.variants.map((v, idx) => (
                     <div key={v.weight} className="space-y-1">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">{v.weight} Price</label>
+                      <label className="text-[10px] font-bold uppercase" style={{ color: 'var(--text-muted)' }}>{v.weight} Price</label>
                       <input 
                         type="number" 
                         className="input" 
@@ -364,23 +364,23 @@ export default function AdminProducts() {
                     </div>
                   ))}
                 </div>
-                <p className="text-[10px] text-slate-400 mt-2 italic">Note: If left empty, 250g price will be used as base.</p>
+                <p className="text-[10px] mt-2 italic" style={{ color: 'var(--text-muted)' }}>Note: If left empty, 250g price will be used as base.</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <label className="flex items-center gap-2 cursor-pointer mt-4">
                   <input type="checkbox" checked={form.isTopSelling} onChange={e => setForm({...form, isTopSelling: e.target.checked})} />
-                  <span className="text-sm font-medium">Mark as Top Selling</span>
+                  <span className="text-sm font-semibold" style={{ color: 'var(--text-main)' }}>Mark as Top Selling</span>
                 </label>
                 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400">Product Rating (e.g. 4.9)</label>
+                  <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Product Rating (e.g. 4.9)</label>
                   <input required type="number" step="0.1" min="0" max="5" className="input" placeholder="Rating (0 to 5)" value={form.rating} onChange={e => setForm({...form, rating: e.target.value})} />
                 </div>
               </div>
 
               <div className="flex justify-end gap-4" style={{ marginTop: '1rem' }}>
-                <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="button" className="btn" onClick={() => setShowModal(false)} style={{ background: 'var(--secondary)', color: 'var(--text-main)', border: '1px solid var(--border)', padding: '10px 20px', borderRadius: '12px', cursor: 'pointer' }}>Cancel</button>
                 <button type="submit" className="btn btn-primary">{editId ? 'Update Product' : 'Save Product'}</button>
               </div>
             </form>

@@ -1,10 +1,11 @@
 'use client';
 import Link from 'next/link';
-import { ShoppingCart, Menu, X, Search, Phone, User as UserIcon, Loader2, Package, Heart } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, Phone, User as UserIcon, Loader2, Package, Heart, Sun, Moon } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import { useWishlistStore } from '@/lib/wishlistStore';
 import { useAuthStore } from '@/lib/authStore';
 import { useSettingsStore } from '@/lib/settingsStore';
+import { useThemeStore } from '@/lib/themeStore';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -31,6 +32,8 @@ export default function StoreLayout({
   const { logoUrl, fetchSettings } = useSettingsStore();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const wishlistCount = wishlistItems.length;
+
+  const { theme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
     setMounted(true);
@@ -86,29 +89,30 @@ export default function StoreLayout({
   };
 
   const styles = {
-    topBanner: { background: '#0f172a', color: 'white', padding: '0.8rem 0', fontSize: '12px', fontWeight: '800', textTransform: 'uppercase' as const, letterSpacing: '0.15em', fontFamily: 'Fraunces, serif', overflow: 'hidden', whiteSpace: 'nowrap' as const, position: 'relative' as const, width: '100%' },
-    header: { position: 'sticky' as const, top: 0, zIndex: 100, background: 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(15px)', borderBottom: '1px solid #f1f5f9', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' },
+    topBanner: { background: 'var(--text-main)', color: 'var(--background)', padding: '0.8rem 0', fontSize: '12px', fontWeight: '800', textTransform: 'uppercase' as const, letterSpacing: '0.15em', fontFamily: 'Fraunces, serif', overflow: 'hidden', whiteSpace: 'nowrap' as const, position: 'relative' as const, width: '100%' },
+    header: { position: 'sticky' as const, top: 0, zIndex: 100, background: 'var(--surface)', borderBottom: '1px solid var(--border)', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' },
     container: { maxWidth: '1250px', margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '3rem' },
     logo: { display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' },
-    logoBox: { width: '55px', height: '55px', background: '#2d5a27', color: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', fontWeight: '900' },
+    logoBox: { width: '55px', height: '55px', background: 'var(--primary)', color: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', fontWeight: '900' },
     searchForm: { flex: 1, maxWidth: '450px', position: 'relative' as const },
-    searchInput: { width: '100%', background: '#f8fafc', border: '2px solid transparent', padding: '1rem 1rem 1rem 3.5rem', borderRadius: '16px', fontSize: '1rem', fontWeight: '600', outline: 'none', transition: 'all 0.2s', color: '#1e293b', fontFamily: 'Fraunces, serif' },
-    resultsDropdown: { position: 'absolute' as const, top: 'calc(100% + 15px)', left: 0, right: 0, background: 'white', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', border: '1px solid #f1f5f9', overflow: 'hidden', zIndex: 1000 },
-    nav: { alignItems: 'center', gap: '2.5rem', fontSize: '1rem', fontWeight: '800', color: '#475569', fontFamily: 'Fraunces, serif' },
-    cartBtn: { position: 'relative' as const, width: '54px', height: '54px', background: '#f0f7f0', color: '#2d5a27', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid #e8f1e8' },
-    wishlistBtn: { position: 'relative' as const, width: '54px', height: '54px', background: '#fef2f2', color: '#ef4444', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid #fecaca' },
-    badge: { position: 'absolute' as const, top: '-6px', right: '-6px', background: '#f43f5e', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '900', border: '3px solid white', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }
+    searchInput: { width: '100%', background: 'var(--border)', border: '2px solid transparent', padding: '1rem 1rem 1rem 3.5rem', borderRadius: '16px', fontSize: '1rem', fontWeight: '600', outline: 'none', transition: 'all 0.2s', color: 'var(--text-main)', fontFamily: 'Fraunces, serif' },
+    resultsDropdown: { position: 'absolute' as const, top: 'calc(100% + 15px)', left: 0, right: 0, background: 'var(--surface)', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', border: '1px solid var(--border)', overflow: 'hidden', zIndex: 1000 },
+    nav: { alignItems: 'center', gap: '2.5rem', fontSize: '1rem', fontWeight: '800', color: 'var(--text-muted)', fontFamily: 'Fraunces, serif' },
+    cartBtn: { position: 'relative' as const, width: '54px', height: '54px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid var(--border)' },
+    wishlistBtn: { position: 'relative' as const, width: '54px', height: '54px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid var(--border)' },
+    themeBtn: { position: 'relative' as const, width: '54px', height: '54px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid var(--border)', cursor: 'pointer' },
+    badge: { position: 'absolute' as const, top: '-6px', right: '-6px', background: 'var(--primary)', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '900', border: '3px solid var(--surface)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#fafbfc' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--background)' }}>
       <style>{`
-        .nav-link { text-decoration: none; color: #475569; transition: all 0.2s; position: relative; padding: 0.5rem 0; font-family: Fraunces, serif; }
-        .nav-link:hover, .nav-link.active { color: #2d5a27 !important; }
-        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: #2d5a27; transition: width 0.3s; border-radius: 3px; }
+        .nav-link { text-decoration: none; color: var(--text-muted); transition: all 0.2s; position: relative; padding: 0.5rem 0; font-family: Fraunces, serif; }
+        .nav-link:hover, .nav-link.active { color: var(--primary) !important; }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: var(--primary); transition: width 0.3s; border-radius: 3px; }
         .nav-link:hover::after, .nav-link.active::after { width: 100%; }
-        .search-input:focus { border-color: #2d5a27 !important; background: white !important; box-shadow: 0 10px 15px -3px rgba(45, 90, 39, 0.1); }
-        .result-item:hover { background: #f8fafc; }
+        .search-input:focus { border-color: var(--primary) !important; background: var(--surface) !important; box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.1); }
+        .result-item:hover { background: var(--border); }
         .marquee-container {
           display: block;
           overflow-x: auto;
@@ -147,8 +151,8 @@ export default function StoreLayout({
             )}
             {!logoUrl && (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '1.8rem', fontWeight: '900', color: '#1e293b', lineHeight: 1, fontFamily: 'Fraunces, serif' }}>Kanvi</span>
-                <span style={{ fontSize: '10px', fontWeight: '800', color: '#2d5a27', textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: '4px' }}>The Pickle Hub</span>
+                <span style={{ fontSize: '1.8rem', fontWeight: '900', color: 'var(--text-main)', lineHeight: 1, fontFamily: 'Fraunces, serif' }}>Kanvi</span>
+                <span style={{ fontSize: '10px', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: '4px' }}>The Pickle Hub</span>
               </div>
             )}
           </Link>
@@ -163,7 +167,7 @@ export default function StoreLayout({
 
           <div className="hidden md:block" style={styles.searchForm} ref={searchRef}>
             <form onSubmit={handleSearchSubmit}>
-              <Search style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} size={20} />
+              <Search style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={20} />
               <input
                 type="text"
                 placeholder="Search premium pickles..."
@@ -174,7 +178,7 @@ export default function StoreLayout({
                 onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
               />
               {isSearching && (
-                <Loader2 style={{ position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#2d5a27', animation: 'spin 1s linear infinite' }} size={20} />
+                <Loader2 style={{ position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', animation: 'spin 1s linear infinite' }} size={20} />
               )}
             </form>
 
@@ -182,34 +186,34 @@ export default function StoreLayout({
               <div style={styles.resultsDropdown}>
                 {searchResults.length > 0 ? (
                   <div>
-                    <div style={{ padding: '15px 20px', background: '#f8fafc', fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Top Results</div>
+                    <div style={{ padding: '15px 20px', background: 'var(--border)', fontSize: '0.7rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Top Results</div>
                     {searchResults.map((p) => (
                       <Link
                         key={p._id}
                         href={`/product/${p._id}`}
                         onClick={() => { setShowResults(false); setSearchQuery(''); }}
                         className="result-item"
-                        style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px 20px', textDecoration: 'none', transition: '0.2s', borderBottom: '1px solid #f1f5f9' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px 20px', textDecoration: 'none', transition: '0.2s', borderBottom: '1px solid var(--border)' }}
                       >
-                        <div style={{ width: '50px', height: '50px', background: '#f1f5f9', borderRadius: '12px', overflow: 'hidden', border: '1px solid #f1f5f9' }}>
+                        <div style={{ width: '50px', height: '50px', background: 'var(--border)', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)' }}>
                           <img src={p.image || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.9rem' }}>{p.name}</div>
-                          <div style={{ fontSize: '0.75rem', color: '#2d5a27', fontWeight: '800' }}>₹{p.price}</div>
+                          <div style={{ fontWeight: '700', color: 'var(--text-main)', fontSize: '0.9rem' }}>{p.name}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '800' }}>₹{p.price}</div>
                         </div>
                       </Link>
                     ))}
                     <Link
                       href={`/products?search=${searchQuery}`}
                       onClick={() => setShowResults(false)}
-                      style={{ display: 'block', padding: '15px', textAlign: 'center', fontSize: '0.85rem', fontWeight: '800', color: '#2d5a27', textDecoration: 'none', background: '#f0fdf4' }}
+                      style={{ display: 'block', padding: '15px', textAlign: 'center', fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)', textDecoration: 'none', background: 'var(--secondary)' }}
                     >
                       View All Results
                     </Link>
                   </div>
                 ) : (
-                  <div style={{ padding: '30px', textAlign: 'center', color: '#94a3b8', fontSize: '0.9rem', fontWeight: '600' }}>
+                  <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: '600' }}>
                     No results for "{searchQuery}"
                   </div>
                 )}
@@ -218,13 +222,19 @@ export default function StoreLayout({
           </div>
 
           <nav className="hidden lg:flex" style={{ alignItems: 'center', gap: '1.5rem' }}>
+            {mounted && (
+              <button onClick={toggleTheme} style={styles.themeBtn} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
+                {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
+              </button>
+            )}
+
             {mounted && user ? (
-              <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1e293b', background: '#f8fafc', padding: '0.7rem 1.4rem', borderRadius: '14px', border: '1px solid #e2e8f0', textDecoration: 'none', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
-                <UserIcon size={16} color="#2d5a27" />
+              <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)', background: 'var(--surface)', padding: '0.7rem 1.4rem', borderRadius: '14px', border: '1px solid var(--border)', textDecoration: 'none', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
+                <UserIcon size={16} color="var(--primary)" />
                 <span>Account</span>
               </Link>
             ) : (
-              <Link href="/login" style={{ textDecoration: 'none', color: 'white', background: '#2d5a27', padding: '0.7rem 1.4rem', borderRadius: '14px', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
+              <Link href="/login" style={{ textDecoration: 'none', color: 'white', background: 'var(--primary)', padding: '0.7rem 1.4rem', borderRadius: '14px', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
                 Sign In
               </Link>
             )}
@@ -246,6 +256,12 @@ export default function StoreLayout({
 
           {/* Mobile Right Nav */}
           <div className="flex lg:!hidden" style={{ alignItems: 'center', gap: '0.75rem' }}>
+            {mounted && (
+              <button onClick={toggleTheme} style={styles.themeBtn} title="Toggle Theme">
+                {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
+              </button>
+            )}
+
             <Link href="/wishlist" style={styles.wishlistBtn}>
               <Heart size={22} />
               {mounted && wishlistCount > 0 && (
@@ -263,9 +279,9 @@ export default function StoreLayout({
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)} 
               style={{ 
-                width: '54px', height: '54px', background: '#f8fafc', color: '#1e293b', 
+                width: '54px', height: '54px', background: 'var(--surface)', color: 'var(--text-main)', 
                 borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                border: '1px solid #e2e8f0', cursor: 'pointer' 
+                border: '1px solid var(--border)', cursor: 'pointer' 
               }}
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -278,20 +294,20 @@ export default function StoreLayout({
         {children}
       </main>
 
-      <footer style={{ background: '#2d5a27', color: 'white', padding: '5rem 0 2rem 0', marginTop: 'auto' }}>
+      <footer className="store-footer" style={{ padding: '5rem 0 2rem 0', marginTop: 'auto' }}>
         <div style={{ ...styles.container, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '4rem', marginBottom: '4rem' }}>
           <div>
             <div style={{ ...styles.logo, marginBottom: '1.5rem' }}>
               {logoUrl ? (
                 <img src={logoUrl} alt="Kanvi Pickles" style={{ height: '55px', objectFit: 'contain' }} />
               ) : (
-                <div style={{ ...styles.logoBox, width: '35px', height: '35px', fontSize: '1.2rem', background: 'white', color: '#2d5a27' }}>K</div>
+                <div style={{ ...styles.logoBox, width: '35px', height: '35px', fontSize: '1.2rem', background: 'var(--background)', color: 'var(--primary)' }}>K</div>
               )}
               {!logoUrl && (
-                <span style={{ fontSize: '1.5rem', fontWeight: '900', color: 'white', fontFamily: 'Fraunces, serif' }}>Kanvi Pickles</span>
+                <span style={{ fontSize: '1.5rem', fontWeight: '900', color: 'inherit', fontFamily: 'Fraunces, serif' }}>Kanvi Pickles</span>
               )}
             </div>
-            <p style={{ color: '#f1f5f9', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>Bringing the authentic taste of Godavari home. Handcrafted recipes passed down through generations.</p>
+            <p style={{ color: 'inherit', opacity: 0.8, fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>Bringing the authentic taste of Godavari home. Handcrafted recipes passed down through generations.</p>
             
             {/* Social Media Links */}
             <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
@@ -302,7 +318,7 @@ export default function StoreLayout({
                   rel="noopener noreferrer" 
                   style={{ 
                     width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', 
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', transition: 'all 0.2s' 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', transition: 'all 0.2s' 
                   }}
                   onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
                   onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
@@ -319,7 +335,7 @@ export default function StoreLayout({
                   rel="noopener noreferrer" 
                   style={{ 
                     width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', 
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', transition: 'all 0.2s' 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', transition: 'all 0.2s' 
                   }}
                   onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
                   onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
@@ -332,16 +348,16 @@ export default function StoreLayout({
             </div>
           </div>
           <div>
-            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Account</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: '#e2e8f0' }}>
+            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Account</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: 'inherit', opacity: 0.9 }}>
               <Link href="/orders" style={{ color: 'inherit', textDecoration: 'none' }}>Order Tracking</Link>
               <Link href="/dashboard" style={{ color: 'inherit', textDecoration: 'none' }}>Wallet Manage</Link>
               <Link href="/dashboard" style={{ color: 'inherit', textDecoration: 'none' }}>Edit Profile</Link>
             </div>
           </div>
           <div>
-            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Contact Details</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: '#e2e8f0' }}>
+            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Contact Details</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: 'inherit', opacity: 0.9 }}>
               <a href={`tel:${(settings?.contactPhone || '+91 8247812474').replace(/\s+/g, '')}`} style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'inherit', textDecoration: 'none' }}>
                 📞 {settings?.contactPhone || '+91 8247812474'}
               </a>
@@ -352,8 +368,8 @@ export default function StoreLayout({
             </div>
           </div>
           <div>
-            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: '#ca8a04', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Policies</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: '#e2e8f0' }}>
+            <h4 style={{ fontSize: '0.625rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Policies</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', color: 'inherit', opacity: 0.9 }}>
               <Link href="/legal/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
               <Link href="/legal/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link>
               <Link href="/legal/refund" style={{ color: 'inherit', textDecoration: 'none' }}>Return & Refund</Link>
@@ -361,12 +377,12 @@ export default function StoreLayout({
             </div>
           </div>
         </div>
-        <div style={{ textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: '2rem', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ fontSize: '0.625rem', fontWeight: '700', color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        <div style={{ textAlign: 'center', borderTop: '1px solid var(--border)', paddingTop: '2rem', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ fontSize: '0.625rem', fontWeight: '700', color: 'inherit', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
             © 2026 Kanvi India • All Rights Reserved.
           </div>
           {(settings?.fssaiNumber || '23324010000854') && (
-            <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#f1f5f9', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(0,0,0,0.15)', padding: '6px 16px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--border)', padding: '6px 16px', borderRadius: '20px', border: '1px solid var(--border)' }}>
               <span>🍃 FSSAI License No: {settings?.fssaiNumber || '23324010000854'}</span>
             </div>
           )}
@@ -388,17 +404,17 @@ export default function StoreLayout({
       <div 
         style={{ 
           position: 'fixed', top: 0, right: 0, bottom: 0, width: '300px', 
-          background: 'white', zIndex: 1000, boxShadow: '-10px 0 30px rgba(0,0,0,0.1)', 
+          background: 'var(--surface)', zIndex: 1000, boxShadow: '-10px 0 30px rgba(0,0,0,0.1)', 
           transform: isMenuOpen ? 'translateX(0)' : 'translateX(100%)', 
           transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           display: 'flex', flexDirection: 'column', padding: '40px 30px', gap: '30px'
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1e293b', fontFamily: 'Fraunces, serif' }}>Menu</span>
+          <span style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-main)', fontFamily: 'Fraunces, serif' }}>Menu</span>
           <button 
             onClick={() => setIsMenuOpen(false)} 
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
           >
             <X size={24} />
           </button>
@@ -407,7 +423,7 @@ export default function StoreLayout({
         {/* Search Bar in Mobile Menu */}
         <div style={{ position: 'relative' }}>
           <form onSubmit={handleSearchSubmit}>
-            <Search style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} size={20} />
+            <Search style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={20} />
             <input
               type="text"
               placeholder="Search pickles..."
@@ -427,18 +443,18 @@ export default function StoreLayout({
           <Link href="/contact" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/contact' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Contact Us</Link>
         </nav>
 
-        <div style={{ marginTop: 'auto', borderTop: '1px solid #f1f5f9', paddingTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border)', paddingTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
           {mounted && user ? (
             <Link 
               href="/dashboard" 
               onClick={() => setIsMenuOpen(false)} 
               style={{ 
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', 
-                color: '#1e293b', background: '#f8fafc', padding: '16px', borderRadius: '16px', 
-                border: '1px solid #e2e8f0', textDecoration: 'none', fontWeight: '800', fontFamily: 'Fraunces, serif' 
+                color: 'var(--text-main)', background: 'var(--surface)', padding: '16px', borderRadius: '16px', 
+                border: '1px solid var(--border)', textDecoration: 'none', fontWeight: '800', fontFamily: 'Fraunces, serif' 
               }}
             >
-              <UserIcon size={18} color="#2d5a27" />
+              <UserIcon size={18} color="var(--primary)" />
               <span>My Account</span>
             </Link>
           ) : (
@@ -446,7 +462,7 @@ export default function StoreLayout({
               href="/login" 
               onClick={() => setIsMenuOpen(false)} 
               style={{ 
-                textDecoration: 'none', color: 'white', background: '#2d5a27', padding: '16px', 
+                textDecoration: 'none', color: 'white', background: 'var(--primary)', padding: '16px', 
                 borderRadius: '16px', fontWeight: '800', textAlign: 'center', fontFamily: 'Fraunces, serif',
                 display: 'block'
               }}

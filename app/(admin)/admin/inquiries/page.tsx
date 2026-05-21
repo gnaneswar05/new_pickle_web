@@ -20,44 +20,44 @@ export default function AdminInquiries() {
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
-        <div style={{ width: '3rem', height: '3rem', background: '#f0f7f0', color: '#2d5a27', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '3rem', height: '3rem', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <MessageSquare size={24} />
         </div>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b' }}>Customer Inquiries</h1>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-main)' }}>Customer Inquiries</h1>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {messages.length === 0 ? (
-          <div style={{ padding: '60px', textAlign: 'center', background: 'white', borderRadius: '32px', border: '1px solid #f1f5f9', color: '#94a3b8' }}>
+          <div style={{ padding: '60px', textAlign: 'center', background: 'var(--surface)', borderRadius: '32px', border: '1px solid var(--border)', color: 'var(--text-muted)' }}>
             No inquiries received yet.
           </div>
         ) : (
           messages.map((m: any) => (
-            <div key={m._id} style={{ background: 'white', padding: '30px', borderRadius: '32px', border: '1px solid #f1f5f9', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.02)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', borderBottom: '1px solid #f8fafc', paddingBottom: '20px' }}>
+            <div key={m._id} style={{ background: 'var(--surface)', padding: '30px', borderRadius: '32px', border: '1px solid var(--border)', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.02)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '20px' }}>
                 <div style={{ display: 'flex', gap: '24px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <User size={16} color="#94a3b8" />
-                    <span style={{ fontWeight: '800', color: '#1e293b' }}>{m.name}</span>
+                    <User size={16} color="currentColor" style={{ color: 'var(--text-muted)' }} />
+                    <span style={{ fontWeight: '800', color: 'var(--text-main)' }}>{m.name}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Phone size={16} color="#94a3b8" />
-                    <span style={{ fontWeight: '700', color: '#64748b' }}>{m.phone}</span>
+                    <Phone size={16} color="currentColor" style={{ color: 'var(--text-muted)' }} />
+                    <span style={{ fontWeight: '700', color: 'var(--text-muted)' }}>{m.phone}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Mail size={16} color="#94a3b8" />
-                    <span style={{ fontWeight: '700', color: '#64748b' }}>{m.email}</span>
+                    <Mail size={16} color="currentColor" style={{ color: 'var(--text-muted)' }} />
+                    <span style={{ fontWeight: '700', color: 'var(--text-muted)' }}>{m.email}</span>
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', color: '#94a3b8', fontWeight: '700' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '700' }}>
                   <Clock size={14} />
                   {new Date(m.createdAt).toLocaleDateString()}
                 </div>
               </div>
 
               <div>
-                <h4 style={{ fontSize: '0.75rem', fontWeight: '900', color: '#2d5a27', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Subject: {m.subject}</h4>
-                <p style={{ color: '#334155', lineHeight: 1.6, fontWeight: '500' }}>{m.message}</p>
+                <h4 style={{ fontSize: '0.75rem', fontWeight: '900', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Subject: {m.subject}</h4>
+                <p style={{ color: 'var(--text-main)', lineHeight: 1.6, fontWeight: '500' }}>{m.message}</p>
               </div>
             </div>
           ))

@@ -56,16 +56,16 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
   const weights = ['250g', '500g', '1kg'];
 
   return (
-    <div style={{ background: 'white', borderRadius: '32px', padding: '16px', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05)', border: '1px solid #f1f5f9', display: 'flex', flexDirection: 'column', transition: 'all 0.3s' }}>
+    <div style={{ background: 'var(--surface)', borderRadius: '32px', padding: '16px', boxShadow: 'var(--shadow)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', transition: 'all 0.3s' }}>
       <Link href={`/product/${p._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', backgroundColor: '#f1f5f9', marginBottom: '20px', aspectRatio: '1/1' }}>
+        <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', backgroundColor: 'var(--border)', marginBottom: '20px', aspectRatio: '1/1' }}>
           <img 
             src={p.image || defaultImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'} 
             alt={p.name} 
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
           {p.category && (
-            <div style={{ position: 'absolute', top: '12px', left: '12px', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', padding: '6px 12px', borderRadius: '99px', fontSize: '10px', fontWeight: '800', color: '#1e293b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <div style={{ position: 'absolute', top: '12px', left: '12px', background: 'var(--surface)', padding: '6px 12px', borderRadius: '99px', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid var(--border)' }}>
               {p.category}
             </div>
           )}
@@ -90,8 +90,7 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
               width: '40px',
               height: '40px',
               borderRadius: '50%',
-              background: isWishlisted ? '#fee2e2' : 'rgba(255,255,255,0.9)',
-              backdropFilter: 'blur(10px)',
+              background: isWishlisted ? 'var(--secondary)' : 'var(--surface)',
               border: 'none',
               cursor: 'pointer',
               display: 'flex',
@@ -103,18 +102,18 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
           >
             <Heart
               size={18}
-              fill={isWishlisted ? '#ef4444' : 'none'}
-              color={isWishlisted ? '#ef4444' : '#94a3b8'}
+              fill={isWishlisted ? 'var(--primary)' : 'none'}
+              color={isWishlisted ? 'var(--primary)' : 'var(--text-muted)'}
               style={{ transition: 'all 0.3s' }}
             />
           </button>
         </div>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '8px', fontFamily: 'Fraunces, serif' }}>{p.name}</h3>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '8px', fontFamily: 'Fraunces, serif' }}>{p.name}</h3>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '16px' }}>
           {[1, 2, 3, 4, 5].map((s) => <Star key={s} size={12} fill="#f59e0b" color="#f59e0b" />)}
-          <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', marginLeft: '4px' }}>({p.rating || 4.9}/5)</span>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', marginLeft: '4px' }}>({p.rating || 4.9}/5)</span>
         </div>
-        <p style={{ fontSize: '1.75rem', fontWeight: '900', color: '#2d5a27', marginBottom: '16px' }}>₹{currentPrice.toFixed(2)}</p>
+        <p style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '16px' }}>₹{currentPrice.toFixed(2)}</p>
       </Link>
 
       {/* Weight Selector */}
@@ -131,9 +130,9 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
               flex: 1,
               padding: '8px 4px',
               borderRadius: '12px',
-              border: `2px solid ${selectedWeight === w ? '#2d5a27' : '#f1f5f9'}`,
-              background: selectedWeight === w ? '#2d5a27' : 'white',
-              color: selectedWeight === w ? 'white' : '#64748b',
+              border: `2px solid ${selectedWeight === w ? 'var(--primary)' : 'var(--border)'}`,
+              background: selectedWeight === w ? 'var(--primary)' : 'var(--surface)',
+              color: selectedWeight === w ? 'white' : 'var(--text-muted)',
               fontSize: '0.75rem',
               fontWeight: '800',
               cursor: 'pointer',
@@ -150,8 +149,8 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
           marginTop: 'auto', 
           width: '100%', 
           padding: '16px', 
-          background: isInCart ? '#2d5a27' : '#0f172a', 
-          color: 'white', 
+          background: isInCart ? 'var(--primary)' : 'var(--text-main)', 
+          color: isInCart ? 'white' : 'var(--background)', 
           border: 'none', 
           borderRadius: '18px', 
           fontWeight: '800', 
@@ -174,4 +173,3 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
     </div>
   );
 }
-

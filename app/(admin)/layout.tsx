@@ -12,9 +12,12 @@ import {
   Grid, 
   Image as ImageIcon, 
   MapPin, 
-  MessageSquare 
+  MessageSquare,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useAdminStore } from '@/lib/adminStore';
+import { useThemeStore } from '@/lib/themeStore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -25,6 +28,7 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const { isAdmin, logoutAdmin } = useAdminStore();
+  const { theme, toggleTheme } = useThemeStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [logoUrl, setLogoUrl] = useState('');
@@ -56,7 +60,7 @@ export default function AdminLayout({
             {logoUrl ? (
               <img src={logoUrl} alt="Logo" style={{ height: '35px', width: '35px', objectFit: 'cover', borderRadius: '8px' }} />
             ) : (
-              <div style={{ width: '35px', height: '35px', background: '#2d5a27', color: 'white', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: '900' }}>K</div>
+              <div style={{ width: '35px', height: '35px', background: 'var(--primary)', color: 'white', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: '900' }}>K</div>
             )}
             <span>Kanvi Admin</span>
           </div>
@@ -92,26 +96,47 @@ export default function AdminLayout({
               <Settings size={18} /> Settings
             </Link>
           </nav>
-          <button 
-            onClick={() => { logoutAdmin(); router.push('/admin/login'); }}
-            className="btn-logout"
-            style={{ 
-              marginTop: 'auto', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '10px', 
-              color: '#ef4444', 
-              fontWeight: '700', 
-              padding: '12px', 
-              width: '100%', 
-              background: '#fef2f2', 
-              border: 'none', 
-              borderRadius: '12px',
-              cursor: 'pointer'
-            }}
-          >
-            <LogOut size={18} /> Logout
-          </button>
+          <div style={{ marginTop: 'auto', display: 'flex', gap: '10px', width: '100%', alignItems: 'center' }}>
+            <button 
+              onClick={() => { logoutAdmin(); router.push('/admin/login'); }}
+              className="btn-logout"
+              style={{ 
+                flex: 1,
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '10px', 
+                color: '#ef4444', 
+                fontWeight: '700', 
+                padding: '12px', 
+                background: 'var(--secondary)', 
+                border: 'none', 
+                borderRadius: '12px',
+                cursor: 'pointer'
+              }}
+            >
+              <LogOut size={18} /> Logout
+            </button>
+            {mounted && (
+              <button 
+                onClick={toggleTheme} 
+                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                style={{ 
+                  width: '45px', 
+                  height: '45px', 
+                  background: 'var(--secondary)', 
+                  color: 'var(--primary)', 
+                  border: 'none', 
+                  borderRadius: '12px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  cursor: 'pointer' 
+                }}
+              >
+                {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+              </button>
+            )}
+          </div>
         </aside>
       )}
       <main className="admin-content" style={{ marginLeft: isAdmin && pathname !== '/admin/login' ? '260px' : '0' }}>

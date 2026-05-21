@@ -7,7 +7,7 @@ import { useAuthStore } from '@/lib/authStore';
 import Script from 'next/script';
 import { ShieldCheck, Truck, CreditCard, Wallet, MapPin, ShoppingBag, AlertCircle, CheckCircle2, User as UserIcon } from 'lucide-react';
 
-import LoadingLogo from '../components/LoadingLogo';
+import { CheckoutSkeleton } from '../components/Skeleton';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -171,7 +171,7 @@ export default function CheckoutPage() {
           }
         },
         prefill: { name: form.customerName, email: form.email, contact: form.phone },
-        theme: { color: "#2d5a27" },
+        theme: { color: "#dc2626" },
       };
       const rzp = new (window as any).Razorpay(options);
       rzp.on('payment.failed', function (response: any) {
@@ -239,7 +239,7 @@ export default function CheckoutPage() {
   };
 
   if (!mounted) return null;
-  if (loading) return <LoadingLogo message="Preparing checkout..." />;
+  if (loading) return <CheckoutSkeleton />;
   if (!user || items.length === 0) return null;
 
   return (
@@ -247,46 +247,46 @@ export default function CheckoutPage() {
       <Script src="https://checkout.razorpay.com/v1/checkout.js" onLoad={() => setIsRazorpayLoaded(true)} />
 
       <div style={{ marginBottom: '60px' }}>
-        <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif' }}>
-          Secure <span style={{ color: '#2d5a27' }}>Checkout</span>
+        <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: '900', color: 'var(--text-main)', margin: 0, fontFamily: 'Fraunces, serif' }}>
+          Secure <span style={{ color: 'var(--primary)' }}>Checkout</span>
         </h1>
-        <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Finalize your pickle selection.</p>
+        <p style={{ color: 'var(--text-muted)', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Finalize your pickle selection.</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '50px', alignItems: 'flex-start' }}>
 
         {/* Delivery Form */}
-        <div style={{ background: 'white', padding: '50px', borderRadius: '48px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '40px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <MapPin size={24} color="#2d5a27" /> Delivery Details
+        <div style={{ background: 'var(--surface)', padding: '50px', borderRadius: '48px', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '40px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <MapPin size={24} color="var(--primary)" /> Delivery Details
           </h3>
           <form id="checkout-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Full Name</label>
+              <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Full Name</label>
               <div style={{ position: 'relative' }}>
-                <UserIcon size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#cbd5e1' }} />
-                <input required style={{ width: '100%', padding: '16px 16px 16px 45px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none', transition: '0.2s' }} value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })} placeholder="Who is receiving?" />
+                <UserIcon size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <input required style={{ width: '100%', padding: '16px 16px 16px 45px', borderRadius: '18px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', fontWeight: '600', outline: 'none', transition: '0.2s' }} value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })} placeholder="Who is receiving?" />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Email</label>
-                <input required type="email" style={{ padding: '16px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none' }} value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="order@example.com" />
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Email</label>
+                <input required type="email" style={{ padding: '16px', borderRadius: '18px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', fontWeight: '600', outline: 'none' }} value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="order@example.com" />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Phone</label>
-                <input required style={{ padding: '16px', borderRadius: '18px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none' }} value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="Mobile No." />
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Phone</label>
+                <input required style={{ padding: '16px', borderRadius: '18px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', fontWeight: '600', outline: 'none' }} value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="Mobile No." />
               </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Delivery Pincode</label>
+              <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Delivery Pincode</label>
               <div style={{ position: 'relative' }}>
-                <input required maxLength={6} style={{ width: '100%', padding: '18px 16px 18px 45px', borderRadius: '18px', border: `2px solid ${pincode.length === 6 ? (isServiceable ? '#2d5a27' : '#ef4444') : '#f1f5f9'}`, background: '#f8fafc', fontWeight: '900', fontSize: '1.2rem', letterSpacing: '0.1em', outline: 'none' }} value={pincode} onChange={e => handlePincodeChange(e.target.value)} placeholder="6 Digit Code" />
-                <MapPin size={22} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <input required maxLength={6} style={{ width: '100%', padding: '18px 16px 18px 45px', borderRadius: '18px', border: `2px solid ${pincode.length === 6 ? (isServiceable ? 'var(--primary)' : '#ef4444') : 'var(--border)'}`, background: 'var(--background)', color: 'var(--text-main)', fontWeight: '900', fontSize: '1.2rem', letterSpacing: '0.1em', outline: 'none' }} value={pincode} onChange={e => handlePincodeChange(e.target.value)} placeholder="6 Digit Code" />
+                <MapPin size={22} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 {isServiceable && cityName && (
-                  <div style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '6px', color: '#2d5a27', fontSize: '0.8rem', fontWeight: '900', background: '#f0f7f0', padding: '6px 12px', borderRadius: '10px' }}>
+                  <div style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--primary)', fontSize: '0.8rem', fontWeight: '900', background: 'var(--secondary)', padding: '6px 12px', borderRadius: '10px' }}>
                     <CheckCircle2 size={16} /> {cityName}
                   </div>
                 )}
@@ -294,8 +294,8 @@ export default function CheckoutPage() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Detailed Address</label>
-              <textarea required style={{ padding: '18px', borderRadius: '20px', border: '2px solid #f1f5f9', background: '#f8fafc', fontWeight: '600', outline: 'none', minHeight: '120px', resize: 'none', lineHeight: 1.6 }} value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} placeholder="Street name, Landmark, House details..." />
+              <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Detailed Address</label>
+              <textarea required style={{ padding: '18px', borderRadius: '20px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', fontWeight: '600', outline: 'none', minHeight: '120px', resize: 'none', lineHeight: 1.6 }} value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} placeholder="Street name, Landmark, House details..." />
             </div>
           </form>
         </div>
@@ -304,34 +304,34 @@ export default function CheckoutPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
 
           {walletBalance > 0 && (
-            <div style={{ background: '#f0fdf4', padding: '30px', borderRadius: '32px', border: '2px solid #d1fae5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 10px 15px -3px rgba(45, 90, 39, 0.05)' }}>
+            <div style={{ background: 'var(--secondary)', padding: '30px', borderRadius: '32px', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', boxShadow: 'var(--shadow)', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-                <div style={{ width: '50px', height: '50px', background: 'white', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-                  <Wallet size={24} color="#2d5a27" />
+                <div style={{ width: '50px', height: '50px', background: 'var(--surface)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow)' }}>
+                  <Wallet size={24} color="var(--primary)" />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontWeight: '900', color: '#142911', fontSize: '1rem' }}>Wallet</p>
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#2d5a27', fontWeight: '700' }}>Balance: ₹{walletBalance.toFixed(2)}</p>
+                  <p style={{ margin: 0, fontWeight: '900', color: 'var(--text-main)', fontSize: '1rem' }}>Wallet</p>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '700' }}>Balance: ₹{walletBalance.toFixed(2)}</p>
                 </div>
               </div>
-              <input type="checkbox" checked={useWallet} onChange={e => setUseWallet(e.target.checked)} style={{ width: '24px', height: '24px', cursor: 'pointer', accentColor: '#2d5a27' }} />
+              <input type="checkbox" checked={useWallet} onChange={e => setUseWallet(e.target.checked)} style={{ width: '24px', height: '24px', cursor: 'pointer', accentColor: 'var(--primary)' }} />
             </div>
           )}
 
           {finalPayable > 0 && (
-            <div style={{ background: 'white', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '25px' }}>Choose Payment</h3>
+            <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '40px', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '25px' }}>Choose Payment</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {taxSettings.isRazorpayEnabled && (
-                  <div onClick={() => setPaymentMethod('Razorpay')} style={{ padding: '18px', borderRadius: '18px', border: '2px solid', borderColor: paymentMethod === 'Razorpay' ? '#2d5a27' : '#f1f5f9', background: paymentMethod === 'Razorpay' ? '#f0f7f0' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', transition: '0.2s' }}>
-                    <CreditCard size={20} color={paymentMethod === 'Razorpay' ? '#2d5a27' : '#94a3b8'} />
-                    <span style={{ fontWeight: '800', color: paymentMethod === 'Razorpay' ? '#142911' : '#1e293b' }}>Pay Online Securely</span>
+                  <div onClick={() => setPaymentMethod('Razorpay')} style={{ padding: '18px', borderRadius: '18px', border: '2px solid', borderColor: paymentMethod === 'Razorpay' ? 'var(--primary)' : 'var(--border)', background: paymentMethod === 'Razorpay' ? 'var(--secondary)' : 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', transition: '0.2s' }}>
+                    <CreditCard size={20} color={paymentMethod === 'Razorpay' ? 'var(--primary)' : 'var(--text-muted)'} />
+                    <span style={{ fontWeight: '800', color: 'var(--text-main)' }}>Pay Online Securely</span>
                   </div>
                 )}
                 {taxSettings.isCodEnabled && grossTotal <= taxSettings.maxCodAmount && (
-                  <div onClick={() => setPaymentMethod('COD')} style={{ padding: '18px', borderRadius: '18px', border: '2px solid', borderColor: paymentMethod === 'COD' ? '#2d5a27' : '#f1f5f9', background: paymentMethod === 'COD' ? '#f0f7f0' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', transition: '0.2s' }}>
-                    <Truck size={20} color={paymentMethod === 'COD' ? '#2d5a27' : '#94a3b8'} />
-                    <span style={{ fontWeight: '800', color: paymentMethod === 'COD' ? '#142911' : '#1e293b' }}>Cash on Delivery</span>
+                  <div onClick={() => setPaymentMethod('COD')} style={{ padding: '18px', borderRadius: '18px', border: '2px solid', borderColor: paymentMethod === 'COD' ? 'var(--primary)' : 'var(--border)', background: paymentMethod === 'COD' ? 'var(--secondary)' : 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '15px', transition: '0.2s' }}>
+                    <Truck size={20} color={paymentMethod === 'COD' ? 'var(--primary)' : 'var(--text-muted)'} />
+                    <span style={{ fontWeight: '800', color: 'var(--text-main)' }}>Cash on Delivery</span>
                   </div>
                 )}
               </div>
@@ -339,40 +339,40 @@ export default function CheckoutPage() {
           )}
 
           {/* Premium Final Summary */}
-          <div style={{ background: '#0f172a', padding: '50px 40px', borderRadius: '48px', color: 'white', boxShadow: '0 25px 50px -12px rgba(15, 23, 42, 0.3)' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: '900', marginBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '20px', fontFamily: 'Fraunces, serif' }}>Order Summary</h3>
+          <div style={{ background: 'var(--surface)', padding: '50px 40px', borderRadius: '48px', color: 'var(--text-main)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: '900', marginBottom: '30px', borderBottom: '1px solid var(--border)', paddingBottom: '20px', fontFamily: 'Fraunces, serif', color: 'var(--text-main)' }}>Order Summary</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', marginBottom: '35px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.95rem', fontWeight: '500' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: '500' }}>
                 <span>Subtotal</span>
-                <span style={{ color: 'white', fontWeight: '700' }}>₹{subtotal.toFixed(2)}</span>
+                <span style={{ color: 'var(--text-main)', fontWeight: '700' }}>₹{subtotal.toFixed(2)}</span>
               </div>
 
               {deliveryCharge > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.95rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Truck size={16} /> Free Shipping {cityName && `(${cityName})`}</span>
-                  <span style={{ color: '#ca8a04', fontWeight: '900' }}>+ ₹{deliveryCharge.toFixed(2)}</span>
+                  <span style={{ color: 'var(--primary)', fontWeight: '900' }}>+ ₹{deliveryCharge.toFixed(2)}</span>
                 </div>
               )}
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.95rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
                 <span>Taxes & System Fees</span>
-                <span style={{ color: 'white', fontWeight: '700' }}>₹{(totalTax + platformFee).toFixed(2)}</span>
+                <span style={{ color: 'var(--text-main)', fontWeight: '700' }}>₹{(totalTax + platformFee).toFixed(2)}</span>
               </div>
 
               {walletDeduction > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#34d399', fontSize: '0.95rem', fontWeight: '900', background: 'rgba(52, 211, 153, 0.1)', padding: '12px 16px', borderRadius: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--primary)', fontSize: '0.95rem', fontWeight: '900', background: 'var(--secondary)', padding: '12px 16px', borderRadius: '16px' }}>
                   <span>Wallet Savings</span>
                   <span>− ₹{walletDeduction.toFixed(2)}</span>
                 </div>
               )}
 
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: '20px', paddingTop: '25px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ borderTop: '1px solid var(--border)', marginTop: '20px', paddingTop: '25px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '1.35rem', fontWeight: '800' }}>Final Total</span>
-                <span style={{ fontSize: '2.8rem', fontWeight: '900', color: '#34d399', letterSpacing: '-0.02em' }}>₹{finalPayable.toFixed(2)}</span>
+                <span style={{ fontSize: '2.8rem', fontWeight: '900', color: 'var(--primary)', letterSpacing: '-0.02em' }}>₹{finalPayable.toFixed(2)}</span>
               </div>
             </div>
 
-            <button form="checkout-form" disabled={loading || paymentLoading} style={{ width: '100%', background: '#2d5a27', color: 'white', padding: '24px', borderRadius: '24px', border: 'none', fontWeight: '900', fontSize: '1.3rem', cursor: (loading || paymentLoading) ? 'not-allowed' : 'pointer', boxShadow: '0 15px 30px -10px rgba(45, 90, 39, 0.3)', transition: '0.3s', opacity: (loading || paymentLoading) ? 0.7 : 1 }}>
+            <button form="checkout-form" disabled={loading || paymentLoading} style={{ width: '100%', background: 'var(--primary)', color: 'white', padding: '24px', borderRadius: '24px', border: 'none', fontWeight: '900', fontSize: '1.3rem', cursor: (loading || paymentLoading) ? 'not-allowed' : 'pointer', boxShadow: 'var(--shadow)', transition: '0.3s', opacity: (loading || paymentLoading) ? 0.7 : 1 }}>
               {(loading || paymentLoading) ? (
                 <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                   <div style={{ width: '20px', height: '20px', border: '3px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}></div>

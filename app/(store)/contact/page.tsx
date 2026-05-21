@@ -6,6 +6,7 @@ import { Mail, Phone, MapPin, Send, ShieldCheck, RefreshCw } from 'lucide-react'
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Dynamic contact info from admin settings
   const [contactInfo, setContactInfo] = useState({
@@ -26,6 +27,7 @@ export default function ContactPage() {
   };
 
   useEffect(() => {
+    setMounted(true);
     generateCaptcha();
     // Fetch contact info from admin settings
     fetch('/api/settings')
@@ -77,60 +79,69 @@ export default function ContactPage() {
     }
   };
 
+  if (!mounted) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '40px', height: '40px', border: '4px solid var(--border)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', fontFamily: 'Fraunces, serif' }}>
       <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: '#1e293b', marginBottom: '1.5rem', fontFamily: 'Fraunces, serif' }}>Get in <span style={{ color: '#2d5a27' }}>Touch</span></h1>
-        <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '600px', margin: '0 auto' }}>Have a question about our pickles or an order? We are here to help!</p>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: 'var(--text-main)', marginBottom: '1.5rem', fontFamily: 'Fraunces, serif' }}>Get in <span style={{ color: 'var(--primary)' }}>Touch</span></h1>
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto' }}>Have a question about our pickles or an order? We are here to help!</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '60px' }}>
         {/* Contact Info */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-          <div style={{ background: 'white', padding: '40px', borderRadius: '40px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '30px', color: '#1e293b', fontFamily: 'Fraunces, serif' }}>Contact Information</h3>
+          <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '40px', boxShadow: 'var(--shadow)', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '30px', color: 'var(--text-main)', fontFamily: 'Fraunces, serif' }}>Contact Information</h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                <div style={{ width: '56px', height: '56px', background: '#f0f7f0', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2d5a27' }}>
+                <div style={{ width: '56px', height: '56px', background: 'var(--secondary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
                   <Phone size={24} />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Phone</p>
-                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>
+                  <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Phone</p>
+                  <p style={{ margin: 0, fontWeight: '700', color: 'var(--text-main)', fontSize: '1.1rem' }}>
                     {contactInfo.phone ? (
                       <a href={`tel:${contactInfo.phone.replace(/\s+/g, '')}`} style={{ color: 'inherit', textDecoration: 'none' }}>{contactInfo.phone}</a>
                     ) : (
-                      <span style={{ color: '#cbd5e1' }}>Not set yet</span>
+                      <span style={{ color: 'var(--text-muted)' }}>Not set yet</span>
                     )}
                   </p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                <div style={{ width: '56px', height: '56px', background: '#eff6ff', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+                <div style={{ width: '56px', height: '56px', background: 'var(--secondary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
                   <Mail size={24} />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Email</p>
-                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>
+                  <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Email</p>
+                  <p style={{ margin: 0, fontWeight: '700', color: 'var(--text-main)', fontSize: '1.1rem' }}>
                     {contactInfo.email ? (
                       <a href={`mailto:${contactInfo.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{contactInfo.email}</a>
                     ) : (
-                      <span style={{ color: '#cbd5e1' }}>Not set yet</span>
+                      <span style={{ color: 'var(--text-muted)' }}>Not set yet</span>
                     )}
                   </p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                <div style={{ width: '56px', height: '56px', background: '#f0f7f0', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b91c1c' }}>
+                <div style={{ width: '56px', height: '56px', background: 'var(--secondary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
                   <MapPin size={24} />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Location</p>
-                  <p style={{ margin: 0, fontWeight: '700', color: '#1e293b', fontSize: '1.1rem' }}>
-                    {contactInfo.address || <span style={{ color: '#cbd5e1' }}>Not set yet</span>}
+                  <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Location</p>
+                  <p style={{ margin: 0, fontWeight: '700', color: 'var(--text-main)', fontSize: '1.1rem' }}>
+                    {contactInfo.address || <span style={{ color: 'var(--text-muted)' }}>Not set yet</span>}
                   </p>
                 </div>
               </div>
@@ -139,48 +150,48 @@ export default function ContactPage() {
         </div>
 
         {/* Contact Form */}
-        <div style={{ background: 'white', padding: '50px', borderRadius: '40px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.08)', border: '1px solid #f1f5f9' }}>
+        <div style={{ background: 'var(--surface)', padding: '50px', borderRadius: '40px', boxShadow: 'var(--shadow)', border: '1px solid var(--border)' }}>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Name</label>
-                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Full Name" />
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Name</label>
+                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600' }} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Full Name" />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Email</label>
-                <input required type="email" style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="email@example.com" />
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Email</label>
+                <input required type="email" style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600' }} value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="email@example.com" />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Phone</label>
-                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="Mobile Number" />
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Phone</label>
+                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600' }} value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="Mobile Number" />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Subject</label>
-                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder="How can we help?" />
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Subject</label>
+                <input required style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600' }} value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder="How can we help?" />
               </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginLeft: '4px' }}>Message</label>
-              <textarea required style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600', minHeight: '120px', resize: 'none' }} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Your inquiry..." />
+              <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Message</label>
+              <textarea required style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', minHeight: '120px', resize: 'none' }} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Your inquiry..." />
             </div>
 
             {/* MATH CAPTCHA SECTION */}
-            <div style={{ background: '#f8fafc', padding: '20px', borderRadius: '24px', border: '2px solid #f1f5f9' }}>
+            <div style={{ background: 'var(--background)', padding: '20px', borderRadius: '24px', border: '2px solid var(--border)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '15px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#1e293b', fontWeight: '800' }}>
-                  <ShieldCheck size={18} color="#2d5a27" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-main)', fontWeight: '800' }}>
+                  <ShieldCheck size={18} color="var(--primary)" />
                   <span>Security Verification</span>
                 </div>
-                <button type="button" onClick={generateCaptcha} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', fontWeight: '700' }}>
+                <button type="button" onClick={generateCaptcha} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', fontWeight: '700' }}>
                   <RefreshCw size={14} /> Refresh
                 </button>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                <div style={{ fontSize: '1.25rem', fontWeight: '900', color: '#2d5a27', background: 'white', padding: '10px 20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: '900', color: 'var(--primary)', background: 'var(--surface)', padding: '10px 20px', borderRadius: '12px', border: '1px solid var(--border)' }}>
                   {captcha.num1} + {captcha.num2} = ?
                 </div>
                 <input
@@ -189,12 +200,12 @@ export default function ContactPage() {
                   value={captcha.userAnswer}
                   onChange={e => setCaptcha({ ...captcha, userAnswer: e.target.value })}
                   placeholder="Answer"
-                  style={{ flex: 1, padding: '12px 16px', borderRadius: '12px', border: '2px solid #e2e8f0', outline: 'none', fontWeight: '800', fontSize: '1.1rem', textAlign: 'center' }}
+                  style={{ flex: 1, padding: '12px 16px', borderRadius: '12px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '800', fontSize: '1.1rem', textAlign: 'center' }}
                 />
               </div>
             </div>
 
-            <button disabled={loading} style={{ background: '#0f172a', color: 'white', padding: '20px', borderRadius: '20px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginTop: '10px', boxShadow: '0 10px 15px -3px rgba(15, 23, 42, 0.2)', opacity: loading ? 0.7 : 1 }}>
+            <button disabled={loading} style={{ background: 'var(--text-main)', color: 'var(--background)', padding: '20px', borderRadius: '20px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginTop: '10px', boxShadow: 'var(--shadow)', opacity: loading ? 0.7 : 1 }}>
               <Send size={20} /> {loading ? 'Sending...' : 'Send Message'}
             </button>
           </form>

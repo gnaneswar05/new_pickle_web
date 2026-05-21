@@ -29,12 +29,12 @@ export default function LegalPage() {
       });
   }, [slug]);
 
-  if (loading) return <div className="container p-20 text-center">Loading policies...</div>;
+  if (loading) return <div className="container p-20 text-center" style={{ color: 'var(--text-muted)' }}>Loading policies...</div>;
 
   return (
     <div className="container" style={{ padding: '6rem 20px', maxWidth: '900px' }}>
-      <h1 className="text-4xl font-bold mb-10 text-slate-800">{title}</h1>
-      <div className="card" style={{ padding: '3rem', lineHeight: '1.6', color: '#555', whiteSpace: 'pre-wrap' }}>
+      <h1 className="text-4xl font-bold mb-10" style={{ color: 'var(--text-main)' }}>{title}</h1>
+      <div className="card" style={{ padding: '3rem', lineHeight: '1.8', color: 'var(--text-main)', opacity: 0.9, whiteSpace: 'pre-wrap' }}>
         {content || `The ${title} is currently being updated. Please check back later.`}
       </div>
     </div>

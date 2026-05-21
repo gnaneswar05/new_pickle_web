@@ -163,12 +163,12 @@ export default function AdminDashboard() {
       {/* Header Section */}
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', marginBottom: '60px' }}>
         <div>
-          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif', lineHeight: 1.1 }}>
-            Business <span style={{ color: '#2d5a27' }}>Overview</span>
+          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: 'var(--text-main)', margin: 0, fontFamily: 'Fraunces, serif', lineHeight: 1.1 }}>
+            Business <span style={{ color: 'var(--primary)' }}>Overview</span>
           </h1>
-          <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Welcome back, Admin. Here's what's happening today.</p>
+          <p style={{ color: 'var(--text-muted)', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Welcome back, Admin. Here's what's happening today.</p>
         </div>
-        <button style={{ background: '#0f172a', color: 'white', padding: '14px 28px', borderRadius: '18px', border: 'none', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 15px -3px rgba(15, 23, 42, 0.2)' }}>
+        <button style={{ background: 'var(--text-main)', color: 'var(--background)', padding: '14px 28px', borderRadius: '18px', border: 'none', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}>
           <Download size={20} /> Generate Report
         </button>
       </div>
@@ -177,54 +177,54 @@ export default function AdminDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '25px', marginBottom: '50px' }}>
         
         {/* Revenue Card */}
-        <div style={{ background: 'white', padding: '35px', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
+        <div style={{ background: 'var(--surface)', padding: '35px', borderRadius: '40px', border: '1px solid var(--border)', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
-            <div style={{ width: '56px', height: '56px', background: '#f0f7f0', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2d5a27' }}>
+            <div style={{ width: '56px', height: '56px', background: 'var(--secondary)', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
               <TrendingUp size={28} />
             </div>
-            <div style={{ background: '#f0f7f0', color: '#2d5a27', height: 'fit-content', padding: '6px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: '900' }}>+12.5%</div>
+            <div style={{ background: 'var(--secondary)', color: 'var(--primary)', height: 'fit-content', padding: '6px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: '900' }}>+12.5%</div>
           </div>
-          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Revenue</p>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', margin: '8px 0' }}>₹{stats.revenue.toLocaleString()}</h2>
-          <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b' }}>Updated just now</p>
+          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Revenue</p>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-main)', margin: '8px 0' }}>₹{stats.revenue.toLocaleString()}</h2>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Updated just now</p>
         </div>
 
         {/* Orders Card */}
-        <div style={{ background: 'white', padding: '35px', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
+        <div style={{ background: 'var(--surface)', padding: '35px', borderRadius: '40px', border: '1px solid var(--border)', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
-            <div style={{ width: '56px', height: '56px', background: '#eff6ff', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+            <div style={{ width: '56px', height: '56px', background: 'rgba(37, 99, 235, 0.1)', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6' }}>
               <ShoppingCart size={28} />
             </div>
-            <div style={{ background: '#eff6ff', color: '#2563eb', height: 'fit-content', padding: '6px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: '900' }}>+8.2%</div>
+            <div style={{ background: 'rgba(37, 99, 235, 0.1)', color: '#3b82f6', height: 'fit-content', padding: '6px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: '900' }}>+8.2%</div>
           </div>
-          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Active Orders</p>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', margin: '8px 0' }}>{stats.orders}</h2>
-          <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b' }}>Live orders</p>
+          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Active Orders</p>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-main)', margin: '8px 0' }}>{stats.orders}</h2>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Live orders</p>
         </div>
 
         {/* Customers Card */}
-        <div style={{ background: 'white', padding: '35px', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
+        <div style={{ background: 'var(--surface)', padding: '35px', borderRadius: '40px', border: '1px solid var(--border)', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
-            <div style={{ width: '56px', height: '56px', background: '#faf5ff', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9333ea' }}>
+            <div style={{ width: '56px', height: '56px', background: 'rgba(147, 51, 234, 0.1)', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a855f7' }}>
               <Users size={28} />
             </div>
-            <div style={{ background: '#faf5ff', color: '#9333ea', height: 'fit-content', padding: '6px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: '900' }}>+4%</div>
+            <div style={{ background: 'rgba(147, 51, 234, 0.1)', color: '#a855f7', height: 'fit-content', padding: '6px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: '900' }}>+4%</div>
           </div>
-          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Loyal Customers</p>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', margin: '8px 0' }}>{stats.customers}</h2>
-          <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b' }}>Active on store</p>
+          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Loyal Customers</p>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-main)', margin: '8px 0' }}>{stats.customers}</h2>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Active on store</p>
         </div>
 
         {/* Products Card */}
-        <div style={{ background: 'white', padding: '35px', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
+        <div style={{ background: 'var(--surface)', padding: '35px', borderRadius: '40px', border: '1px solid var(--border)', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
-            <div style={{ width: '56px', height: '56px', background: '#fff7ed', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d97706' }}>
+            <div style={{ width: '56px', height: '56px', background: 'rgba(217, 119, 6, 0.1)', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b' }}>
               <Package size={28} />
             </div>
           </div>
-          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Inventory Items</p>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', margin: '8px 0' }}>{stats.products}</h2>
-          <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b' }}>Live on storefront</p>
+          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Inventory Items</p>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-main)', margin: '8px 0' }}>{stats.products}</h2>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Live on storefront</p>
         </div>
       </div>
 
@@ -232,15 +232,15 @@ export default function AdminDashboard() {
       <div className="admin-charts-grid">
         
         {/* Sales Trend (Line/Area Chart) */}
-        <div style={{ background: 'white', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9', position: 'relative' }}>
+        <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '40px', border: '1px solid var(--border)', position: 'relative' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '15px', marginBottom: '30px' }}>
             <div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>Business Sales Trend</h3>
-              <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0 0', fontWeight: '500' }}>Monitor revenue and order volume trends</p>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>Business Sales Trend</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '4px 0 0 0', fontWeight: '500' }}>Monitor revenue and order volume trends</p>
             </div>
             
             {/* Timeframe Selectors */}
-            <div style={{ display: 'flex', background: '#f1f5f9', padding: '4px', borderRadius: '12px', gap: '4px' }}>
+            <div style={{ display: 'flex', background: 'var(--border)', padding: '4px', borderRadius: '12px', gap: '4px' }}>
               {(['daily', 'weekly', 'monthly'] as const).map(tf => (
                 <button
                   key={tf}
@@ -253,8 +253,8 @@ export default function AdminDashboard() {
                     fontWeight: '800',
                     cursor: 'pointer',
                     textTransform: 'capitalize',
-                    background: timeframe === tf ? '#2d5a27' : 'transparent',
-                    color: timeframe === tf ? 'white' : '#64748b',
+                    background: timeframe === tf ? 'var(--primary)' : 'transparent',
+                    color: timeframe === tf ? 'white' : 'var(--text-muted)',
                     transition: 'all 0.2s'
                   }}
                 >
@@ -269,8 +269,8 @@ export default function AdminDashboard() {
             <svg viewBox="0 0 500 200" style={{ width: '100%', overflow: 'visible' }}>
               <defs>
                 <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2d5a27" stopOpacity="0.2" />
-                  <stop offset="100%" stopColor="#2d5a27" stopOpacity="0.0" />
+                  <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="var(--primary)" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
 
@@ -284,7 +284,7 @@ export default function AdminDashboard() {
                     y1={y} 
                     x2="460" 
                     y2={y} 
-                    stroke="#f1f5f9" 
+                    stroke="var(--border)" 
                     strokeWidth="1" 
                   />
                 );
@@ -298,7 +298,7 @@ export default function AdminDashboard() {
                 <path 
                   d={pathD} 
                   fill="none" 
-                  stroke="#2d5a27" 
+                  stroke="var(--primary)" 
                   strokeWidth="3" 
                   strokeLinecap="round" 
                   strokeLinejoin="round" 
@@ -318,8 +318,8 @@ export default function AdminDashboard() {
                     cx={p.x} 
                     cy={p.y} 
                     r={hoveredPoint?.x === p.x ? 6 : 4} 
-                    fill={hoveredPoint?.x === p.x ? "#2d5a27" : "white"} 
-                    stroke="#2d5a27" 
+                    fill={hoveredPoint?.x === p.x ? "var(--primary)" : "var(--surface)"} 
+                    stroke="var(--primary)" 
                     strokeWidth="2.5" 
                     style={{ transition: 'all 0.15s' }}
                   />
@@ -333,7 +333,7 @@ export default function AdminDashboard() {
                   x={p.x}
                   y="190"
                   textAnchor="middle"
-                  fill="#94a3b8"
+                  fill="var(--text-muted)"
                   fontSize="8"
                   fontWeight="800"
                 >
@@ -364,7 +364,7 @@ export default function AdminDashboard() {
                 whiteSpace: 'nowrap'
               }}>
                 <span style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: '800' }}>{hoveredPoint.label}</span>
-                <span style={{ color: '#ca8a04', fontWeight: '900' }}>Revenue: ₹{hoveredPoint.revenue.toLocaleString()}</span>
+                <span style={{ color: '#f59e0b', fontWeight: '900' }}>Revenue: ₹{hoveredPoint.revenue.toLocaleString()}</span>
                 <span>Orders: {hoveredPoint.orders}</span>
               </div>
             )}
@@ -372,9 +372,9 @@ export default function AdminDashboard() {
         </div>
 
         {/* Categories Share (Donut Chart) */}
-        <div style={{ background: 'white', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', margin: '0 0 6px 0' }}>Popular Categories</h3>
-          <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '0 0 30px 0', fontWeight: '500' }}>Product distribution share</p>
+        <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '40px', border: '1px solid var(--border)' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 6px 0' }}>Popular Categories</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0 0 30px 0', fontWeight: '500' }}>Product distribution share</p>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
             {/* SVG Donut */}
@@ -403,8 +403,8 @@ export default function AdminDashboard() {
                 transform: 'translate(-50%, -50%)',
                 textAlign: 'center'
               }}>
-                <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#1e293b', display: 'block', lineHeight: 1 }}>100%</span>
-                <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Natural</span>
+                <span style={{ fontSize: '1.4rem', fontWeight: '900', color: 'var(--text-main)', display: 'block', lineHeight: 1 }}>100%</span>
+                <span style={{ fontSize: '0.7rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Natural</span>
               </div>
             </div>
 
@@ -414,9 +414,9 @@ export default function AdminDashboard() {
                 <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div style={{ width: '12px', height: '12px', borderRadius: '4px', background: cat.color }}></div>
-                    <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#475569' }}>{cat.name}</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-muted)' }}>{cat.name}</span>
                   </div>
-                  <span style={{ fontSize: '0.9rem', fontWeight: '900', color: '#1e293b' }}>{Math.round(cat.share * 100)}%</span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: '900', color: 'var(--text-main)' }}>{Math.round(cat.share * 100)}%</span>
                 </div>
               ))}
             </div>
@@ -429,56 +429,56 @@ export default function AdminDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '30px' }}>
         
         {/* Recent Activity */}
-        <div style={{ background: 'white', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
+        <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '40px', border: '1px solid var(--border)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>Recent Activity</h3>
-            <Link href="/admin/orders" style={{ fontSize: '0.85rem', fontWeight: '800', color: '#2d5a27', textDecoration: 'none' }}>View All</Link>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>Recent Activity</h3>
+            <Link href="/admin/orders" style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)', textDecoration: 'none' }}>View All</Link>
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
             {[1, 2, 3].map(i => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                <div style={{ width: '52px', height: '52px', background: '#f8fafc', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>📦</div>
+                <div style={{ width: '52px', height: '52px', background: 'var(--secondary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>📦</div>
                 <div style={{ flex: 1 }}>
-                  <p style={{ margin: 0, fontWeight: '800', color: '#1e293b' }}>New Order #PKL-10{88+i}</p>
-                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#94a3b8', fontWeight: '600' }}>Just now • Processing</p>
+                  <p style={{ margin: 0, fontWeight: '800', color: 'var(--text-main)' }}>New Order #PKL-10{88+i}</p>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600' }}>Just now • Processing</p>
                 </div>
-                <p style={{ margin: 0, fontWeight: '900', color: '#1e293b' }}>₹{450 + i * 120}</p>
+                <p style={{ margin: 0, fontWeight: '900', color: 'var(--text-main)' }}>₹{450 + i * 120}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Store Health */}
-        <div style={{ background: 'white', padding: '40px', borderRadius: '40px', border: '1px solid #f1f5f9' }}>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e293b', marginBottom: '35px' }}>Store Performance</h3>
+        <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '40px', border: '1px solid var(--border)' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '35px' }}>Store Performance</h3>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '35px' }}>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase' }}>Orders Fulfilled</span>
-                <span style={{ fontSize: '0.85rem', fontWeight: '900', color: '#1e293b' }}>92%</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Orders Fulfilled</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: '900', color: 'var(--text-main)' }}>92%</span>
               </div>
-              <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '99px', overflow: 'hidden' }}>
-                <div style={{ width: '92%', height: '100%', background: '#2d5a27', borderRadius: '99px' }}></div>
+              <div style={{ height: '8px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
+                <div style={{ width: '92%', height: '100%', background: 'var(--primary)', borderRadius: '99px' }}></div>
               </div>
             </div>
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: '800', color: '#64748b', textTransform: 'uppercase' }}>Customer Retention</span>
-                <span style={{ fontSize: '0.85rem', fontWeight: '900', color: '#1e293b' }}>85%</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Customer Retention</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: '900', color: 'var(--text-main)' }}>85%</span>
               </div>
-              <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ height: '8px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
                 <div style={{ width: '85%', height: '100%', background: '#2563eb', borderRadius: '99px' }}></div>
               </div>
             </div>
 
-            <div style={{ marginTop: '10px', background: '#f8fafc', padding: '20px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '15px' }}>
-              <div style={{ width: '40px', height: '40px', background: '#f0f7f0', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2d5a27' }}>
+            <div style={{ marginTop: '10px', background: 'var(--border)', padding: '20px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--secondary)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
                 <ShieldCheck size={20} />
               </div>
-              <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: '#64748b' }}>Store systems are running at <span style={{ color: '#2d5a27', fontWeight: '900' }}>100% capacity</span>.</p>
+              <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-muted)' }}>Store systems are running at <span style={{ color: 'var(--primary)', fontWeight: '900' }}>100% capacity</span>.</p>
             </div>
           </div>
         </div>

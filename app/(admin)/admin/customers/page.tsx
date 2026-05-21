@@ -46,18 +46,18 @@ export default function AdminCustomers() {
     }
   };
 
-  if (loading) return <div className="p-8 text-slate-500">Loading customer base...</div>;
+    if (loading) return <div className="p-8" style={{ color: 'var(--text-muted)' }}>Loading customer base...</div>;
 
   return (
     <div style={{ fontFamily: 'Fraunces, serif' }}>
-      <div className="flex justify-between items-end mb-10">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '15px' }}>
         <div>
-          <h1 className="text-4xl font-extrabold text-slate-800" style={{ fontFamily: 'Fraunces, serif' }}>Customers</h1>
-          <p className="text-slate-500 mt-2">Managing {customers.length} registered users.</p>
+          <h1 className="text-4xl font-extrabold" style={{ color: 'var(--text-main)' }}>Customers</h1>
+          <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>Managing {customers.length} registered users.</p>
         </div>
-        <div className="flex gap-4">
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} size={18} />
             <input 
               type="text" 
               placeholder="Search by phone..." 
@@ -67,7 +67,8 @@ export default function AdminCustomers() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button onClick={exportToCSV} className="export-btn">
+          <button onClick={exportToCSV}
+            style={{ background: 'var(--surface)', color: 'var(--text-muted)', padding: '10px 18px', borderRadius: '12px', border: '1px solid var(--border)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
             <Download size={20} /> Export CSV
           </button>
         </div>
@@ -89,14 +90,14 @@ export default function AdminCustomers() {
               <tr key={c._id}>
                 <td>
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${c.isBlocked ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${c.isBlocked ? 'bg-rose-500/10 text-rose-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
                       <UserIcon size={20} />
                     </div>
-                    <div className="font-bold text-slate-700">{c.phone}</div>
+                    <div className="font-bold" style={{ color: 'var(--text-main)' }}>{c.phone}</div>
                   </div>
                 </td>
-                <td className="font-mono text-xs text-slate-400">#{c._id.toUpperCase()}</td>
-                <td>{new Date(c.createdAt).toLocaleDateString()}</td>
+                <td className="font-mono text-xs" style={{ color: 'var(--text-muted)' }}>#{c._id.toUpperCase()}</td>
+                <td style={{ color: 'var(--text-main)' }}>{new Date(c.createdAt).toLocaleDateString()}</td>
                 <td>
                   <span className={`status-badge ${c.isBlocked ? 'cancelled' : 'delivered'}`} style={{ fontSize: '10px' }}>
                     {c.isBlocked ? 'Suspended' : 'Active'}
@@ -105,7 +106,19 @@ export default function AdminCustomers() {
                 <td>
                   <button 
                     onClick={() => toggleBlock(c._id, c.isBlocked)}
-                    className={`text-xs font-bold px-4 py-2 rounded-xl transition-all ${c.isBlocked ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-rose-50 text-rose-700 hover:bg-rose-100'}`}
+                    className="text-xs font-bold px-4 py-2 rounded-xl transition-all"
+                    style={{
+                      background: c.isBlocked ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                      color: c.isBlocked ? '#10b981' : '#ef4444',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = c.isBlocked ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = c.isBlocked ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+                    }}
                   >
                     {c.isBlocked ? 'Restore Access' : 'Suspend User'}
                   </button>
@@ -115,7 +128,7 @@ export default function AdminCustomers() {
           </tbody>
         </table>
         {filteredCustomers.length === 0 && (
-          <div className="text-center py-12 text-slate-400">
+          <div className="text-center py-12" style={{ color: 'var(--text-muted)' }}>
             No customers found matching your search.
           </div>
         )}

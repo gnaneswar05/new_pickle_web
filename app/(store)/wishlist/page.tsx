@@ -5,6 +5,7 @@ import { useWishlistStore } from '@/lib/wishlistStore';
 import { useCartStore } from '@/lib/store';
 import { Heart, ShoppingBasket, Trash2, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { ProductCardSkeleton } from '../components/Skeleton';
 
 export default function WishlistPage() {
   const [mounted, setMounted] = useState(false);
@@ -14,15 +15,6 @@ export default function WishlistPage() {
   const addCartItem = useCartStore((state) => state.addItem);
 
   useEffect(() => setMounted(true), []);
-
-  if (!mounted) {
-    return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTopColor: '#2d5a27', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
-  }
 
   const handleAddToCart = (item: any) => {
     addCartItem({
@@ -39,28 +31,36 @@ export default function WishlistPage() {
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px', fontFamily: 'Fraunces, serif', minHeight: '60vh' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: '#fee2e2', color: '#ef4444', padding: '10px 20px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>
-          <Heart size={16} fill="#ef4444" /> My Wishlist
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: 'var(--secondary)', color: 'var(--primary)', padding: '10px 20px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>
+          <Heart size={16} fill="var(--primary)" /> My Wishlist
         </div>
-        <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', marginBottom: '1rem', fontFamily: 'Fraunces, serif' }}>
-          Your <span style={{ color: '#ef4444' }}>Favourites</span>
+        <h1 style={{ fontSize: '3rem', fontWeight: '900', color: 'var(--text-main)', marginBottom: '1rem', fontFamily: 'Fraunces, serif' }}>
+          Your <span style={{ color: 'var(--primary)' }}>Favourites</span>
         </h1>
-        <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '500px', margin: '0 auto', fontWeight: '500' }}>
-          {items.length > 0
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '500px', margin: '0 auto', fontWeight: '500' }}>
+          {!mounted
+            ? 'Loading favourites...'
+            : items.length > 0
             ? `You have ${items.length} item${items.length > 1 ? 's' : ''} in your wishlist.`
             : 'Your wishlist is empty. Start adding your favourite pickles!'}
         </p>
       </div>
 
-      {items.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '80px 20px', background: '#f8fafc', borderRadius: '40px', border: '2px dashed #e2e8f0' }}>
-          <Heart size={64} color="#e2e8f0" style={{ margin: '0 auto 20px' }} />
-          <p style={{ fontSize: '1.25rem', fontWeight: '800', color: '#94a3b8', marginBottom: '20px' }}>No favourites yet</p>
+      {!mounted ? (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '30px' }}>
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <ProductCardSkeleton key={idx} />
+          ))}
+        </div>
+      ) : items.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '80px 20px', background: 'var(--secondary)', borderRadius: '40px', border: '2px dashed var(--border)' }}>
+          <Heart size={64} color="var(--border)" style={{ margin: '0 auto 20px' }} />
+          <p style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-muted)', marginBottom: '20px' }}>No favourites yet</p>
           <Link
             href="/products"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
-              background: '#2d5a27', color: 'white', padding: '16px 32px',
+              background: 'var(--primary)', color: 'white', padding: '16px 32px',
               borderRadius: '18px', fontWeight: '800', fontSize: '0.95rem',
               textDecoration: 'none', transition: 'all 0.2s',
             }}
@@ -75,7 +75,7 @@ export default function WishlistPage() {
             <button
               onClick={() => { clearWishlist(); toast.success('Wishlist cleared'); }}
               style={{
-                background: 'white', color: '#ef4444', border: '1px solid #fecaca',
+                background: 'var(--surface)', color: 'var(--primary)', border: '1px solid var(--border)',
                 padding: '10px 20px', borderRadius: '14px', fontWeight: '800',
                 fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
                 transition: 'all 0.2s',
@@ -91,15 +91,15 @@ export default function WishlistPage() {
               <div
                 key={item.id}
                 style={{
-                  background: 'white', borderRadius: '32px', padding: '16px',
-                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05)', border: '1px solid #f1f5f9',
+                  background: 'var(--surface)', borderRadius: '32px', padding: '16px',
+                  boxShadow: 'var(--shadow)', border: '1px solid var(--border)',
                   display: 'flex', flexDirection: 'column', transition: 'all 0.3s',
                 }}
               >
                 <Link href={`/product/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <div style={{
                     position: 'relative', borderRadius: '24px', overflow: 'hidden',
-                    backgroundColor: '#f1f5f9', marginBottom: '20px', aspectRatio: '1/1',
+                    backgroundColor: 'var(--border)', marginBottom: '20px', aspectRatio: '1/1',
                   }}>
                     <img
                       src={item.image || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'}
@@ -111,7 +111,7 @@ export default function WishlistPage() {
                         position: 'absolute', top: '12px', left: '12px',
                         background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)',
                         padding: '6px 12px', borderRadius: '99px', fontSize: '10px',
-                        fontWeight: '800', color: '#1e293b', textTransform: 'uppercase', letterSpacing: '0.05em',
+                        fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.05em',
                       }}>
                         {item.category}
                       </div>
@@ -120,15 +120,15 @@ export default function WishlistPage() {
                     <div style={{
                       position: 'absolute', top: '12px', right: '12px',
                       width: '40px', height: '40px', borderRadius: '50%',
-                      background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: 'var(--secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
-                      <Heart size={18} fill="#ef4444" color="#ef4444" />
+                      <Heart size={18} fill="var(--primary)" color="var(--primary)" />
                     </div>
                   </div>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#1e293b', marginBottom: '8px', fontFamily: 'Fraunces, serif' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '8px', fontFamily: 'Fraunces, serif' }}>
                     {item.name}
                   </h3>
-                  <p style={{ fontSize: '1.5rem', fontWeight: '900', color: '#2d5a27', marginBottom: '16px' }}>
+                  <p style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '16px' }}>
                     ₹{item.price?.toFixed(2)}
                   </p>
                 </Link>
@@ -138,7 +138,7 @@ export default function WishlistPage() {
                   <button
                     onClick={() => handleAddToCart(item)}
                     style={{
-                      flex: 1, padding: '14px', background: '#0f172a', color: 'white',
+                      flex: 1, padding: '14px', background: 'var(--text-main)', color: 'var(--background)',
                       border: 'none', borderRadius: '16px', fontWeight: '800',
                       fontSize: '0.85rem', cursor: 'pointer', display: 'flex',
                       alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s',
@@ -149,7 +149,7 @@ export default function WishlistPage() {
                   <button
                     onClick={() => { removeItem(item.id); toast.success(`${item.name} removed`); }}
                     style={{
-                      width: '50px', padding: '14px', background: '#fee2e2', color: '#ef4444',
+                      width: '50px', padding: '14px', background: 'var(--secondary)', color: 'var(--primary)',
                       border: 'none', borderRadius: '16px', cursor: 'pointer',
                       display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s',
                     }}

@@ -163,33 +163,34 @@ export default function AdminSettings() {
         .tab-btn { 
           display: flex; align-items: center; gap: 1rem; width: 100%; padding: 1.25rem 1.5rem; 
           border-radius: 20px; font-weight: 800; border: none; cursor: pointer; transition: all 0.2s;
-          background: transparent; color: #94a3b8; text-align: left;
+          background: transparent; color: var(--text-muted); text-align: left;
         }
-        .tab-btn.active { background: white; color: #2d5a27; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: var(--surface); color: var(--primary); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
         .settings-card { 
-          background: white; border-radius: 40px; padding: 40px; flex: 1; min-height: 500px;
-          box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;
+          background: var(--surface); border-radius: 40px; padding: 40px; flex: 1; min-height: 500px;
+          box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); border: 1px solid var(--border);
         }
         .input-group { margin-bottom: 25px; }
-        .input-label { display: block; font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .input-label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
         .custom-input { 
-          width: 100%; padding: 16px 20px; border-radius: 16px; border: 2px solid #f1f5f9; 
-          outline: none; transition: all 0.2s; font-size: 1rem; background: #f8fafc; font-weight: 600;
+          width: 100%; padding: 16px 20px; border-radius: 16px; border: 2px solid var(--border); 
+          outline: none; transition: all 0.2s; font-size: 1rem; background: var(--background); color: var(--text-main); font-weight: 600;
         }
-        .custom-input:focus { border-color: #2d5a27; background: white; box-shadow: 0 10px 15px -3px rgba(45, 90, 39, 0.05); }
+        .custom-input:focus { border-color: var(--primary); background: var(--surface); box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.05); }
         .toggle-card { 
-          padding: 20px; border-radius: 24px; border: 2px solid #f1f5f9; cursor: pointer; transition: all 0.2s;
+          padding: 20px; border-radius: 24px; border: 2px solid var(--border); cursor: pointer; transition: all 0.2s;
           display: flex; justify-content: space-between; align-items: center;
+          background: var(--surface); color: var(--text-main);
         }
-        .toggle-card.active { border-color: #2d5a27; background: #f0fdf4; }
+        .toggle-card.active { border-color: var(--primary); background: var(--secondary); }
       `}</style>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif' }}>System <span style={{ color: '#2d5a27' }}>Settings</span></h1>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', marginTop: '0.5rem', fontWeight: '500' }}>Global configuration for the Kanvi Pickles platform.</p>
+          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: 'var(--text-main)', margin: 0, fontFamily: 'Fraunces, serif' }}>System <span style={{ color: 'var(--primary)' }}>Settings</span></h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginTop: '0.5rem', fontWeight: '500' }}>Global configuration for the Kanvi Pickles platform.</p>
         </div>
-        <button onClick={() => handleSubmit()} style={{ background: '#2d5a27', color: 'white', padding: '16px 35px', borderRadius: '20px', border: 'none', fontSize: '1.1rem', fontWeight: '900', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 15px -3px rgba(45, 90, 39, 0.2)' }}>
+        <button onClick={() => handleSubmit()} style={{ background: 'var(--primary)', color: 'white', padding: '16px 35px', borderRadius: '20px', border: 'none', fontSize: '1.1rem', fontWeight: '900', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 10px 15px -3px rgba(220, 38, 38, 0.2)' }}>
           <Save size={20} /> Save Changes
         </button>
       </div>
@@ -208,7 +209,7 @@ export default function AdminSettings() {
         <div className="settings-card">
           {activeTab === 'financial' && (
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: '#1e293b' }}>Financial & Storefront Config</h2>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Financial & Storefront Config</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px' }}>
                 <div className="input-group">
                   <label className="input-label">CGST (%)</label>
@@ -236,17 +237,17 @@ export default function AdminSettings() {
 
           {activeTab === 'payment' && (
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: '#1e293b' }}>Payment Gateways</h2>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Payment Gateways</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '40px' }}>
                 <div className={`toggle-card ${form.isCodEnabled ? 'active' : ''}`} onClick={() => setForm({...form, isCodEnabled: !form.isCodEnabled})}>
-                  <p style={{ margin: 0, fontWeight: '800', color: form.isCodEnabled ? '#142911' : '#64748b' }}>Cash on Delivery</p>
-                  <div style={{ width: '44px', height: '24px', background: form.isCodEnabled ? '#2d5a27' : '#cbd5e1', borderRadius: '12px', position: 'relative', transition: '0.2s' }}>
+                  <p style={{ margin: 0, fontWeight: '800', color: form.isCodEnabled ? 'var(--text-main)' : 'var(--text-muted)' }}>Cash on Delivery</p>
+                  <div style={{ width: '44px', height: '24px', background: form.isCodEnabled ? 'var(--primary)' : 'var(--border)', borderRadius: '12px', position: 'relative', transition: '0.2s' }}>
                     <div style={{ width: '18px', height: '18px', background: 'white', borderRadius: '50%', position: 'absolute', top: '3px', transition: '0.2s', left: form.isCodEnabled ? '23px' : '3px' }}></div>
                   </div>
                 </div>
                 <div className={`toggle-card ${form.isRazorpayEnabled ? 'active' : ''}`} onClick={() => setForm({...form, isRazorpayEnabled: !form.isRazorpayEnabled})}>
-                  <p style={{ margin: 0, fontWeight: '800', color: form.isRazorpayEnabled ? '#142911' : '#64748b' }}>Razorpay Online</p>
-                  <div style={{ width: '44px', height: '24px', background: form.isRazorpayEnabled ? '#2d5a27' : '#cbd5e1', borderRadius: '12px', position: 'relative', transition: '0.2s' }}>
+                  <p style={{ margin: 0, fontWeight: '800', color: form.isRazorpayEnabled ? 'var(--text-main)' : 'var(--text-muted)' }}>Razorpay Online</p>
+                  <div style={{ width: '44px', height: '24px', background: form.isRazorpayEnabled ? 'var(--primary)' : 'var(--border)', borderRadius: '12px', position: 'relative', transition: '0.2s' }}>
                     <div style={{ width: '18px', height: '18px', background: 'white', borderRadius: '50%', position: 'absolute', top: '3px', transition: '0.2s', left: form.isRazorpayEnabled ? '23px' : '3px' }}></div>
                   </div>
                 </div>
@@ -264,26 +265,26 @@ export default function AdminSettings() {
 
           {activeTab === 'content' && (
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: '#1e293b' }}>Brand Assets & Content</h2>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Brand Assets & Content</h2>
               
               {/* DYNAMIC BANNER TEXT ADDED HERE */}
-              <div className="input-group" style={{ background: '#f0f7f0', padding: '25px', borderRadius: '24px', border: '2px solid #d1fae5', marginBottom: '35px' }}>
-                <label className="input-label" style={{ color: '#2d5a27', display: 'flex', alignItems: 'center', gap: '8px' }}><Type size={16} /> Top Announcement Banner</label>
-                <input className="custom-input" style={{ borderColor: '#d1fae5' }} value={form.topBannerText} onChange={e => setForm({...form, topBannerText: e.target.value})} placeholder="e.g. Free shipping on orders above ₹1000" />
-                <p style={{ margin: '12px 0 0 0', fontSize: '0.75rem', color: '#2d5a27', fontWeight: '700' }}>This text appears at the very top of every page in your store.</p>
+              <div className="input-group" style={{ background: 'var(--secondary)', padding: '25px', borderRadius: '24px', border: '2px solid var(--border)', marginBottom: '35px' }}>
+                <label className="input-label" style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}><Type size={16} /> Top Announcement Banner</label>
+                <input className="custom-input" style={{ borderColor: 'var(--border)' }} value={form.topBannerText} onChange={e => setForm({...form, topBannerText: e.target.value})} placeholder="e.g. Free shipping on orders above ₹1000" />
+                <p style={{ margin: '12px 0 0 0', fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '700' }}>This text appears at the very top of every page in your store.</p>
               </div>
 
               <div className="input-group">
                 <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Globe size={16} /> Default Product Image</label>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <input className="custom-input" value={form.defaultProductImage} onChange={e => setForm({...form, defaultProductImage: e.target.value})} placeholder="https://..." />
-                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', border: '2px solid #e2e8f0', padding: '0 15px', borderRadius: '16px', cursor: 'pointer', color: '#64748b', transition: '0.2s' }} onMouseOver={e => e.currentTarget.style.borderColor = '#2d5a27'} onMouseOut={e => e.currentTarget.style.borderColor = '#e2e8f0'}>
+                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface)', border: '2px solid var(--border)', padding: '0 15px', borderRadius: '16px', cursor: 'pointer', color: 'var(--text-muted)', transition: '0.2s' }} onMouseOver={e => e.currentTarget.style.borderColor = 'var(--primary)'} onMouseOut={e => e.currentTarget.style.borderColor = 'var(--border)'}>
                     <Upload size={20} />
                     <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
                   </label>
                 </div>
                 {uploading && <p style={{ fontSize: '0.75rem', color: '#3b82f6', marginTop: '5px' }}>Uploading...</p>}
-                {form.defaultProductImage && <img src={form.defaultProductImage} alt="Preview" style={{ marginTop: '15px', width: '120px', height: '120px', objectFit: 'cover', borderRadius: '16px', border: '1px solid #f1f5f9' }} />}
+                {form.defaultProductImage && <img src={form.defaultProductImage} alt="Preview" style={{ marginTop: '15px', width: '120px', height: '120px', objectFit: 'cover', borderRadius: '16px', border: '1px solid var(--border)' }} />}
               </div>
               
               <div className="input-group">
@@ -297,8 +298,8 @@ export default function AdminSettings() {
               </div>
 
               {/* CONTACT & SOCIAL INFORMATION */}
-              <div style={{ background: '#f0f7f0', padding: '25px', borderRadius: '24px', border: '2px solid #d1fae5', marginTop: '10px' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: '#2d5a27', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>📞 Contact & Social Details</h3>
+              <div style={{ background: 'var(--secondary)', padding: '25px', borderRadius: '24px', border: '2px solid var(--border)', marginTop: '10px' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>📞 Contact & Social Details</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
                   <div className="input-group">
                     <label className="input-label">Phone Number</label>
@@ -329,7 +330,7 @@ export default function AdminSettings() {
 
           {activeTab === 'legal' && (
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: '#1e293b' }}>Compliance & Legal</h2>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Compliance & Legal</h2>
               <div className="input-group" style={{ marginBottom: '30px', maxWidth: '400px' }}>
                 <label className="input-label">FSSAI License Number</label>
                 <input className="custom-input" placeholder="e.g. 23324010000854" value={form.fssaiNumber} onChange={e => setForm({...form, fssaiNumber: e.target.value})} />
@@ -357,14 +358,14 @@ export default function AdminSettings() {
 
           {activeTab === 'extra' && (
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '10px', color: '#1e293b' }}>Homepage Trust Features</h2>
-              <p style={{ color: '#64748b', fontSize: '0.95rem', marginBottom: '30px', fontWeight: '500' }}>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '10px', color: 'var(--text-main)' }}>Homepage Trust Features</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '30px', fontWeight: '500' }}>
                 Configure the three highlight cards displayed on the homepage above the footer.
               </p>
 
               {(form.trustFeatures || []).map((feature: any, index: number) => (
-                <div key={index} style={{ background: '#f8fafc', padding: '30px', borderRadius: '24px', border: '2px solid #f1f5f9', marginBottom: '25px' }}>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#2d5a27', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div key={index} style={{ background: 'var(--background)', padding: '30px', borderRadius: '24px', border: '2px solid var(--border)', marginBottom: '25px' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     ✨ Feature Card #{index + 1}
                   </h3>
                   
@@ -422,8 +423,8 @@ export default function AdminSettings() {
 
           {activeTab === 'security' && (
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '10px', color: '#1e293b' }}>Change Admin Password</h2>
-              <p style={{ color: '#64748b', fontSize: '0.95rem', marginBottom: '30px', fontWeight: '500' }}>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '10px', color: 'var(--text-main)' }}>Change Admin Password</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '30px', fontWeight: '500' }}>
                 Update your administrator password. You will need to enter your current password for verification.
               </p>
 
@@ -472,11 +473,11 @@ export default function AdminSettings() {
                   onClick={handleChangePassword}
                   disabled={pwLoading}
                   style={{ 
-                    background: '#2d5a27', color: 'white', padding: '16px 35px', borderRadius: '20px', 
+                    background: 'var(--primary)', color: 'white', padding: '16px 35px', borderRadius: '20px', 
                     border: 'none', fontSize: '1rem', fontWeight: '900', cursor: pwLoading ? 'not-allowed' : 'pointer', 
                     display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px',
                     opacity: pwLoading ? 0.7 : 1,
-                    boxShadow: '0 10px 15px -3px rgba(45, 90, 39, 0.2)' 
+                    boxShadow: '0 10px 15px -3px rgba(220, 38, 38, 0.2)' 
                   }}
                 >
                   <Lock size={18} />

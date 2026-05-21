@@ -70,11 +70,11 @@ export default function AdminOrders() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Delivered': return { bg: '#f0f7f0', text: '#2d5a27', dot: '#16a34a' };
+      case 'Delivered': return { bg: 'var(--secondary)', text: 'var(--primary)', dot: 'var(--primary)' };
       case 'Processing': return { bg: '#eff6ff', text: '#2563eb', dot: '#3b82f6' };
       case 'Shipped': return { bg: '#fef3c7', text: '#d97706', dot: '#f59e0b' };
       case 'Cancelled': return { bg: '#fef2f2', text: '#dc2626', dot: '#ef4444' };
-      default: return { bg: '#f1f5f9', text: '#64748b', dot: '#94a3b8' };
+      default: return { bg: 'var(--background)', text: 'var(--text-muted)', dot: 'var(--border)' };
     }
   };
 
@@ -88,34 +88,34 @@ export default function AdminOrders() {
       {/* Header Area */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', marginBottom: '60px' }}>
         <div>
-          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', margin: 0, fontFamily: 'Fraunces, serif' }}>
-            Order <span style={{ color: '#2d5a27' }}>Vault</span>
+          <h1 style={{ fontSize: '3rem', fontWeight: '900', color: 'var(--text-main)', margin: 0, fontFamily: 'Fraunces, serif' }}>
+            Order <span style={{ color: 'var(--primary)' }}>Vault</span>
           </h1>
-          <p style={{ color: '#64748b', marginTop: '12px', fontWeight: '500' }}>Manage shipments and customer fulfillment.</p>
+          <p style={{ color: 'var(--text-muted)', marginTop: '12px', fontWeight: '500' }}>Manage shipments and customer fulfillment.</p>
         </div>
         <div style={{ display: 'flex', gap: '15px' }}>
           <div style={{ position: 'relative' }}>
-            <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
             <input 
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               placeholder="Search orders..." 
-              style={{ padding: '14px 14px 14px 45px', borderRadius: '18px', border: '1px solid #f1f5f9', background: 'white', width: '250px', outline: 'none', fontWeight: '600' }}
+              style={{ padding: '14px 14px 14px 45px', borderRadius: '18px', border: '1px solid var(--border)', background: 'var(--surface)', width: '250px', outline: 'none', fontWeight: '600', color: 'var(--text-main)' }}
             />
           </div>
         </div>
       </div>
 
       {/* Main Table */}
-      <div style={{ background: 'white', borderRadius: '40px', border: '1px solid #f1f5f9', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
+      <div style={{ background: 'var(--surface)', borderRadius: '40px', border: '1px solid var(--border)', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.02)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
           <thead>
-            <tr style={{ background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
-              <th style={{ padding: '25px 30px', color: '#64748b', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>Order</th>
-              <th style={{ padding: '25px 30px', color: '#64748b', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>Customer</th>
-              <th style={{ padding: '25px 30px', color: '#64748b', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>Billing</th>
-              <th style={{ padding: '25px 30px', color: '#64748b', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>Status</th>
-              <th style={{ padding: '25px 30px', color: '#64748b', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', textAlign: 'right' }}>Actions</th>
+            <tr style={{ background: 'var(--background)', borderBottom: '1px solid var(--border)' }}>
+              <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>Order</th>
+              <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>Customer</th>
+              <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>Billing</th>
+              <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>Status</th>
+              <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -124,17 +124,17 @@ export default function AdminOrders() {
               const isLocked = o.status === 'Delivered';
               
               return (
-                <tr key={o._id} style={{ borderBottom: '1px solid #f8fafc', background: isLocked ? '#fafbfc' : 'white' }}>
+                <tr key={o._id} style={{ borderBottom: '1px solid var(--border)', background: isLocked ? 'var(--background)' : 'var(--surface)' }}>
                   <td style={{ padding: '25px 30px' }}>
-                    <div style={{ fontWeight: '800', color: isLocked ? '#94a3b8' : '#1e293b' }}>#{o._id.slice(-6).toUpperCase()}</div>
-                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '600' }}>{new Date(o.createdAt).toLocaleDateString()}</div>
+                    <div style={{ fontWeight: '800', color: isLocked ? 'var(--text-muted)' : 'var(--text-main)' }}>#{o._id.slice(-6).toUpperCase()}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600' }}>{new Date(o.createdAt).toLocaleDateString()}</div>
                   </td>
                   <td style={{ padding: '25px 30px' }}>
-                    <div style={{ fontWeight: '700', color: isLocked ? '#94a3b8' : '#1e293b' }}>{o.customerName}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{o.phone}</div>
+                    <div style={{ fontWeight: '700', color: isLocked ? 'var(--text-muted)' : 'var(--text-main)' }}>{o.customerName}</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{o.phone}</div>
                   </td>
                   <td style={{ padding: '25px 30px' }}>
-                    <div style={{ fontWeight: '900', color: isLocked ? '#94a3b8' : '#2d5a27', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ fontWeight: '900', color: isLocked ? 'var(--text-muted)' : 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                       ₹{(o.totalAmount || 0).toFixed(2)}
                       {(o.deliveryCharge || 0) > 0 && (
                         <span style={{ fontSize: '0.65rem', background: '#fef3c7', color: '#d97706', padding: '2px 6px', borderRadius: '6px' }}>
@@ -142,7 +142,7 @@ export default function AdminOrders() {
                         </span>
                       )}
                     </div>
-                    <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{o.paymentMethod}</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{o.paymentMethod}</div>
                   </td>
                   <td style={{ padding: '25px 30px' }}>
                     <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '12px', background: status.bg, color: status.text, fontWeight: '800', fontSize: '0.75rem' }}>
@@ -163,7 +163,7 @@ export default function AdminOrders() {
                   <td style={{ padding: '25px 30px', textAlign: 'right' }}>
                     <button 
                       onClick={() => openDetails(o)}
-                      style={{ background: '#f8fafc', border: '1px solid #f1f5f9', padding: '10px 18px', borderRadius: '12px', color: '#1e293b', fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      style={{ background: 'var(--background)', border: '1px solid var(--border)', padding: '10px 18px', borderRadius: '12px', color: 'var(--text-main)', fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                     >
                       View Details <ChevronRight size={14} />
                     </button>
@@ -178,69 +178,69 @@ export default function AdminOrders() {
       {/* ORDER DETAILS MODAL */}
       {showDetailsModal && selectedOrder && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, backdropFilter: 'blur(10px)' }}>
-          <div style={{ background: 'white', padding: '50px', borderRadius: '48px', width: '100%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 50px 100px -20px rgba(0,0,0,0.25)' }}>
-            <button onClick={() => setShowDetailsModal(false)} style={{ position: 'absolute', right: '40px', top: '40px', background: '#f8fafc', border: 'none', padding: '12px', borderRadius: '16px', cursor: 'pointer' }}><X size={24} /></button>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: '50px', borderRadius: '48px', width: '100%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 50px 100px -20px rgba(0,0,0,0.25)' }}>
+            <button onClick={() => setShowDetailsModal(false)} style={{ position: 'absolute', right: '40px', top: '40px', background: 'var(--background)', border: 'none', padding: '12px', borderRadius: '16px', cursor: 'pointer', color: 'var(--text-main)' }}><X size={24} /></button>
             
             <div style={{ marginBottom: '40px' }}>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1e293b', fontFamily: 'Fraunces, serif', margin: 0 }}>Order Details</h2>
-              <p style={{ color: '#64748b', fontWeight: '600' }}>ID: #{selectedOrder?._id?.toUpperCase()}</p>
+              <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-main)', fontFamily: 'Fraunces, serif', margin: 0 }}>Order Details</h2>
+              <p style={{ color: 'var(--text-muted)', fontWeight: '600' }}>ID: #{selectedOrder?._id?.toUpperCase()}</p>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', marginBottom: '40px' }}>
               {/* Customer Info */}
-              <div style={{ background: '#f8fafc', padding: '30px', borderRadius: '32px' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><User size={18} color="#2d5a27" /> Customer</h3>
+              <div style={{ background: 'var(--background)', padding: '30px', borderRadius: '32px' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: 'var(--text-main)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><User size={18} color="currentColor" style={{ color: 'var(--primary)' }} /> Customer</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div style={{ fontWeight: '800', color: '#1e293b' }}>{selectedOrder?.customerName}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#64748b' }}>
+                  <div style={{ fontWeight: '800', color: 'var(--text-main)' }}>{selectedOrder?.customerName}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                     <Phone size={14} /> {selectedOrder?.phone}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: '#64748b' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                     <Mail size={14} /> {selectedOrder?.email}
                   </div>
                 </div>
               </div>
 
               {/* Shipping Info */}
-              <div style={{ background: '#f8fafc', padding: '30px', borderRadius: '32px' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><MapPin size={18} color="#2d5a27" /> Delivery</h3>
-                <p style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: '600', lineHeight: 1.6, margin: 0 }}>
+              <div style={{ background: 'var(--background)', padding: '30px', borderRadius: '32px' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: '900', color: 'var(--text-main)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><MapPin size={18} color="currentColor" style={{ color: 'var(--primary)' }} /> Delivery</h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: '600', lineHeight: 1.6, margin: 0 }}>
                   {selectedOrder?.address}<br />
-                  <span style={{ color: '#2d5a27', fontWeight: '800' }}>Pincode: {selectedOrder?.pincode}</span>
+                  <span style={{ color: 'var(--primary)', fontWeight: '800' }}>Pincode: {selectedOrder?.pincode}</span>
                 </p>
               </div>
             </div>
 
             {/* Products List */}
             <div style={{ marginBottom: '40px' }}>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: '#1e293b', marginBottom: '20px', fontFamily: 'Fraunces, serif' }}>Ordered Items</h3>
-              <div style={{ border: '1px solid #f1f5f9', borderRadius: '24px', overflow: 'hidden' }}>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: 'var(--text-main)', marginBottom: '20px', fontFamily: 'Fraunces, serif' }}>Ordered Items</h3>
+              <div style={{ border: '1px solid var(--border)', borderRadius: '24px', overflow: 'hidden' }}>
                 {selectedOrder?.products?.map((p: any, idx: number) => (
-                  <div key={idx} style={{ padding: '20px 30px', background: idx % 2 === 0 ? 'white' : '#f8fafc', borderBottom: idx === (selectedOrder.products.length - 1) ? 'none' : '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div key={idx} style={{ padding: '20px 30px', background: idx % 2 === 0 ? 'var(--surface)' : 'var(--background)', borderBottom: idx === (selectedOrder.products.length - 1) ? 'none' : '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <div style={{ fontWeight: '800', color: '#1e293b' }}>{p.name}</div>
-                      <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Qty: {p.quantity} × ₹{p.price}</div>
+                      <div style={{ fontWeight: '800', color: 'var(--text-main)' }}>{p.name}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Qty: {p.quantity} × ₹{p.price}</div>
                     </div>
-                    <div style={{ fontWeight: '900', color: '#2d5a27' }}>₹{(p.price * p.quantity).toFixed(2)}</div>
+                    <div style={{ fontWeight: '900', color: 'var(--primary)' }}>₹{(p.price * p.quantity).toFixed(2)}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Billing Summary */}
-            <div style={{ background: '#0f172a', padding: '40px', borderRadius: '32px', color: 'white' }}>
+            <div style={{ background: 'var(--secondary)', border: '1px solid var(--border)', padding: '40px', borderRadius: '32px', color: 'var(--text-main)' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#94a3b8' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                   <span>Delivery Charge</span>
-                  <span style={{ color: '#ca8a04', fontWeight: '800' }}>+ ₹{(selectedOrder?.deliveryCharge || 0).toFixed(2)}</span>
+                  <span style={{ color: 'var(--primary)', fontWeight: '800' }}>+ ₹{(selectedOrder?.deliveryCharge || 0).toFixed(2)}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#94a3b8' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                   <span>Payment Method</span>
-                  <span style={{ color: 'white', fontWeight: '800' }}>{selectedOrder?.paymentMethod}</span>
+                  <span style={{ color: 'var(--text-main)', fontWeight: '800' }}>{selectedOrder?.paymentMethod}</span>
                 </div>
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px', marginTop: '5px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ borderTop: '1px solid var(--border)', paddingTop: '20px', marginTop: '5px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: '1.2rem', fontWeight: '800' }}>Grand Total</span>
-                  <span style={{ fontSize: '2.5rem', fontWeight: '900', color: '#34d399' }}>₹{(selectedOrder?.totalAmount || 0).toFixed(2)}</span>
+                  <span style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--primary)' }}>₹{(selectedOrder?.totalAmount || 0).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -250,7 +250,7 @@ export default function AdminOrders() {
               {selectedOrder?.status !== 'Shipped' && selectedOrder?.status !== 'Delivered' && (
                 <button 
                   onClick={() => { setShowDetailsModal(false); setShowShipModal(true); }}
-                  style={{ flex: 1, background: '#2d5a27', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', cursor: 'pointer' }}
+                  style={{ flex: 1, background: 'var(--primary)', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', cursor: 'pointer' }}
                 >
                   Mark as Shipped
                 </button>
@@ -258,7 +258,7 @@ export default function AdminOrders() {
               {selectedOrder?.status === 'Shipped' && (
                 <button 
                   onClick={() => updateStatus(selectedOrder._id, 'Delivered')}
-                  style={{ flex: 1, background: '#2d5a27', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', cursor: 'pointer' }}
+                  style={{ flex: 1, background: 'var(--primary)', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', cursor: 'pointer' }}
                 >
                   Confirm Delivery
                 </button>
@@ -271,29 +271,29 @@ export default function AdminOrders() {
       {/* Shipping Details Modal */}
       {showShipModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1200, backdropFilter: 'blur(4px)' }}>
-          <div style={{ background: 'white', padding: '40px', borderRadius: '40px', width: '100%', maxWidth: '450px', position: 'relative' }}>
-            <button onClick={() => setShowShipModal(false)} style={{ position: 'absolute', right: '30px', top: '30px', background: '#f8fafc', border: 'none', padding: '10px', borderRadius: '12px', cursor: 'pointer' }}><X size={20} /></button>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: '40px', borderRadius: '40px', width: '100%', maxWidth: '450px', position: 'relative', color: 'var(--text-main)' }}>
+            <button onClick={() => setShowShipModal(false)} style={{ position: 'absolute', right: '30px', top: '30px', background: 'var(--background)', border: 'none', padding: '10px', borderRadius: '12px', cursor: 'pointer', color: 'var(--text-main)' }}><X size={20} /></button>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <div style={{ width: '60px', height: '60px', background: '#f0f7f0', color: '#2d5a27', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <div style={{ width: '60px', height: '60px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
                 <Truck size={30} />
               </div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#1e293b', fontFamily: 'Fraunces, serif' }}>Shipping Details</h2>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--text-main)', fontFamily: 'Fraunces, serif' }}>Shipping Details</h2>
             </div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Courier Company</label>
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Courier Company</label>
                 <input 
-                  style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} 
+                  style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', outline: 'none', fontWeight: '600', color: 'var(--text-main)' }} 
                   placeholder="e.g. Delhivery, BlueDart" 
                   value={courierInfo.name}
                   onChange={e => setCourierInfo({...courierInfo, name: e.target.value})}
                 />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase' }}>Tracking ID</label>
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Tracking ID</label>
                 <input 
-                  style={{ padding: '16px', borderRadius: '16px', border: '2px solid #f1f5f9', background: '#f8fafc', outline: 'none', fontWeight: '600' }} 
+                  style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', outline: 'none', fontWeight: '600', color: 'var(--text-main)' }} 
                   placeholder="Enter tracking number" 
                   value={courierInfo.trackingId}
                   onChange={e => setCourierInfo({...courierInfo, trackingId: e.target.value})}
@@ -301,7 +301,7 @@ export default function AdminOrders() {
               </div>
               <button 
                 onClick={() => updateStatus(selectedOrder._id, 'Shipped', courierInfo)}
-                style={{ background: '#2d5a27', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer' }}
+                style={{ background: 'var(--primary)', color: 'white', padding: '20px', borderRadius: '24px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer' }}
               >
                 Confirm Shipment
               </button>

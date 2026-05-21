@@ -13,7 +13,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const persisted = localStorage.getItem('pickle-theme');
+                if (persisted) {
+                  const state = JSON.parse(persisted).state;
+                  if (state && state.theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                }
+              } catch (e) {}
+            `
+          }}
+        />
+      </head>
       <body suppressHydrationWarning>
         {children}
         <Toaster position="top-center" />

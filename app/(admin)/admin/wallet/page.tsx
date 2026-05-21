@@ -2,8 +2,10 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Search, Wallet, ArrowUpCircle, ArrowDownCircle, User as UserIcon, History, ShieldCheck, Zap } from 'lucide-react';
+import { useThemeStore } from '@/lib/themeStore';
 
 export default function AdminWalletManager() {
+  const { theme } = useThemeStore();
   const [phone, setPhone] = useState('');
   const [foundUser, setFoundUser] = useState<any>(null);
   const [amount, setAmount] = useState('');
@@ -64,24 +66,24 @@ export default function AdminWalletManager() {
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto', fontFamily: 'Fraunces, serif', padding: '20px' }}>
       <div style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: '800', color: '#1e293b', letterSpacing: '-0.02em', margin: 0 }}>Wallet Manager</h1>
-        <p style={{ fontSize: '1.1rem', color: '#64748b', marginTop: '0.5rem' }}>Centralized manual control for customer balances.</p>
+        <h1 style={{ fontSize: '3rem', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.02em', margin: 0 }}>Wallet Manager</h1>
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Centralized manual control for customer balances.</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2.5rem', alignItems: 'start' }}>
         {/* Left Card */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div style={{ background: 'white', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)', border: '1px solid #f1f5f9' }}>
-            <h3 style={{ fontWeight: '800', color: '#1e293b', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.25rem' }}>
-              <Search size={24} color="#16a34a" /> Find Profile
+          <div style={{ background: 'var(--surface)', borderRadius: '32px', padding: '2.5rem', boxShadow: 'var(--shadow)', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontWeight: '800', color: 'var(--text-main)', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.25rem' }}>
+              <Search size={24} color="currentColor" style={{ color: 'var(--primary)' }} /> Find Profile
             </h3>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>Customer Phone</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>Customer Phone</label>
               <div style={{ position: 'relative' }}>
-                <span style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', fontWeight: '800', color: '#94a3b8', fontSize: '1rem', zIndex: 10 }}>+91</span>
+                <span style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', fontWeight: '800', color: 'var(--text-muted)', fontSize: '1rem', zIndex: 10 }}>+91</span>
                 <input 
                   type="text" 
-                  style={{ width: '100%', background: '#f8fafc', border: '2px solid #e2e8f0', padding: '1.25rem 1.25rem 1.25rem 4rem', borderRadius: '18px', fontSize: '1.1rem', fontWeight: '700', color: '#334155', outline: 'none' }} 
+                  style={{ width: '100%', background: 'var(--background)', border: '2px solid var(--border)', padding: '1.25rem 1.25rem 1.25rem 4rem', borderRadius: '18px', fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', outline: 'none' }} 
                   placeholder="98765 43210" 
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
@@ -91,7 +93,7 @@ export default function AdminWalletManager() {
             </div>
             <button 
               onClick={handleSearch} 
-              style={{ width: '100%', background: '#0f172a', color: 'white', padding: '1.25rem', borderRadius: '18px', fontWeight: '800', fontSize: '1.1rem', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', boxShadow: '0 10px 15px -3px rgba(15, 23, 42, 0.2)' }} 
+              style={{ width: '100%', background: 'var(--primary)', color: 'white', padding: '1.25rem', borderRadius: '18px', fontWeight: '800', fontSize: '1.1rem', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', boxShadow: '0 10px 15px -3px rgba(220, 38, 38, 0.2)' }} 
               disabled={searching}
             >
               {searching ? 'Searching...' : 'Locate Account'}
@@ -99,24 +101,24 @@ export default function AdminWalletManager() {
           </div>
 
           {foundUser && (
-            <div style={{ background: '#0f172a', borderRadius: '40px', padding: '2.5rem', color: 'white', position: 'relative', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(15, 23, 42, 0.5)' }}>
+            <div style={{ background: 'linear-gradient(135deg, var(--primary), var(--primary-hover))', borderRadius: '40px', padding: '2.5rem', color: 'white', position: 'relative', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(220, 38, 38, 0.35)' }}>
               <div style={{ position: 'relative', zIndex: 2 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '3rem' }}>
-                  <div style={{ width: '4rem', height: '4rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)' }}>
-                    <UserIcon size={32} color="#34d399" />
+                  <div style={{ width: '4rem', height: '4rem', background: 'rgba(255, 255, 255, 0.15)', borderRadius: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255, 255, 255, 0.25)' }}>
+                    <UserIcon size={32} color="white" />
                   </div>
                   <div>
                     <p style={{ fontWeight: '800', fontSize: '1.25rem', margin: 0 }}>{foundUser.phone}</p>
-                    <p style={{ fontSize: '0.7rem', fontWeight: '900', textTransform: 'uppercase', color: '#34d399', letterSpacing: '0.15em', margin: '0.25rem 0 0 0' }}>VERIFIED CUSTOMER</p>
+                    <p style={{ fontSize: '0.7rem', fontWeight: '900', textTransform: 'uppercase', color: '#ffe4e6', letterSpacing: '0.15em', margin: '0.25rem 0 0 0' }}>VERIFIED CUSTOMER</p>
                   </div>
                 </div>
-                <p style={{ fontSize: '0.8rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em', margin: 0 }}>Wallet Balance</p>
+                <p style={{ fontSize: '0.8rem', fontWeight: '800', color: '#fecdd3', textTransform: 'uppercase', letterSpacing: '0.2em', margin: 0 }}>Wallet Balance</p>
                 <h2 style={{ fontSize: '4rem', fontWeight: '900', margin: '0.5rem 0 1.5rem 0', letterSpacing: '-0.03em', color: 'white' }}>₹{foundUser.walletBalance.toFixed(2)}</h2>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(52, 211, 153, 0.1)', padding: '0.5rem 1rem', borderRadius: '99px', border: '1px solid rgba(52, 211, 153, 0.2)', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', color: '#34d399' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255, 255, 255, 0.15)', padding: '0.5rem 1rem', borderRadius: '99px', border: '1px solid rgba(255, 255, 255, 0.25)', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', color: 'white' }}>
                   <ShieldCheck size={14} /> Active & Secured
                 </div>
               </div>
-              <div style={{ position: 'absolute', right: '-8rem', bottom: '-8rem', width: '20rem', height: '20rem', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '50%', filter: 'blur(80px)' }}></div>
+              <div style={{ position: 'absolute', right: '-8rem', bottom: '-8rem', width: '20rem', height: '20rem', background: 'rgba(255, 255, 255, 0.12)', borderRadius: '50%', filter: 'blur(80px)' }}></div>
             </div>
           )}
         </div>
@@ -124,32 +126,32 @@ export default function AdminWalletManager() {
         {/* Right Section */}
         <div>
           {foundUser ? (
-            <div style={{ background: 'white', borderRadius: '40px', padding: '3.5rem', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.08)', border: '1px solid #f1f5f9' }}>
+            <div style={{ background: 'var(--surface)', borderRadius: '40px', padding: '3.5rem', boxShadow: 'var(--shadow-hover)', border: '1px solid var(--border)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3.5rem' }}>
                 <div>
-                  <h3 style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '1rem', margin: 0 }}>
+                  <h3 style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '1rem', margin: 0 }}>
                     <Zap size={36} color="#f59e0b" fill="#f59e0b" /> Adjust Balance
                   </h3>
-                  <p style={{ color: '#94a3b8', marginTop: '0.5rem', fontWeight: '600', fontSize: '1rem' }}>Enter amount and remark for the audit trail.</p>
+                  <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontWeight: '600', fontSize: '1rem' }}>Enter amount and remark for the audit trail.</p>
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>Amount (₹)</label>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>Amount (₹)</label>
                   <input 
                     type="number" 
-                    style={{ width: '100%', background: '#f8fafc', border: '3px solid #f1f5f9', padding: '1.5rem', borderRadius: '20px', fontSize: '2rem', fontWeight: '900', color: '#1e293b', outline: 'none' }} 
+                    style={{ width: '100%', background: 'var(--background)', border: '3px solid var(--border)', padding: '1.5rem', borderRadius: '20px', fontSize: '2rem', fontWeight: '900', color: 'var(--text-main)', outline: 'none' }} 
                     placeholder="0.00" 
                     value={amount}
                     onChange={e => setAmount(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>Narrative / Remark</label>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>Narrative / Remark</label>
                   <input 
                     type="text" 
-                    style={{ width: '100%', background: '#f8fafc', border: '3px solid #f1f5f9', padding: '1.5rem', borderRadius: '20px', fontSize: '1.1rem', fontWeight: '700', color: '#334155', outline: 'none' }} 
+                    style={{ width: '100%', background: 'var(--background)', border: '3px solid var(--border)', padding: '1.5rem', borderRadius: '20px', fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', outline: 'none' }} 
                     placeholder="e.g. Refund for Order #1" 
                     value={remark}
                     onChange={e => setRemark(e.target.value)}
@@ -160,7 +162,7 @@ export default function AdminWalletManager() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <button 
                   onClick={() => handleUpdate('Credit')}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: '#f0f7f0', color: '#142911', transition: 'all 0.2s' }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: theme === 'dark' ? '#064e3b' : '#f0fdf4', color: theme === 'dark' ? '#a7f3d0' : '#166534', transition: 'all 0.2s' }}
                   disabled={loading}
                 >
                   <ArrowDownCircle size={56} />
@@ -171,7 +173,7 @@ export default function AdminWalletManager() {
                 </button>
                 <button 
                   onClick={() => handleUpdate('Debit')}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: '#f0f7f0', color: '#9f1239', transition: 'all 0.2s' }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', padding: '2.5rem', borderRadius: '32px', border: 'none', cursor: 'pointer', background: theme === 'dark' ? '#7f1d1d' : '#fef2f2', color: theme === 'dark' ? '#fca5a5' : '#b91c1c', transition: 'all 0.2s' }}
                   disabled={loading}
                 >
                   <ArrowUpCircle size={56} />
@@ -182,22 +184,22 @@ export default function AdminWalletManager() {
                 </button>
               </div>
 
-              <div style={{ marginTop: '4rem', paddingTop: '2.5rem', borderTop: '2px solid #f8fafc', display: 'flex', gap: '3rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#cbd5e1', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <div style={{ marginTop: '4rem', paddingTop: '2.5rem', borderTop: '2px solid var(--border)', display: 'flex', gap: '3rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                   <History size={20} /> Secure Audit Logs
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#cbd5e1', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                   <ShieldCheck size={20} /> Verified Admin
                 </div>
               </div>
             </div>
           ) : (
-            <div style={{ height: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#cbd5e1', background: '#f8fafc', borderRadius: '40px', border: '4px dashed #e2e8f0' }}>
-              <div style={{ width: '8rem', height: '8rem', background: 'white', borderRadius: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
-                <Search size={64} style={{ opacity: 0.2, color: '#1e293b' }} />
+            <div style={{ height: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', background: 'var(--surface)', borderRadius: '40px', border: '4px dashed var(--border)' }}>
+              <div style={{ width: '8rem', height: '8rem', background: 'var(--background)', borderRadius: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow)', marginBottom: '2rem' }}>
+                <Search size={64} style={{ opacity: 0.3, color: 'var(--text-muted)' }} />
               </div>
-              <h4 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#94a3b8', margin: 0 }}>Search for Profile</h4>
-              <p style={{ fontSize: '1rem', fontWeight: '600', marginTop: '0.75rem' }}>Enter a mobile number to manage the wallet.</p>
+              <h4 style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>Search for Profile</h4>
+              <p style={{ fontSize: '1rem', fontWeight: '600', marginTop: '0.75rem', color: 'var(--text-muted)' }}>Enter a mobile number to manage the wallet.</p>
             </div>
           )}
         </div>

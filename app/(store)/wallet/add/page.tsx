@@ -61,7 +61,7 @@ export default function AddMoneyPage() {
         prefill: {
           contact: user.phone,
         },
-        theme: { color: "#16a34a" },
+        theme: { color: "#dc2626" },
       };
 
       const rzp = new (window as any).Razorpay(options);
@@ -97,12 +97,12 @@ export default function AddMoneyPage() {
     <div className="container" style={{ padding: '6rem 20px', maxWidth: '400px' }}>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="card shadow-2xl" style={{ borderRadius: '24px' }}>
-        <h1 className="text-3xl font-bold text-center mb-8" style={{ fontFamily: 'Fraunces, serif' }}>Top Up Wallet</h1>
+        <h1 className="text-3xl font-bold text-center mb-8" style={{ fontFamily: 'Fraunces, serif', color: 'var(--text-main)' }}>Top Up Wallet</h1>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div>
-            <label className="block text-sm font-bold text-slate-600 mb-2">Amount to Add (₹)</label>
+            <label className="block text-sm font-bold mb-2" style={{ color: 'var(--text-muted)' }}>Amount to Add (₹)</label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">₹</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold" style={{ color: 'var(--text-muted)' }}>₹</span>
               <input
                 required
                 type="number"
@@ -121,7 +121,21 @@ export default function AddMoneyPage() {
                 key={val}
                 type="button"
                 onClick={() => setAmount(val.toString())}
-                className="p-3 rounded-xl border-2 border-slate-100 hover:border-emerald-500 hover:bg-emerald-50 transition-all font-bold text-slate-600"
+                className="p-3 rounded-xl border-2 transition-all font-bold"
+                style={{
+                  borderColor: 'var(--border)',
+                  background: 'var(--background)',
+                  color: 'var(--text-main)',
+                  cursor: 'pointer'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--primary)';
+                  e.currentTarget.style.background = 'var(--secondary)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                  e.currentTarget.style.background = 'var(--background)';
+                }}
               >
                 +₹{val}
               </button>
