@@ -270,29 +270,6 @@ export default function AdminSettings() {
 
         {/* Content Area */}
         <div className="settings-card">
-          {activeTab === 'security' && (
-            <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Admin Security</h2>
-              <div style={{ maxWidth: '500px' }}>
-                <div className="input-group">
-                  <label className="input-label">Current Password</label>
-                  <input type="password" required className="custom-input" value={pwForm.currentPassword} onChange={e => setPwForm({...pwForm, currentPassword: e.target.value})} />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">New Password</label>
-                  <input type="password" required className="custom-input" value={pwForm.newPassword} onChange={e => setPwForm({...pwForm, newPassword: e.target.value})} />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Confirm New Password</label>
-                  <input type="password" required className="custom-input" value={pwForm.confirmPassword} onChange={e => setPwForm({...pwForm, confirmPassword: e.target.value})} />
-                </div>
-                <button onClick={handleChangePassword} disabled={pwLoading} style={{ background: 'var(--primary)', color: 'white', padding: '16px', borderRadius: '16px', border: 'none', fontWeight: '800', width: '100%', cursor: pwLoading ? 'not-allowed' : 'pointer', opacity: pwLoading ? 0.7 : 1 }}>
-                  {pwLoading ? 'Updating...' : 'Update Password'}
-                </button>
-              </div>
-            </div>
-          )}
-
           {activeTab === 'popup' && (
             <div>
               <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Welcome Popup Config</h2>
