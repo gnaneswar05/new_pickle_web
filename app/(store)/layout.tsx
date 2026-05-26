@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ShoppingCart, Menu, X, Search, Phone, User as UserIcon, Loader2, Package, Heart, Sun, Moon, Mail, MapPin, Send, ShieldCheck, RefreshCw } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, Phone, User as UserIcon, Loader2, Package, Heart, Sun, Moon, Mail, MapPin, Send, ShieldCheck, RefreshCw, Sparkles } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import { useWishlistStore } from '@/lib/wishlistStore';
 import { useAuthStore } from '@/lib/authStore';
