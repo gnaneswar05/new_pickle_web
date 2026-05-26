@@ -286,7 +286,7 @@ export default function AdminSettings() {
                   <label className="input-label">Confirm New Password</label>
                   <input type="password" required className="custom-input" value={pwForm.confirmPassword} onChange={e => setPwForm({...pwForm, confirmPassword: e.target.value})} />
                 </div>
-                <button onClick={handlePasswordChange} disabled={pwLoading} style={{ background: 'var(--primary)', color: 'white', padding: '16px', borderRadius: '16px', border: 'none', fontWeight: '800', width: '100%', cursor: pwLoading ? 'not-allowed' : 'pointer', opacity: pwLoading ? 0.7 : 1 }}>
+                <button onClick={handleChangePassword} disabled={pwLoading} style={{ background: 'var(--primary)', color: 'white', padding: '16px', borderRadius: '16px', border: 'none', fontWeight: '800', width: '100%', cursor: pwLoading ? 'not-allowed' : 'pointer', opacity: pwLoading ? 0.7 : 1 }}>
                   {pwLoading ? 'Updating...' : 'Update Password'}
                 </button>
               </div>
