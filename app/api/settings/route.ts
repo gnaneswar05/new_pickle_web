@@ -38,7 +38,11 @@ export async function GET() {
         bundlePrice: 499,
         bundleQuantity: 3,
         bundleTitle: "Curate Your Gourmet Sample Box",
-        bundleDescription: "Choose any 3 of our premium pickles (150g jars) and get them delivered in a handcrafted luxury wooden gift box."
+        bundleDescription: "Choose any 3 of our premium pickles (150g jars) and get them delivered in a handcrafted luxury wooden gift box.",
+        welcomePopupEnabled: false,
+        welcomePopupImage: '',
+        welcomePopupTitle: '',
+        welcomePopupText: ''
       });
     }
     return NextResponse.json(settings);

@@ -6,7 +6,7 @@ import { Plus, Trash2, Edit2, Upload } from 'lucide-react';
 export default function AdminSlider() {
   const [sliders, setSliders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ title: '', subtitle: '', image: '', link: '' });
+  const [form, setForm] = useState({ title: '', subtitle: '', image: '', link: '', description: '', buttonText: '' });
   const [showModal, setShowModal] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -66,7 +66,7 @@ export default function AdminSlider() {
   };
 
   const handleEdit = (slider: any) => {
-    setForm({ title: slider.title || '', subtitle: slider.subtitle || '', image: slider.image || '', link: slider.link || '' });
+    setForm({ title: slider.title || '', subtitle: slider.subtitle || '', image: slider.image || '', link: slider.link || '', description: slider.description || '', buttonText: slider.buttonText || '' });
     setEditId(slider._id);
     setShowModal(true);
   };
@@ -74,7 +74,7 @@ export default function AdminSlider() {
   const closeModal = () => {
     setShowModal(false);
     setEditId(null);
-    setForm({ title: '', subtitle: '', image: '', link: '' });
+    setForm({ title: '', subtitle: '', image: '', link: '', description: '', buttonText: '' });
   };
 
   const handleDelete = async (id: string) => {
@@ -118,6 +118,11 @@ export default function AdminSlider() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <input required className="input" placeholder="Title" value={form.title} onChange={e => setForm({...form, title: e.target.value})} />
               <input className="input" placeholder="Subtitle" value={form.subtitle} onChange={e => setForm({...form, subtitle: e.target.value})} />
+              <textarea className="input" placeholder="Description" rows={3} value={form.description} onChange={e => setForm({...form, description: e.target.value})} style={{ resize: 'vertical' }} />
+              <div className="flex gap-2">
+                <input className="input w-1/2" placeholder="Button Text (e.g., Shop Now)" value={form.buttonText} onChange={e => setForm({...form, buttonText: e.target.value})} />
+                <input className="input w-1/2" placeholder="Button Link (e.g., /products)" value={form.link} onChange={e => setForm({...form, link: e.target.value})} />
+              </div>
               
               <div className="space-y-1">
                 <div className="flex gap-2">

@@ -71,7 +71,11 @@ const settingsSchema = new Schema({
   bundlePrice: { type: Number, default: 499 },
   bundleQuantity: { type: Number, default: 3 },
   bundleTitle: { type: String, default: "Curate Your Gourmet Sample Box" },
-  bundleDescription: { type: String, default: "Choose any 3 of our premium pickles (150g jars) and get them delivered in a handcrafted luxury wooden gift box." }
+  bundleDescription: { type: String, default: "Choose any 3 of our premium pickles (150g jars) and get them delivered in a handcrafted luxury wooden gift box." },
+  welcomePopupEnabled: { type: Boolean, default: false },
+  welcomePopupImage: { type: String, default: '' },
+  welcomePopupTitle: { type: String, default: 'Welcome to Kanvi!' },
+  welcomePopupText: { type: String, default: 'Discover authentic Godavari pickles.' }
 }, { timestamps: true });
 
 export const Settings = models.Settings || model('Settings', settingsSchema);

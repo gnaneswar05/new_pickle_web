@@ -319,90 +319,136 @@ export default function Home() {
       {loading ? (
         <HeroSkeleton />
       ) : (
-        <section style={{ position: 'relative', overflow: 'hidden', padding: '100px 20px', background: '#0a0505', minHeight: '85vh', display: 'flex', alignItems: 'center' }}>
-          {/* Subtle Dynamic Gradients */}
-          <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(220,38,38,0.25) 0%, transparent 70%)', filter: 'blur(100px)', borderRadius: '50%' }}></div>
-          <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%)', filter: 'blur(100px)', borderRadius: '50%' }}></div>
+        <section style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', display: 'flex', alignItems: 'center', background: '#0a0505' }}>
+          {/* Dynamic Full-Bleed Slide Backgrounds */}
+          <div style={{ position: 'absolute', inset: 0, zIndex: 1, overflow: 'hidden' }}>
+            {sliders.length > 0 ? (
+              sliders.map((slide, idx) => (
+                <div
+                  key={slide._id || idx}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: `url(${slide.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center right',
+                    transform: currentSlideIndex === idx ? 'translateX(0)' : currentSlideIndex > idx ? 'translateX(-100%)' : 'translateX(100%)',
+                    transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                    zIndex: currentSlideIndex === idx ? 2 : 1,
+                  }}
+                >
+                  {/* Left-side dark gradient to create premium "empty space" for readable text overlay */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to right, rgba(10, 5, 5, 0.95) 0%, rgba(10, 5, 5, 0.85) 35%, rgba(10, 5, 5, 0.4) 65%, transparent 100%)',
+                    }}
+                  />
+                </div>
+              ))
+            ) : (
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `url(${settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center right',
+                  opacity: 1,
+                  zIndex: 2,
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to right, rgba(10, 5, 5, 0.95) 0%, rgba(10, 5, 5, 0.85) 35%, rgba(10, 5, 5, 0.4) 65%, transparent 100%)',
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Subtle Dynamic Gradients overlayed on top of slides */}
+          <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(220,38,38,0.2) 0%, transparent 70%)', filter: 'blur(100px)', borderRadius: '50%', zIndex: 3, pointerEvents: 'none' }}></div>
+          <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%)', filter: 'blur(100px)', borderRadius: '50%', zIndex: 3, pointerEvents: 'none' }}></div>
           
           {/* Drifting Spice Particles */}
-          <div className="spice-floater" style={{ top: '15%', left: '8%', animation: 'float-particle-1 8s infinite ease-in-out' }}>
+          <div className="spice-floater" style={{ top: '15%', left: '8%', animation: 'float-particle-1 8s infinite ease-in-out', zIndex: 4 }}>
             <Flame size={28} color="#ef4444" style={{ opacity: 0.15, transform: 'rotate(15deg)' }} />
           </div>
-          <div className="spice-floater" style={{ top: '65%', left: '85%', animation: 'float-particle-2 10s infinite ease-in-out' }}>
+          <div className="spice-floater" style={{ top: '65%', left: '85%', animation: 'float-particle-2 10s infinite ease-in-out', zIndex: 4 }}>
             <Sparkles size={24} color="#f59e0b" style={{ opacity: 0.2 }} />
           </div>
-          <div className="spice-floater" style={{ top: '80%', left: '15%', animation: 'float-particle-1 12s infinite ease-in-out' }}>
+          <div className="spice-floater" style={{ top: '80%', left: '15%', animation: 'float-particle-1 12s infinite ease-in-out', zIndex: 4 }}>
             <Leaf size={28} color="#16a34a" style={{ opacity: 0.15, transform: 'rotate(-25deg)' }} />
           </div>
-          <div className="spice-floater" style={{ top: '25%', left: '75%', animation: 'float-particle-2 9s infinite ease-in-out' }}>
+          <div className="spice-floater" style={{ top: '25%', left: '75%', animation: 'float-particle-2 9s infinite ease-in-out', zIndex: 4 }}>
             <Droplet size={24} color="#f59e0b" style={{ opacity: 0.15, transform: 'rotate(45deg)' }} />
           </div>
 
-          <div className="container" style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', gap: '60px', flexWrap: 'wrap' }}>
-            <div style={{ flex: '1 1 500px' }} key={activeSlide?._id || 'default'}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'rgba(220, 38, 38, 0.1)', color: '#ef4444', borderRadius: '30px', fontSize: '0.8rem', fontWeight: '900', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '25px', border: '1px solid rgba(220, 38, 38, 0.2)' }}>
-                <Sparkles size={14} /> {activeSlide?.subtitle || '100% Handcrafted Legacy'}
-              </div>
-              <h1 style={{ fontSize: 'clamp(3rem, 5.5vw, 5rem)', fontWeight: '900', color: 'white', lineHeight: 1.1, fontFamily: 'Fraunces, serif', marginBottom: '25px' }}>
-                {activeSlide?.title ? (
-                  <>
-                    {activeSlide.title.split(' ').slice(0, -2).join(' ')}{' '}
-                    <span style={{ color: '#ef4444', fontStyle: 'italic' }}>
-                      {activeSlide.title.split(' ').slice(-2).join(' ')}
-                    </span>
-                  </>
-                ) : (
-                  <>The Cured Gold Standard of <span style={{ color: '#ef4444', fontStyle: 'italic' }}>Andhra Pickles</span></>
-                )}
-              </h1>
-              <p style={{ fontSize: '1.2rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '40px', maxWidth: '600px', fontWeight: '500' }}>
-                Handed down through three generations. Sourced from organic farms, cured under the warm sun, and preserved in cold-pressed mustard oil.
-              </p>
-              <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-                <Link href={activeSlide?.link || "/products"} className="hero-btn" style={{ background: 'var(--primary)', color: 'white', padding: '20px 40px', borderRadius: '30px', textDecoration: 'none', fontWeight: '900', fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.3s', boxShadow: '0 15px 25px -5px rgba(220, 38, 38, 0.3)' }}>
-                  Shop Pickles <ArrowRight size={18} />
-                </Link>
-                <Link href="/about" className="hero-btn-alt" style={{ background: 'rgba(255,255,255,0.03)', color: 'white', padding: '20px 40px', borderRadius: '30px', textDecoration: 'none', fontWeight: '800', fontSize: '1.05rem', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', transition: 'all 0.3s' }}>
-                  Our Craft
-                </Link>
-              </div>
-            </div>
-
-            <div style={{ flex: '1 1 450px', position: 'relative', display: 'flex', justifyContent: 'center' }}>
-              {/* Main Image Frame */}
-              <div className="hero-img" key={activeSlide?.image || 'img'} style={{ position: 'relative', width: '100%', maxWidth: '420px', aspectRatio: '1/1', borderRadius: '50% 50% 30% 70% / 50% 60% 40% 50%', overflow: 'hidden', border: '8px solid rgba(255,255,255,0.05)', boxShadow: '0 30px 60px -15px rgba(0,0,0,0.8)' }}>
-                <img src={activeSlide?.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'} alt="Kanvi Premium Pickles" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,5,5,0.9), transparent 60%)' }}></div>
-              </div>
-
-              {/* Floating Award Badge */}
-              <div style={{ position: 'absolute', bottom: '-20px', left: '10px', background: 'rgba(23, 13, 13, 0.85)', backdropFilter: 'blur(20px)', padding: '16px 24px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 20px 30px rgba(0,0,0,0.3)' }}>
-                <div style={{ width: '44px', height: '44px', background: '#f59e0b', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
-                  <Award size={22} />
+          <div className="container" style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', width: '100%', padding: '80px 20px' }}>
+            <div style={{ maxWidth: '650px', width: '100%' }} key={activeSlide?._id || 'default'}>
+              {activeSlide?.subtitle && (
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'rgba(220, 38, 38, 0.15)', color: '#ef4444', borderRadius: '30px', fontSize: '0.8rem', fontWeight: '900', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '25px', border: '1px solid rgba(220, 38, 38, 0.25)', backdropFilter: 'blur(5px)' }}>
+                  <Sparkles size={14} /> {activeSlide.subtitle}
                 </div>
-                <div>
-                  <div style={{ color: 'white', fontWeight: '900', fontSize: '0.95rem' }}>100% Organic Curing</div>
-                  <div style={{ color: '#cbd5e1', fontSize: '0.75rem', fontWeight: '600' }}>Passed generation standards</div>
-                </div>
-              </div>
-
-              {/* Slider Dots */}
-              {sliders.length > 1 && (
-                <div style={{ position: 'absolute', right: '-30px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 20 }}>
-                  {sliders.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentSlideIndex(idx)}
-                      style={{
-                        width: '10px', height: '10px', borderRadius: '50%', border: 'none', cursor: 'pointer', transition: 'all 0.3s',
-                        background: currentSlideIndex === idx ? '#ef4444' : 'rgba(255,255,255,0.2)',
-                        transform: currentSlideIndex === idx ? 'scale(1.4)' : 'scale(1)'
-                      }}
-                    />
-                  ))}
+              )}
+              
+              {activeSlide?.title && (
+                <h1 style={{ fontSize: 'clamp(2.8rem, 5.5vw, 4.8rem)', fontWeight: '900', color: 'white', lineHeight: 1.1, fontFamily: 'Fraunces, serif', marginBottom: '25px' }}>
+                  {activeSlide.title.split(' ').length > 2 ? (
+                    <>
+                      {activeSlide.title.split(' ').slice(0, -2).join(' ')}{' '}
+                      <span style={{ color: '#ef4444', fontStyle: 'italic' }}>
+                        {activeSlide.title.split(' ').slice(-2).join(' ')}
+                      </span>
+                    </>
+                  ) : (
+                    <span style={{ color: '#ef4444', fontStyle: 'italic' }}>{activeSlide.title}</span>
+                  )}
+                </h1>
+              )}
+              
+              {activeSlide?.description && (
+                <p style={{ fontSize: '1.2rem', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '40px', maxWidth: '550px', fontWeight: '500' }}>
+                  {activeSlide.description}
+                </p>
+              )}
+              
+              {activeSlide?.buttonText && (
+                <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '45px' }}>
+                  <Link href={activeSlide?.link || "#"} className="hero-btn" style={{ background: 'var(--primary)', color: 'white', padding: '18px 36px', borderRadius: '30px', textDecoration: 'none', fontWeight: '900', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.3s', boxShadow: '0 15px 25px -5px rgba(220, 38, 38, 0.4)' }}>
+                    {activeSlide.buttonText} <ArrowRight size={18} />
+                  </Link>
                 </div>
               )}
             </div>
+
+            {/* Slider Dots */}
+            {sliders.length > 1 && (
+              <div style={{ position: 'absolute', right: '40px', bottom: '40px', display: 'flex', gap: '12px', zIndex: 30 }}>
+                {sliders.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentSlideIndex(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                      background: currentSlideIndex === idx ? 'var(--primary)' : 'rgba(255,255,255,0.3)',
+                      transform: currentSlideIndex === idx ? 'scale(1.4)' : 'scale(1)',
+                      boxShadow: currentSlideIndex === idx ? '0 0 10px var(--primary)' : 'none',
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}

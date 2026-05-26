@@ -44,7 +44,11 @@ export default function AdminSettings() {
     bundlePrice: 499,
     bundleQuantity: 3,
     bundleTitle: '',
-    bundleDescription: ''
+    bundleDescription: '',
+    welcomePopupEnabled: false,
+    welcomePopupImage: '',
+    welcomePopupTitle: '',
+    welcomePopupText: ''
   });
   const [uploading, setUploading] = useState(false);
   const [pwForm, setPwForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
@@ -68,6 +72,33 @@ export default function AdminSettings() {
       if (res.ok) {
         setForm({ ...form, defaultProductImage: data.url });
         toast.success('Image uploaded');
+      } else {
+        toast.error(data.error || 'Upload failed');
+      }
+    } catch (error) {
+      toast.error('Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handlePopupImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setForm({ ...form, welcomePopupImage: data.url });
+        toast.success('Popup image uploaded');
       } else {
         toast.error(data.error || 'Upload failed');
       }
@@ -184,6 +215,7 @@ export default function AdminSettings() {
     { id: 'extra', name: 'Trust Section', icon: Sparkles },
     { id: 'testimonials', name: 'Testimonials', icon: MessageSquare },
     { id: 'journey', name: 'Journey Steps', icon: Compass },
+    { id: 'popup', name: 'Welcome Popup', icon: ImageIcon },
     { id: 'security', name: 'Security', icon: Lock },
   ];
 
@@ -238,6 +270,78 @@ export default function AdminSettings() {
 
         {/* Content Area */}
         <div className="settings-card">
+          {activeTab === 'security' && (
+            <div>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Admin Security</h2>
+              <div style={{ maxWidth: '500px' }}>
+                <div className="input-group">
+                  <label className="input-label">Current Password</label>
+                  <input type="password" required className="custom-input" value={pwForm.currentPassword} onChange={e => setPwForm({...pwForm, currentPassword: e.target.value})} />
+                </div>
+                <div className="input-group">
+                  <label className="input-label">New Password</label>
+                  <input type="password" required className="custom-input" value={pwForm.newPassword} onChange={e => setPwForm({...pwForm, newPassword: e.target.value})} />
+                </div>
+                <div className="input-group">
+                  <label className="input-label">Confirm New Password</label>
+                  <input type="password" required className="custom-input" value={pwForm.confirmPassword} onChange={e => setPwForm({...pwForm, confirmPassword: e.target.value})} />
+                </div>
+                <button onClick={handlePasswordChange} disabled={pwLoading} style={{ background: 'var(--primary)', color: 'white', padding: '16px', borderRadius: '16px', border: 'none', fontWeight: '800', width: '100%', cursor: pwLoading ? 'not-allowed' : 'pointer', opacity: pwLoading ? 0.7 : 1 }}>
+                  {pwLoading ? 'Updating...' : 'Update Password'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'popup' && (
+            <div>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Welcome Popup Config</h2>
+              
+              <div 
+                className={`toggle-card ${form.welcomePopupEnabled ? 'active' : ''}`}
+                onClick={() => setForm({...form, welcomePopupEnabled: !form.welcomePopupEnabled})}
+                style={{ marginBottom: '30px' }}
+              >
+                <div>
+                  <div style={{ fontWeight: '800', fontSize: '1.1rem' }}>Enable Welcome Popup</div>
+                  <div style={{ fontSize: '0.85rem', opacity: 0.8, marginTop: '4px' }}>Shows a one-time popup to new visitors on the website.</div>
+                </div>
+                <div style={{ width: '50px', height: '28px', background: form.welcomePopupEnabled ? 'var(--primary)' : 'var(--border)', borderRadius: '30px', position: 'relative', transition: 'all 0.3s' }}>
+                  <div style={{ position: 'absolute', top: '4px', left: form.welcomePopupEnabled ? '26px' : '4px', width: '20px', height: '20px', background: 'white', borderRadius: '50%', transition: 'all 0.3s' }} />
+                </div>
+              </div>
+
+              {form.welcomePopupEnabled && (
+                <>
+                  <div className="input-group">
+                    <label className="input-label">Popup Title</label>
+                    <input className="custom-input" placeholder="Welcome to Kanvi!" value={form.welcomePopupTitle} onChange={e => setForm({...form, welcomePopupTitle: e.target.value})} />
+                  </div>
+                  <div className="input-group">
+                    <label className="input-label">Popup Message</label>
+                    <textarea className="custom-input" rows={3} placeholder="Discover authentic Godavari pickles..." value={form.welcomePopupText} onChange={e => setForm({...form, welcomePopupText: e.target.value})} style={{ resize: 'vertical' }} />
+                  </div>
+                  <div className="input-group">
+                    <label className="input-label">Popup Image</label>
+                    <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
+                      <input className="custom-input" placeholder="Image URL" value={form.welcomePopupImage} onChange={e => setForm({...form, welcomePopupImage: e.target.value})} />
+                      <label style={{ background: 'var(--surface)', color: 'var(--primary)', padding: '16px 20px', borderRadius: '16px', border: '2px solid var(--border)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Upload size={20} />
+                        <input type="file" accept="image/*" onChange={handlePopupImageUpload} style={{ display: 'none' }} />
+                      </label>
+                    </div>
+                    {uploading && <p style={{ fontSize: '0.8rem', color: 'var(--primary)', marginTop: '8px', fontWeight: '600' }}>Uploading...</p>}
+                    {form.welcomePopupImage && (
+                      <div style={{ marginTop: '15px', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border)', width: '200px', height: '150px' }}>
+                        <img src={form.welcomePopupImage} alt="Popup Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
           {activeTab === 'financial' && (
             <div>
               <h2 style={{ fontSize: '1.75rem', fontWeight: '900', marginBottom: '30px', color: 'var(--text-main)' }}>Financial & Storefront Config</h2>

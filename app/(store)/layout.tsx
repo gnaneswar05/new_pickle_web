@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ShoppingCart, Menu, X, Search, Phone, User as UserIcon, Loader2, Package, Heart, Sun, Moon } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, Phone, User as UserIcon, Loader2, Package, Heart, Sun, Moon, Mail, MapPin, Send, ShieldCheck, RefreshCw } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import { useWishlistStore } from '@/lib/wishlistStore';
 import { useAuthStore } from '@/lib/authStore';
@@ -8,6 +8,7 @@ import { useSettingsStore } from '@/lib/settingsStore';
 import { useThemeStore } from '@/lib/themeStore';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function StoreLayout({
   children,
@@ -27,6 +28,62 @@ export default function StoreLayout({
   const [settings, setSettings] = useState<any>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
+  // Contact Us Modal States
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [contactLoading, setContactLoading] = useState(false);
+  const [contactCaptcha, setContactCaptcha] = useState({ num1: 0, num2: 0, userAnswer: '' });
+
+  // Welcome Popup State
+  const [showWelcomePopup, setShowWelcomePopup] = useState(false);
+
+  // Scroll-aware header
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const generateContactCaptcha = () => {
+    setContactCaptcha({
+      num1: Math.floor(Math.random() * 10) + 1,
+      num2: Math.floor(Math.random() * 10) + 1,
+      userAnswer: ''
+    });
+  };
+
+  useEffect(() => {
+    if (isContactOpen) {
+      generateContactCaptcha();
+    }
+  }, [isContactOpen]);
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (parseInt(contactCaptcha.userAnswer) !== (contactCaptcha.num1 + contactCaptcha.num2)) {
+      toast.error('Incorrect CAPTCHA answer. Please try again.');
+      generateContactCaptcha();
+      return;
+    }
+
+    setContactLoading(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contactForm)
+      });
+      if (res.ok) {
+        toast.success('Message sent! We will contact you soon.');
+        setContactForm({ name: '', email: '', phone: '', subject: '', message: '' });
+        setIsContactOpen(false);
+      } else {
+        toast.error('Failed to send message');
+      }
+    } catch (err) {
+      toast.error('An error occurred');
+    } finally {
+      setContactLoading(false);
+    }
+  };
+
   const user = useAuthStore((state) => state.user);
   const items = useCartStore((state) => state.items);
   const wishlistItems = useWishlistStore((state) => state.items);
@@ -45,6 +102,18 @@ export default function StoreLayout({
       .then(data => {
         setSettings(data);
         if (data.topBannerText) setTopBannerText(data.topBannerText);
+
+        // Welcome Popup: show once per session, keyed by title so new content shows again
+        if (data.welcomePopupEnabled) {
+          const popupKey = `welcomeShown_${(data.welcomePopupTitle || 'default').replace(/\s+/g, '_')}`;
+          if (!sessionStorage.getItem(popupKey)) {
+            // Small delay so page renders first
+            setTimeout(() => {
+              setShowWelcomePopup(true);
+              sessionStorage.setItem(popupKey, 'true');
+            }, 800);
+          }
+        }
       })
       .catch(err => console.error(err));
 
@@ -54,7 +123,14 @@ export default function StoreLayout({
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    const handleScroll = () => setIsScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   // Live Search Logic
@@ -129,27 +205,157 @@ export default function StoreLayout({
           0% { transform: translate3d(0%, 0, 0); }
           100% { transform: translate3d(-100%, 0, 0); }
         }
+      `}
+      </style>
+
+      {/* Google Fonts – Playfair Display (headings) + Lato (body) */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Lato:wght@400;700;900&display=swap');
+
+        :root {
+          --font-display: 'Playfair Display', 'Fraunces', Georgia, serif;
+          --font-body: 'Lato', 'Inter', sans-serif;
+        }
+
+        /* Scroll-aware header transitions */
+        .header-bar {
+          transition: background 0.4s ease, box-shadow 0.4s ease, padding 0.3s ease, backdrop-filter 0.4s ease;
+        }
+        .header-bar.scrolled {
+          background: rgba(255,255,255,0.92) !important;
+          backdrop-filter: saturate(180%) blur(18px) !important;
+          -webkit-backdrop-filter: saturate(180%) blur(18px) !important;
+          box-shadow: 0 4px 30px rgba(0,0,0,0.10) !important;
+          border-bottom: 1px solid rgba(220,38,38,0.10) !important;
+        }
+        [data-theme='dark'] .header-bar.scrolled {
+          background: rgba(20,10,10,0.85) !important;
+          box-shadow: 0 4px 30px rgba(0,0,0,0.40) !important;
+          border-bottom: 1px solid rgba(220,38,38,0.18) !important;
+        }
+
+        /* Nav links */
+        .nav-link { 
+          text-decoration: none; 
+          color: var(--text-muted); 
+          transition: all 0.2s; 
+          position: relative; 
+          padding: 0.5rem 0; 
+          font-family: var(--font-display); 
+          font-weight: 600;
+          letter-spacing: 0.01em;
+          font-size: 1rem;
+        }
+        /* On transparent homepage hero – show white text */
+        .header-hero .nav-link { color: rgba(255,255,255,0.88); }
+        .header-hero .nav-link:hover, .header-hero .nav-link.active { color: #ef4444 !important; }
+
+        .nav-link:hover, .nav-link.active { color: var(--primary) !important; }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary); transition: width 0.3s; border-radius: 3px; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .search-input:focus { border-color: var(--primary) !important; background: var(--surface) !important; box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.1); }
+        .result-item:hover { background: var(--border); }
+
+        /* ── Custom scrollbar: Contact popup ── */
+        .contact-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: #dc2626 transparent;
+        }
+        .contact-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+        .contact-scroll::-webkit-scrollbar-track {
+          background: transparent;
+          margin: 16px 0;
+        }
+        .contact-scroll::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+          border-radius: 99px;
+        }
+        .contact-scroll::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #dc2626 0%, #7f1d1d 100%);
+        }
+
+        .marquee-container {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .marquee-container::-webkit-scrollbar {
+          display: none;
+        }
+        .marquee-text {
+          display: inline-block;
+          animation: marquee-scroll 25s linear infinite;
+          padding-left: 100%;
+        }
+        @keyframes marquee-scroll {
+          0% { transform: translate3d(0%, 0, 0); }
+          100% { transform: translate3d(-100%, 0, 0); }
+        }
       `}</style>
+      {/* HEADER WRAPPER – sticky always; transparent on hero, frosted on scroll */}
+      <div style={
+        pathname === '/' && !isScrolled
+          ? { position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200 }
+          : { position: 'sticky', top: 0, zIndex: 200 }
+      }>
+        {/* TOP BANNER – hide when scrolled for more screen space */}
+        {!isScrolled && (
+          <div style={styles.topBanner}>
+            <span>{topBannerText}</span>
+          </div>
+        )}
 
-      {/* DYNAMIC TOP BANNER */}
-      <div style={styles.topBanner}>
-        <span>
-          {topBannerText}
-        </span>
-      </div>
-
-      <header style={styles.header}>
-        <div style={{ ...styles.container, padding: '1.5rem 20px' }}>
-          <Link href="/" style={styles.logo}>
+        <header
+          className={`header-bar${
+            pathname === '/' && !isScrolled ? ' header-hero' : ' scrolled'
+          }`}
+          style={{
+            ...styles.header,
+            background: pathname === '/' && !isScrolled ? 'transparent' : undefined,
+            borderBottom: pathname === '/' && !isScrolled ? 'none' : undefined,
+            boxShadow: pathname === '/' && !isScrolled ? 'none' : undefined,
+            padding: isScrolled ? '0' : undefined,
+          }}
+        >
+          <div style={{ ...styles.container, padding: isScrolled ? '0.8rem 20px' : '1.5rem 20px' }}>
+            <Link href="/" style={styles.logo}>
             {logoUrl ? (
-              <img src={logoUrl} alt="Kanvi Pickles" style={{ height: '85px', objectFit: 'contain' }} />
+              <img 
+                src={logoUrl} 
+                alt="Kanvi Pickles" 
+                style={{ 
+                  height: isScrolled ? '55px' : '85px', 
+                  objectFit: 'contain',
+                  transition: 'height 0.3s ease'
+                }} 
+              />
             ) : (
               <div style={styles.logoBox}>K</div>
             )}
             {!logoUrl && (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '1.8rem', fontWeight: '900', color: 'var(--text-main)', lineHeight: 1, fontFamily: 'Fraunces, serif' }}>Kanvi</span>
-                <span style={{ fontSize: '10px', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: '4px' }}>The Pickle Hub</span>
+                <span style={{ 
+                  fontSize: isScrolled ? '1.4rem' : '1.8rem', 
+                  fontWeight: '900', 
+                  color: pathname === '/' && !isScrolled ? 'white' : 'var(--text-main)', 
+                  lineHeight: 1, 
+                  fontFamily: 'Playfair Display, Fraunces, Georgia, serif',
+                  transition: 'all 0.3s ease'
+                }}>Kanvi</span>
+                <span style={{ 
+                  fontSize: '10px', 
+                  fontWeight: '700', 
+                  color: pathname === '/' && !isScrolled ? 'rgba(255,255,255,0.75)' : 'var(--primary)', 
+                  textTransform: 'uppercase', 
+                  letterSpacing: '0.18em', 
+                  marginTop: '4px',
+                  fontFamily: 'Lato, sans-serif',
+                  transition: 'all 0.3s ease'
+                }}>The Pickle Hub</span>
               </div>
             )}
           </Link>
@@ -159,12 +365,22 @@ export default function StoreLayout({
             <Link href="/products" className={`nav-link ${pathname === '/products' || pathname?.startsWith('/product/') ? 'active' : ''}`}>Pickles</Link>
             <Link href="/categories" className={`nav-link ${pathname === '/categories' ? 'active' : ''}`}>Categories</Link>
             <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`}>Our Story</Link>
-            <Link href="/contact" className={`nav-link ${pathname === '/contact' ? 'active' : ''}`}>Contact Us</Link>
+            <a href="/contact" onClick={(e) => { e.preventDefault(); setIsContactOpen(true); }} className={`nav-link ${pathname === '/contact' ? 'active' : ''}`}>Contact Us</a>
           </nav>
 
           <nav className="hidden lg:flex" style={{ alignItems: 'center', gap: '1.25rem' }}>
             {/* Search Trigger */}
-            <button onClick={() => setIsSearchOpen(!isSearchOpen)} style={styles.actionBtn} title="Search Pickles">
+            <button 
+              onClick={() => setIsSearchOpen(!isSearchOpen)} 
+              style={{
+                ...styles.actionBtn,
+                background: pathname === '/' && !isScrolled ? 'rgba(255,255,255,0.12)' : 'var(--secondary)',
+                color: pathname === '/' && !isScrolled ? 'white' : 'var(--primary)',
+                border: pathname === '/' && !isScrolled ? '1px solid rgba(255,255,255,0.2)' : '1px solid var(--border)',
+                backdropFilter: pathname === '/' && !isScrolled ? 'blur(10px)' : 'none',
+              }} 
+              title="Search Pickles"
+            >
               <Search size={22} />
             </button>
 
@@ -333,6 +549,7 @@ export default function StoreLayout({
           </div>
         </div>
       </header>
+      </div> {/* End Header Wrapper */}
 
       <main style={{ flex: 1 }}>
         {children}
@@ -484,7 +701,7 @@ export default function StoreLayout({
           <Link href="/products" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/products' || pathname?.startsWith('/product/') ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Pickles</Link>
           <Link href="/categories" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/categories' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Categories</Link>
           <Link href="/about" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/about' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Our Story</Link>
-          <Link href="/contact" onClick={() => setIsMenuOpen(false)} className={`nav-link ${pathname === '/contact' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Contact Us</Link>
+          <a href="/contact" onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); setIsContactOpen(true); }} className={`nav-link ${pathname === '/contact' ? 'active' : ''}`} style={{ fontSize: '1.2rem', fontWeight: '800' }}>Contact Us</a>
         </nav>
 
         <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border)', paddingTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -516,6 +733,255 @@ export default function StoreLayout({
           )}
         </div>
       </div>
+
+      {/* Contact Us Popup Modal */}
+      {isContactOpen && (
+        <div 
+          style={{ 
+            position: 'fixed', 
+            inset: 0, 
+            background: 'rgba(10, 5, 5, 0.6)', 
+            backdropFilter: 'blur(12px)', 
+            zIndex: 1500, 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            padding: '20px' 
+          }}
+          onClick={() => setIsContactOpen(false)}
+        >
+          <div 
+            className="contact-scroll"
+            style={{ 
+              background: 'var(--surface)', 
+              border: '1px solid var(--border)', 
+              borderRadius: '32px', 
+              padding: '40px', 
+              width: '100%', 
+              maxWidth: '650px', 
+              boxShadow: '0 30px 60px -15px rgba(0,0,0,0.5)', 
+              position: 'relative', 
+              maxHeight: '90vh', 
+              overflowY: 'auto',
+              fontFamily: 'Fraunces, serif'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setIsContactOpen(false)} 
+              style={{ 
+                position: 'absolute', 
+                top: '25px', 
+                right: '25px', 
+                background: 'var(--border)', 
+                border: 'none', 
+                color: 'var(--text-main)', 
+                width: '40px', 
+                height: '40px', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={e => e.currentTarget.style.background = 'var(--primary)'}
+              onMouseOut={e => e.currentTarget.style.background = 'var(--border)'}
+            >
+              <X size={20} />
+            </button>
+
+            <div style={{ textAlign: 'center', marginBottom: '35px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', background: 'rgba(220, 38, 38, 0.1)', color: 'var(--primary)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>
+                ✉️ Inquiry
+              </div>
+              <h2 style={{ fontSize: '2.4rem', fontWeight: '900', color: 'var(--text-main)', margin: '0 0 10px 0' }}>
+                Get in <span style={{ color: 'var(--primary)' }}>Touch</span>
+              </h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: '500', maxWidth: '420px', margin: '0 auto' }}>
+                Have questions about our artisanal pickles? Drop us a line and our kitchen team will reply shortly.
+              </p>
+            </div>
+
+            <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Name</label>
+                  <input 
+                    required 
+                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }} 
+                    value={contactForm.name} 
+                    onChange={e => setContactForm({ ...contactForm, name: e.target.value })} 
+                    placeholder="Full Name" 
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Email</label>
+                  <input 
+                    required 
+                    type="email" 
+                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }} 
+                    value={contactForm.email} 
+                    onChange={e => setContactForm({ ...contactForm, email: e.target.value })} 
+                    placeholder="email@example.com" 
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Phone</label>
+                  <input 
+                    required 
+                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }} 
+                    value={contactForm.phone} 
+                    onChange={e => setContactForm({ ...contactForm, phone: e.target.value })} 
+                    placeholder="Mobile Number" 
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Subject</label>
+                  <input 
+                    required 
+                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }} 
+                    value={contactForm.subject} 
+                    onChange={e => setContactForm({ ...contactForm, subject: e.target.value })} 
+                    placeholder="How can we help?" 
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Message</label>
+                <textarea 
+                  required 
+                  style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem', minHeight: '90px', resize: 'none' }} 
+                  value={contactForm.message} 
+                  onChange={e => setContactForm({ ...contactForm, message: e.target.value })} 
+                  placeholder="Your message..." 
+                />
+              </div>
+
+              {/* CAPTCHA Verification */}
+              <div style={{ background: 'var(--background)', padding: '15px 20px', borderRadius: '20px', border: '2px solid var(--border)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', fontWeight: '800', fontSize: '0.85rem' }}>
+                    <ShieldCheck size={16} color="var(--primary)" />
+                    <span>Security Verification</span>
+                  </div>
+                  <button type="button" onClick={generateContactCaptcha} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.7rem', fontWeight: '700' }}>
+                    <RefreshCw size={12} /> Refresh
+                  </button>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <div style={{ fontSize: '1.1rem', fontWeight: '900', color: 'var(--primary)', background: 'var(--surface)', padding: '8px 16px', borderRadius: '10px', border: '1px solid var(--border)' }}>
+                    {contactCaptcha.num1} + {contactCaptcha.num2} = ?
+                  </div>
+                  <input
+                    required
+                    type="number"
+                    value={contactCaptcha.userAnswer}
+                    onChange={e => setContactCaptcha({ ...contactCaptcha, userAnswer: e.target.value })}
+                    placeholder="Answer"
+                    style={{ flex: 1, padding: '10px 14px', borderRadius: '10px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '800', fontSize: '1rem', textAlign: 'center' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '15px', marginTop: '10px' }}>
+                <button 
+                  disabled={contactLoading} 
+                  type="submit"
+                  style={{ 
+                    background: 'var(--primary)', 
+                    color: 'white', 
+                    padding: '16px', 
+                    borderRadius: '16px', 
+                    border: 'none', 
+                    fontWeight: '900', 
+                    fontSize: '1rem', 
+                    cursor: contactLoading ? 'not-allowed' : 'pointer', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: '10px', 
+                    boxShadow: '0 10px 20px -5px rgba(220, 38, 38, 0.3)', 
+                    opacity: contactLoading ? 0.7 : 1,
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={e => !contactLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
+                  onMouseOut={e => !contactLoading && (e.currentTarget.style.transform = 'none')}
+                >
+                  <Send size={18} /> {contactLoading ? 'Sending...' : 'Send Message'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Welcome Popup Modal */}
+      {showWelcomePopup && settings && (
+        <div 
+          style={{ 
+            position: 'fixed', inset: 0, background: 'rgba(10, 5, 5, 0.7)', backdropFilter: 'blur(8px)', 
+            zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' 
+          }}
+          onClick={() => setShowWelcomePopup(false)}
+        >
+          <div 
+            style={{ 
+              background: 'var(--surface)', borderRadius: '32px', overflow: 'hidden', width: '100%', maxWidth: '450px', 
+              boxShadow: '0 30px 60px -15px rgba(0,0,0,0.5)', position: 'relative', display: 'flex', flexDirection: 'column'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowWelcomePopup(false)} 
+              style={{ 
+                position: 'absolute', top: '20px', right: '20px', background: 'rgba(0,0,0,0.4)', border: 'none', 
+                color: 'white', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', 
+                justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s', zIndex: 10, backdropFilter: 'blur(4px)'
+              }}
+              onMouseOver={e => e.currentTarget.style.background = 'var(--primary)'}
+              onMouseOut={e => e.currentTarget.style.background = 'rgba(0,0,0,0.4)'}
+            >
+              <X size={18} />
+            </button>
+
+            {settings.welcomePopupImage && (
+              <div style={{ width: '100%', height: '220px', background: 'var(--border)' }}>
+                <img src={settings.welcomePopupImage} alt="Welcome" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            )}
+            
+            <div style={{ padding: '40px 30px', textAlign: 'center', fontFamily: 'Fraunces, serif' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', marginBottom: '15px' }}>
+                <Sparkles size={20} />
+              </div>
+              <h2 style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--text-main)', margin: '0 0 15px 0', lineHeight: 1.2 }}>
+                {settings.welcomePopupTitle || 'Welcome to Kanvi!'}
+              </h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1rem', fontWeight: '500', margin: '0 0 30px 0', lineHeight: 1.6 }}>
+                {settings.welcomePopupText || 'Discover authentic Godavari pickles.'}
+              </p>
+              
+              <button 
+                onClick={() => setShowWelcomePopup(false)}
+                style={{ 
+                  background: 'var(--primary)', color: 'white', padding: '16px 32px', borderRadius: '16px', 
+                  border: 'none', fontWeight: '900', fontSize: '1rem', cursor: 'pointer', width: '100%',
+                  boxShadow: '0 10px 20px -5px rgba(220, 38, 38, 0.3)', transition: 'all 0.2s'
+                }}
+                onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                onMouseOut={e => e.currentTarget.style.transform = 'none'}
+              >
+                Start Exploring
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
