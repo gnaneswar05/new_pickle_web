@@ -31,6 +31,7 @@ const orderSchema = new Schema({
   }],
   paymentMethod: { type: String, default: 'COD' },
   pincode: String,
+  expectedDelivery: { type: String, default: '' },
   userId: { type: String, required: true },
   courierName: { type: String, default: '' },
   courierTrackingId: { type: String, default: '' },

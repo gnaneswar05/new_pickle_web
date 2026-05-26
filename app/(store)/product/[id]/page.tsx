@@ -16,6 +16,7 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedWeight, setSelectedWeight] = useState('250g');
+  const [activeImage, setActiveImage] = useState('');
 
   useEffect(() => {
     fetch('/api/settings').then(res => res.json()).then(setSettings);
@@ -23,6 +24,7 @@ export default function ProductDetailPage() {
       .then(res => res.json())
       .then(data => {
         setProduct(data);
+        setActiveImage(data.image || '');
         setLoading(false);
       })
       .catch(() => {
@@ -72,15 +74,46 @@ export default function ProductDetailPage() {
         <ProductDetailSkeleton />
       ) : !product ? null : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '80px' }}>
-        {/* Left: Image */}
+        {/* Left: Image Viewport and Thumbnail Gallery */}
         <div>
           <div style={{ position: 'relative', borderRadius: '40px', overflow: 'hidden', backgroundColor: 'var(--surface)', border: '8px solid var(--surface)', boxShadow: 'var(--shadow)' }}>
             <img 
-              src={product.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} 
+              src={activeImage || product.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} 
               alt={product.name} 
-              style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover' }}
+              style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', transition: 'all 0.3s ease' }}
             />
           </div>
+          {/* Gallery Thumbnails row */}
+          {(() => {
+            const allImages = [product.image, ...(product.images || [])].filter(Boolean);
+            if (allImages.length <= 1) return null;
+            return (
+              <div style={{ display: 'flex', gap: '12px', marginTop: '20px', overflowX: 'auto', padding: '5px 0' }}>
+                {allImages.map((img, idx) => (
+                  <button 
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveImage(img)}
+                    style={{
+                      width: '75px',
+                      height: '75px',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      border: `3px solid ${activeImage === img ? 'var(--primary)' : 'var(--border)'}`,
+                      background: 'var(--surface)',
+                      cursor: 'pointer',
+                      padding: 0,
+                      flexShrink: 0,
+                      transition: 'all 0.2s',
+                      boxShadow: activeImage === img ? '0 10px 15px -3px rgba(220, 38, 38, 0.15)' : 'none'
+                    }}
+                  >
+                    <img src={img} alt="Product Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </button>
+                ))}
+              </div>
+            );
+          })()}
         </div>
 
         {/* Right: Info */}
@@ -167,19 +200,38 @@ export default function ProductDetailPage() {
             )}
           </div>
 
-          {/* Trust Factors */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', paddingTop: '40px', borderTop: '2px solid var(--border)' }}>
-            <div style={{ textAlign: 'center' }}>
-              <ShieldCheck size={24} color="var(--primary)" style={{ marginBottom: '8px' }} />
-              <p style={{ fontSize: '0.6rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>100% Pure</p>
+          {/* Redesigned Premium Trust Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', paddingTop: '40px', borderTop: '2px solid var(--border)' }}>
+            <style>{`
+              .trust-card {
+                background: var(--secondary);
+                border: 1px solid var(--border);
+                border-radius: 20px;
+                padding: 18px 10px;
+                text-align: center;
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                cursor: default;
+              }
+              .trust-card:hover {
+                transform: translateY(-5px);
+                border-color: var(--primary) !important;
+                box-shadow: 0 12px 20px -5px rgba(220, 38, 38, 0.08);
+              }
+            `}</style>
+            <div className="trust-card">
+              <ShieldCheck size={26} color="var(--primary)" style={{ marginBottom: '6px' }} />
+              <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: '900', color: 'var(--text-main)', letterSpacing: '0.05em' }}>100% Pure</p>
+              <p style={{ margin: '3px 0 0 0', fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '600' }}>No Preservatives</p>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <Truck size={24} color="var(--primary)" style={{ marginBottom: '8px' }} />
-              <p style={{ fontSize: '0.6rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Express Delivery</p>
+            <div className="trust-card">
+              <Truck size={26} color="var(--primary)" style={{ marginBottom: '6px' }} />
+              <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: '900', color: 'var(--text-main)', letterSpacing: '0.05em' }}>Express Shipping</p>
+              <p style={{ margin: '3px 0 0 0', fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '600' }}>Dispatch in 24h</p>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <RotateCcw size={24} color="var(--primary)" style={{ marginBottom: '8px' }} />
-              <p style={{ fontSize: '0.6rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Easy Returns</p>
+            <div className="trust-card">
+              <RotateCcw size={26} color="var(--primary)" style={{ marginBottom: '6px' }} />
+              <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: '900', color: 'var(--text-main)', letterSpacing: '0.05em' }}>Easy Returns</p>
+              <p style={{ margin: '3px 0 0 0', fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '600' }}>100% Satisfaction</p>
             </div>
           </div>
         </div>

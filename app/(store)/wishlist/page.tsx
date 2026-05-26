@@ -9,12 +9,19 @@ import { ProductCardSkeleton } from '../components/Skeleton';
 
 export default function WishlistPage() {
   const [mounted, setMounted] = useState(false);
+  const [settings, setSettings] = useState<any>(null);
   const items = useWishlistStore((state) => state.items);
   const removeItem = useWishlistStore((state) => state.removeItem);
   const clearWishlist = useWishlistStore((state) => state.clearWishlist);
   const addCartItem = useCartStore((state) => state.addItem);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(setSettings)
+      .catch(err => console.error(err));
+  }, []);
 
   const handleAddToCart = (item: any) => {
     addCartItem({
@@ -102,7 +109,7 @@ export default function WishlistPage() {
                     backgroundColor: 'var(--border)', marginBottom: '20px', aspectRatio: '1/1',
                   }}>
                     <img
-                      src={item.image || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'}
+                      src={item.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'}
                       alt={item.name}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />

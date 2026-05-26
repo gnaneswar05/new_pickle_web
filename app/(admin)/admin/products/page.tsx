@@ -30,9 +30,11 @@ export default function AdminProducts() {
     description: '', 
     price: '', 
     image: '', 
+    images: [] as string[],
     category: '', 
     isTopSelling: false,
     rating: '4.9',
+    spiceLevel: 'Medium',
     variants: [
       { weight: '250g', price: '' },
       { weight: '500g', price: '' },
@@ -111,9 +113,11 @@ export default function AdminProducts() {
       description: p.description,
       price: p.price.toString(),
       image: p.image,
+      images: p.images || [],
       category: p.category,
       isTopSelling: !!p.isTopSelling,
       rating: p.rating ? p.rating.toString() : '4.9',
+      spiceLevel: p.spiceLevel || 'Medium',
       variants: [
         { weight: '250g', price: pVariants.find((v: any) => v.weight === '250g')?.price || '' },
         { weight: '500g', price: pVariants.find((v: any) => v.weight === '500g')?.price || '' },
@@ -344,6 +348,64 @@ export default function AdminProducts() {
                 </div>
               </div>
 
+              {/* Gallery Images Section */}
+              <div style={{ background: 'var(--background)', padding: '1.5rem', borderRadius: '16px', border: '1px solid var(--border)' }}>
+                <label className="text-xs font-bold block mb-2" style={{ color: 'var(--text-main)' }}>Additional Gallery Images (Optional)</label>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '15px' }}>
+                  {(form.images || []).map((imgUrl, imgIdx) => (
+                    <div key={imgIdx} style={{ position: 'relative', width: '70px', height: '70px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                      <img src={imgUrl} alt="Gallery item" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = form.images.filter((_, idx) => idx !== imgIdx);
+                          setForm({ ...form, images: updated });
+                        }}
+                        style={{ position: 'absolute', top: '2px', right: '2px', background: 'rgba(239, 68, 68, 0.8)', border: 'none', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    id="gallery-input"
+                    className="input"
+                    placeholder="Additional Image URL"
+                    style={{ flex: 1 }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const val = e.currentTarget.value.trim();
+                        if (val) {
+                          setForm({ ...form, images: [...(form.images || []), val] });
+                          e.currentTarget.value = '';
+                        }
+                      }
+                    }}
+                  />
+                  <label className="btn cursor-pointer flex items-center justify-center" style={{ padding: '0 1.2rem', borderRadius: '12px', border: '2px solid var(--border)', background: 'var(--surface)', color: 'var(--text-muted)' }}>
+                    <Upload size={16} style={{ marginRight: '6px' }} /> Upload
+                    <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const formData = new FormData();
+                      formData.append('file', file);
+                      try {
+                        const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+                        const uploadData = await uploadRes.json();
+                        if (uploadRes.ok) {
+                          setForm({ ...form, images: [...(form.images || []), uploadData.url] });
+                          toast.success('Gallery image uploaded');
+                        }
+                      } catch (err) { toast.error('Upload failed'); }
+                    }} />
+                  </label>
+                </div>
+                <p className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>Press Enter to add image URL or click Upload to upload files.</p>
+              </div>
+
               {/* Weight Pricing Section */}
               <div style={{ background: 'var(--background)', padding: '1.5rem', borderRadius: '16px', border: '1px solid var(--border)' }}>
                 <h4 className="font-bold text-sm mb-4 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
@@ -367,15 +429,24 @@ export default function AdminProducts() {
                 <p className="text-[10px] mt-2 italic" style={{ color: 'var(--text-muted)' }}>Note: If left empty, 250g price will be used as base.</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <label className="flex items-center gap-2 cursor-pointer mt-4">
+              <div className="grid grid-cols-3 gap-4 items-end">
+                <label className="flex items-center gap-2 cursor-pointer mb-2">
                   <input type="checkbox" checked={form.isTopSelling} onChange={e => setForm({...form, isTopSelling: e.target.checked})} />
-                  <span className="text-sm font-semibold" style={{ color: 'var(--text-main)' }}>Mark as Top Selling</span>
+                  <span className="text-sm font-semibold" style={{ color: 'var(--text-main)' }}>Top Selling</span>
                 </label>
                 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Product Rating (e.g. 4.9)</label>
-                  <input required type="number" step="0.1" min="0" max="5" className="input" placeholder="Rating (0 to 5)" value={form.rating} onChange={e => setForm({...form, rating: e.target.value})} />
+                  <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Spice Level</label>
+                  <select required className="input" value={form.spiceLevel} onChange={e => setForm({...form, spiceLevel: e.target.value})}>
+                    <option value="Mild">Mild</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hot">Hot</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Rating (0-5)</label>
+                  <input required type="number" step="0.1" min="0" max="5" className="input" placeholder="4.9" value={form.rating} onChange={e => setForm({...form, rating: e.target.value})} />
                 </div>
               </div>
 

@@ -12,7 +12,11 @@ import {
   Type,
   Upload,
   Sparkles,
-  Lock
+  Lock,
+  Plus,
+  Trash2,
+  MessageSquare,
+  Compass
 } from 'lucide-react';
 import { useAdminStore } from '@/lib/adminStore';
 
@@ -32,7 +36,15 @@ export default function AdminSettings() {
       { icon: 'Sparkles', title: '', description: '' },
       { icon: 'Leaf', title: '', description: '' },
       { icon: 'Truck', title: '', description: '' }
-    ]
+    ],
+    testimonials: [],
+    middleBannerText: '',
+    craftSteps: [],
+    isBundleEnabled: true,
+    bundlePrice: 499,
+    bundleQuantity: 3,
+    bundleTitle: '',
+    bundleDescription: ''
   });
   const [uploading, setUploading] = useState(false);
   const [pwForm, setPwForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
@@ -87,11 +99,28 @@ export default function AdminSettings() {
         fssaiNumber: data.fssaiNumber || '',
         instagramUrl: data.instagramUrl || '',
         whatsappUrl: data.whatsappUrl || '',
-        trustFeatures: data.trustFeatures || [
+        trustFeatures: (data.trustFeatures && data.trustFeatures.length > 0) ? data.trustFeatures : [
           { icon: 'Sparkles', title: 'Traditional Recipes', description: 'Handed down through generations, cooked with authentic Godavari spices, sun-dried ingredients, and traditional cold-pressed oils.' },
           { icon: 'Leaf', title: '100% Natural & Pure', description: 'No chemical preservatives, zero artificial colors, and no MSG. We only pack pure, wholesome flavor inspired by nature.' },
           { icon: 'Truck', title: 'Express Fresh Delivery', description: 'Directly shipped from our kitchen in Visakhapatnam to your home. Double-sealed premium glass jars ensure freshness.' }
-        ]
+        ],
+        testimonials: (data.testimonials && data.testimonials.length > 0) ? data.testimonials : [
+          { quote: "The Mango Avakaya is just out of this world! It tastes exactly like the pickle my grandmother used to make in Rajahmundry. Purity at its best.", author: "Srinivas K.", roleOrLocation: "Hyderabad • Verified Buyer", rating: 5 },
+          { quote: "I was skeptical about ordering online, but Kanvi changed my mind. The Gongura pickle is perfectly spicy and sour. Premium packaging too!", author: "Priya Sharma", roleOrLocation: "Bangalore • Food Blogger", rating: 5 },
+          { quote: "Exceptional quality. The garlic pickle is fresh, aromatic, and goes perfectly with hot rice and ghee. Will definitely order again.", author: "Ramanathan M.", roleOrLocation: "Chennai • Satisfied Customer", rating: 5 }
+        ],
+        middleBannerText: data.middleBannerText || '100% Sun-Dried Godavari Recipes • No Chemical Preservatives • Cured in Cold-Pressed Oils • Free Shipping Above ₹999',
+        craftSteps: (data.craftSteps && data.craftSteps.length > 0) ? data.craftSteps : [
+          { stepNumber: 1, title: 'Godavari Sourcing', description: 'We source fresh green mangoes, aromatic ginger, plump garlic, and local red chillies directly from Godavari farmers at their peak harvest.' },
+          { stepNumber: 2, title: 'Sun-Dried Curing', description: 'Sliced ingredients are dried under natural sunlight to remove excess moisture and preserve their structural goodness and natural tang.' },
+          { stepNumber: 3, title: 'Cold-Pressed Oils', description: 'We cure our pickles in high-quality cold-pressed mustard oil and sesame oil, ensuring they stay preserved naturally and taste richly aromatic.' },
+          { stepNumber: 4, title: 'Hand-Spiced & Sealed', description: 'Each batch is hand-mixed with ancestral spice ratios and sealed in premium glass jars to protect the home-made aroma and taste.' }
+        ],
+        isBundleEnabled: data.isBundleEnabled ?? true,
+        bundlePrice: data.bundlePrice || 499,
+        bundleQuantity: data.bundleQuantity || 3,
+        bundleTitle: data.bundleTitle || 'Curate Your Gourmet Sample Box',
+        bundleDescription: data.bundleDescription || 'Choose any 3 of our premium pickles (150g jars) and get them delivered in a handcrafted luxury wooden gift box.'
       });
       setLoading(false);
     });
@@ -153,6 +182,8 @@ export default function AdminSettings() {
     { id: 'content', name: 'Brand & Media', icon: Info },
     { id: 'legal', name: 'Legal Policies', icon: FileText },
     { id: 'extra', name: 'Trust Section', icon: Sparkles },
+    { id: 'testimonials', name: 'Testimonials', icon: MessageSquare },
+    { id: 'journey', name: 'Journey Steps', icon: Compass },
     { id: 'security', name: 'Security', icon: Lock },
   ];
 
@@ -232,6 +263,41 @@ export default function AdminSettings() {
                   <input type="number" min="1" className="custom-input" value={form.productsPerPage} onChange={e => setForm({...form, productsPerPage: Math.max(1, parseInt(e.target.value) || 1)})} />
                 </div>
               </div>
+
+              <div style={{ marginTop: '40px', borderTop: '2px solid var(--border)', paddingTop: '30px' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '20px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  🎁 Custom Gourmet Bundle Box Builder
+                </h3>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                  <div className={`toggle-card ${form.isBundleEnabled ? 'active' : ''}`} onClick={() => setForm({...form, isBundleEnabled: !form.isBundleEnabled})}>
+                    <p style={{ margin: 0, fontWeight: '800', color: form.isBundleEnabled ? 'var(--text-main)' : 'var(--text-muted)' }}>Enable Homepage Box Builder</p>
+                    <div style={{ width: '44px', height: '24px', background: form.isBundleEnabled ? 'var(--primary)' : 'var(--border)', borderRadius: '12px', position: 'relative', transition: '0.2s' }}>
+                      <div style={{ width: '18px', height: '18px', background: 'white', borderRadius: '50%', position: 'absolute', top: '3px', transition: '0.2s', left: form.isBundleEnabled ? '23px' : '3px' }}></div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                    <div className="input-group" style={{ marginBottom: 0 }}>
+                      <label className="input-label">Box Flat Price (₹)</label>
+                      <input type="number" className="custom-input" value={form.bundlePrice} onChange={e => setForm({...form, bundlePrice: Number(e.target.value)})} />
+                    </div>
+                    <div className="input-group" style={{ marginBottom: 0 }}>
+                      <label className="input-label">Jars Count</label>
+                      <input type="number" className="custom-input" value={form.bundleQuantity} onChange={e => setForm({...form, bundleQuantity: Number(e.target.value)})} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="input-group">
+                  <label className="input-label">Bundle Box Title</label>
+                  <input className="custom-input" value={form.bundleTitle} onChange={e => setForm({...form, bundleTitle: e.target.value})} placeholder="e.g. Curate Your Gourmet Sample Box" />
+                </div>
+
+                <div className="input-group" style={{ marginBottom: 0 }}>
+                  <label className="input-label">Bundle Box Marketing Description</label>
+                  <textarea className="custom-input" style={{ minHeight: '80px', resize: 'none' }} value={form.bundleDescription} onChange={e => setForm({...form, bundleDescription: e.target.value})} placeholder="Explain what the custom box comes with..." />
+                </div>
+              </div>
             </div>
           )}
 
@@ -272,6 +338,12 @@ export default function AdminSettings() {
                 <label className="input-label" style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}><Type size={16} /> Top Announcement Banner</label>
                 <input className="custom-input" style={{ borderColor: 'var(--border)' }} value={form.topBannerText} onChange={e => setForm({...form, topBannerText: e.target.value})} placeholder="e.g. Free shipping on orders above ₹1000" />
                 <p style={{ margin: '12px 0 0 0', fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '700' }}>This text appears at the very top of every page in your store.</p>
+              </div>
+
+              <div className="input-group" style={{ background: 'var(--secondary)', padding: '25px', borderRadius: '24px', border: '2px solid var(--border)', marginBottom: '35px' }}>
+                <label className="input-label" style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}><Type size={16} /> Middle Scrolling Ticker Marquee</label>
+                <input className="custom-input" style={{ borderColor: 'var(--border)' }} value={form.middleBannerText} onChange={e => setForm({...form, middleBannerText: e.target.value})} placeholder="e.g. 100% Sun-Dried Godavari Recipes • Cured in Cold-Pressed Oils" />
+                <p style={{ margin: '12px 0 0 0', fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '700' }}>This text scrolls continuously in the red bar on the store homepage.</p>
               </div>
 
               <div className="input-group">
@@ -418,6 +490,229 @@ export default function AdminSettings() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {activeTab === 'testimonials' && (
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+                <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--text-main)', margin: 0 }}>Customer Testimonials</h2>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = [...(form.testimonials || [])];
+                    updated.push({ quote: '', author: '', roleOrLocation: 'Verified Buyer', rating: 5 });
+                    setForm({ ...form, testimonials: updated });
+                  }}
+                  style={{
+                    background: 'var(--primary)', color: 'white', padding: '10px 20px', borderRadius: '12px',
+                    border: 'none', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px'
+                  }}
+                >
+                  <Plus size={16} /> Add Testimonial
+                </button>
+              </div>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '30px', fontWeight: '500' }}>
+                Manage customer testimonials displayed dynamically on the homepage carousel.
+              </p>
+
+              {(form.testimonials || []).length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)', border: '2px dashed var(--border)', borderRadius: '24px' }}>
+                  No testimonials added yet. Click "Add Testimonial" to create one.
+                </div>
+              ) : (
+                (form.testimonials || []).map((t: any, index: number) => (
+                  <div key={index} style={{ background: 'var(--background)', padding: '25px', borderRadius: '24px', border: '2px solid var(--border)', marginBottom: '25px', position: 'relative' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = (form.testimonials || []).filter((_: any, i: number) => i !== index);
+                        setForm({ ...form, testimonials: updated });
+                      }}
+                      style={{
+                        position: 'absolute', top: '20px', right: '20px', background: 'transparent',
+                        border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center'
+                      }}
+                      title="Delete Testimonial"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                    
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '20px' }}>
+                      💬 Testimonial #{index + 1}
+                    </h3>
+                    
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                      <div className="input-group" style={{ marginBottom: 0 }}>
+                        <label className="input-label">Author Name</label>
+                        <input
+                          className="custom-input"
+                          value={t.author || ''}
+                          onChange={e => {
+                            const updated = [...(form.testimonials || [])];
+                            updated[index] = { ...updated[index], author: e.target.value };
+                            setForm({ ...form, testimonials: updated });
+                          }}
+                          placeholder="e.g. Srinivas K."
+                          required
+                        />
+                      </div>
+                      
+                      <div className="input-group" style={{ marginBottom: 0 }}>
+                        <label className="input-label">Location / Role</label>
+                        <input
+                          className="custom-input"
+                          value={t.roleOrLocation || ''}
+                          onChange={e => {
+                            const updated = [...(form.testimonials || [])];
+                            updated[index] = { ...updated[index], roleOrLocation: e.target.value };
+                            setForm({ ...form, testimonials: updated });
+                          }}
+                          placeholder="e.g. Hyderabad • Verified Buyer"
+                        />
+                      </div>
+
+                      <div className="input-group" style={{ marginBottom: 0 }}>
+                        <label className="input-label">Rating (Stars)</label>
+                        <select
+                          className="custom-input"
+                          value={t.rating || 5}
+                          onChange={e => {
+                            const updated = [...(form.testimonials || [])];
+                            updated[index] = { ...updated[index], rating: Number(e.target.value) };
+                            setForm({ ...form, testimonials: updated });
+                          }}
+                        >
+                          <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                          <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
+                          <option value="3">⭐⭐⭐ (3 Stars)</option>
+                          <option value="2">⭐⭐ (2 Stars)</option>
+                          <option value="1">⭐ (1 Star)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="input-group" style={{ marginBottom: 0 }}>
+                      <label className="input-label">Customer Quote</label>
+                      <textarea
+                        className="custom-input"
+                        style={{ minHeight: '85px', resize: 'none' }}
+                        value={t.quote || ''}
+                        onChange={e => {
+                          const updated = [...(form.testimonials || [])];
+                          updated[index] = { ...updated[index], quote: e.target.value };
+                          setForm({ ...form, testimonials: updated });
+                        }}
+                        placeholder="Write the customer's review here..."
+                        required
+                      />
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
+          {activeTab === 'journey' && (
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+                <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--text-main)', margin: 0 }}>Godavari Curing Journey Steps</h2>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = [...(form.craftSteps || [])];
+                    const nextNum = updated.length + 1;
+                    updated.push({ stepNumber: nextNum, title: '', description: '' });
+                    setForm({ ...form, craftSteps: updated });
+                  }}
+                  style={{
+                    background: 'var(--primary)', color: 'white', padding: '10px 20px', borderRadius: '12px',
+                    border: 'none', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px'
+                  }}
+                >
+                  <Plus size={16} /> Add Step
+                </button>
+              </div>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '30px', fontWeight: '500' }}>
+                Configure the chronological steps explaining the pickle craftsmanship journey on the homepage.
+              </p>
+
+              {(form.craftSteps || []).length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)', border: '2px dashed var(--border)', borderRadius: '24px' }}>
+                  No craft journey steps added yet. Click "Add Step" to create one.
+                </div>
+              ) : (
+                (form.craftSteps || []).map((step: any, index: number) => (
+                  <div key={index} style={{ background: 'var(--background)', padding: '25px', borderRadius: '24px', border: '2px solid var(--border)', marginBottom: '25px', position: 'relative' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = (form.craftSteps || []).filter((_: any, i: number) => i !== index)
+                          .map((s: any, idx: number) => ({ ...s, stepNumber: idx + 1 }));
+                        setForm({ ...form, craftSteps: updated });
+                      }}
+                      style={{
+                        position: 'absolute', top: '20px', right: '20px', background: 'transparent',
+                        border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center'
+                      }}
+                      title="Delete Step"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                    
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '20px' }}>
+                      🏺 Journey Step #{step.stepNumber}
+                    </h3>
+                    
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '20px', marginBottom: '20px' }}>
+                      <div className="input-group" style={{ marginBottom: 0 }}>
+                        <label className="input-label">Step Number</label>
+                        <input
+                          type="number"
+                          className="custom-input"
+                          value={step.stepNumber}
+                          onChange={e => {
+                            const updated = [...(form.craftSteps || [])];
+                            updated[index] = { ...updated[index], stepNumber: Number(e.target.value) };
+                            setForm({ ...form, craftSteps: updated });
+                          }}
+                        />
+                      </div>
+                      
+                      <div className="input-group" style={{ marginBottom: 0 }}>
+                        <label className="input-label">Step Title</label>
+                        <input
+                          className="custom-input"
+                          value={step.title || ''}
+                          onChange={e => {
+                            const updated = [...(form.craftSteps || [])];
+                            updated[index] = { ...updated[index], title: e.target.value };
+                            setForm({ ...form, craftSteps: updated });
+                          }}
+                          placeholder="e.g. Traditional Sun-Drying"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="input-group" style={{ marginBottom: 0 }}>
+                      <label className="input-label">Step Description</label>
+                      <textarea
+                        className="custom-input"
+                        style={{ minHeight: '85px', resize: 'none' }}
+                        value={step.description || ''}
+                        onChange={e => {
+                          const updated = [...(form.craftSteps || [])];
+                          updated[index] = { ...updated[index], description: e.target.value };
+                          setForm({ ...form, craftSteps: updated });
+                        }}
+                        placeholder="Describe the activities performed in this step..."
+                        required
+                      />
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           )}
 

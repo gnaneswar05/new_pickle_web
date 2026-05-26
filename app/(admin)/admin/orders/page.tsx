@@ -207,6 +207,12 @@ export default function AdminOrders() {
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: '600', lineHeight: 1.6, margin: 0 }}>
                   {selectedOrder?.address}<br />
                   <span style={{ color: 'var(--primary)', fontWeight: '800' }}>Pincode: {selectedOrder?.pincode}</span>
+                  {selectedOrder?.expectedDelivery && (
+                    <>
+                      <br />
+                      <span style={{ color: 'var(--text-main)', fontWeight: '800' }}>Expected Delivery: {selectedOrder.expectedDelivery}</span>
+                    </>
+                  )}
                 </p>
               </div>
             </div>

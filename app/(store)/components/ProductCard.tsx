@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/lib/store';
 import { useWishlistStore } from '@/lib/wishlistStore';
 import toast from 'react-hot-toast';
-import { ShoppingBasket, Star, Check, Heart } from 'lucide-react';
+import { ShoppingBasket, Star, Check, Heart, Flame } from 'lucide-react';
 
 export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?: string }) {
   const [selectedWeight, setSelectedWeight] = useState('250g');
@@ -28,7 +28,25 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
     return basePrice;
   };
 
+  const getSpiceLevel = () => {
+    if (p.spiceLevel) {
+      if (p.spiceLevel === 'Hot') return 3;
+      if (p.spiceLevel === 'Mild') return 1;
+      return 2;
+    }
+    const name = p.name.toLowerCase();
+    const cat = p.category?.toLowerCase() || '';
+    if (name.includes('avakaya') || name.includes('chilli') || name.includes('spicy') || cat.includes('chilli') || name.includes('gongura')) {
+      return 3;
+    }
+    if (name.includes('sweet') || name.includes('bellam') || name.includes('jaggery') || name.includes('mild')) {
+      return 1;
+    }
+    return 2;
+  };
+
   const currentPrice = getPrice();
+  const spiceLevel = getSpiceLevel();
   
   // Check if exactly this product variant is in cart
   const cartItemId = `${p._id}-${selectedWeight}`;
@@ -112,6 +130,19 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '16px' }}>
           {[1, 2, 3, 4, 5].map((s) => <Star key={s} size={12} fill="#f59e0b" color="#f59e0b" />)}
           <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', marginLeft: '4px' }}>({p.rating || 4.9}/5)</span>
+          
+          {/* Dynamic Spice Level Indicator */}
+          <div style={{ display: 'flex', gap: '1px', marginLeft: 'auto', background: 'var(--secondary)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--border)' }} title={`Spice: ${spiceLevel === 3 ? 'Hot' : spiceLevel === 2 ? 'Medium' : 'Mild'}`}>
+            {Array.from({ length: 3 }).map((_, idx) => (
+              <Flame
+                key={idx}
+                size={12}
+                fill={idx < spiceLevel ? '#ef4444' : 'none'}
+                color={idx < spiceLevel ? '#ef4444' : 'var(--text-muted)'}
+                style={{ opacity: idx < spiceLevel ? 1 : 0.15 }}
+              />
+            ))}
+          </div>
         </div>
         <p style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '16px' }}>₹{currentPrice.toFixed(2)}</p>
       </Link>

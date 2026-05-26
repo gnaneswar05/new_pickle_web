@@ -10,10 +10,12 @@ const productSchema = new Schema({
   featured: { type: Boolean, default: false },
   isTopSelling: { type: Boolean, default: false },
   rating: { type: Number, default: 4.9 },
+  spiceLevel: { type: String, enum: ['Mild', 'Medium', 'Hot'], default: 'Medium' },
   variants: [{
     weight: String,
     price: Number
-  }]
+  }],
+  images: { type: [String], default: [] }
 }, { timestamps: true });
 
 export const Product = models.Product || model('Product', productSchema);

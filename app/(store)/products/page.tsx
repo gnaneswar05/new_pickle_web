@@ -115,7 +115,7 @@ function ProductsContent() {
       </div>
 
       {loading ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '24px' }}>
           {Array.from({ length: 8 }).map((_, idx) => (
             <ProductCardSkeleton key={idx} />
           ))}
@@ -127,7 +127,7 @@ function ProductsContent() {
         </div>
       ) : (
         <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '24px' }}>
             {(() => {
               const productsPerPage = settings?.productsPerPage || 8;
               const indexOfLastProduct = currentPage * productsPerPage;

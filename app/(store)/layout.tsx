@@ -22,6 +22,7 @@ export default function StoreLayout({
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [topBannerText, setTopBannerText] = useState('Authentic Godavari • Global Shipping Available');
   const [settings, setSettings] = useState<any>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -89,18 +90,14 @@ export default function StoreLayout({
   };
 
   const styles = {
-    topBanner: { background: 'var(--text-main)', color: 'var(--background)', padding: '0.8rem 0', fontSize: '12px', fontWeight: '800', textTransform: 'uppercase' as const, letterSpacing: '0.15em', fontFamily: 'Fraunces, serif', overflow: 'hidden', whiteSpace: 'nowrap' as const, position: 'relative' as const, width: '100%' },
+    topBanner: { background: 'var(--text-main)', color: 'var(--background)', padding: '0.8rem 0', fontSize: '12px', fontWeight: '800', textTransform: 'uppercase' as const, letterSpacing: '0.15em', fontFamily: 'Fraunces, serif', overflow: 'hidden', whiteSpace: 'nowrap' as const, position: 'relative' as const, width: '100%', textAlign: 'center' as const, display: 'flex', justifyContent: 'center', alignItems: 'center' },
     header: { position: 'sticky' as const, top: 0, zIndex: 100, background: 'var(--surface)', borderBottom: '1px solid var(--border)', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' },
-    container: { maxWidth: '1250px', margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '3rem' },
+    container: { maxWidth: '1250px', margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' },
     logo: { display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' },
     logoBox: { width: '55px', height: '55px', background: 'var(--primary)', color: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', fontWeight: '900' },
-    searchForm: { flex: 1, maxWidth: '450px', position: 'relative' as const },
-    searchInput: { width: '100%', background: 'var(--border)', border: '2px solid transparent', padding: '1rem 1rem 1rem 3.5rem', borderRadius: '16px', fontSize: '1rem', fontWeight: '600', outline: 'none', transition: 'all 0.2s', color: 'var(--text-main)', fontFamily: 'Fraunces, serif' },
-    resultsDropdown: { position: 'absolute' as const, top: 'calc(100% + 15px)', left: 0, right: 0, background: 'var(--surface)', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', border: '1px solid var(--border)', overflow: 'hidden', zIndex: 1000 },
-    nav: { alignItems: 'center', gap: '2.5rem', fontSize: '1rem', fontWeight: '800', color: 'var(--text-muted)', fontFamily: 'Fraunces, serif' },
-    cartBtn: { position: 'relative' as const, width: '54px', height: '54px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid var(--border)' },
-    wishlistBtn: { position: 'relative' as const, width: '54px', height: '54px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid var(--border)' },
-    themeBtn: { position: 'relative' as const, width: '54px', height: '54px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid var(--border)', cursor: 'pointer' },
+    nav: { alignItems: 'center', gap: '2rem', fontSize: '1rem', fontWeight: '850', color: 'var(--text-muted)', fontFamily: 'Fraunces, serif' },
+    actionBtn: { position: 'relative' as const, width: '54px', height: '54px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid var(--border)', cursor: 'pointer' },
+    searchInput: { width: '100%', background: 'var(--border)', border: '2px solid transparent', padding: '0.7rem 1rem 0.7rem 2.5rem', borderRadius: '16px', fontSize: '0.9rem', fontWeight: '600', outline: 'none', transition: 'all 0.2s', color: 'var(--text-main)', fontFamily: 'Fraunces, serif' },
     badge: { position: 'absolute' as const, top: '-6px', right: '-6px', background: 'var(--primary)', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '900', border: '3px solid var(--surface)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }
   };
 
@@ -135,8 +132,8 @@ export default function StoreLayout({
       `}</style>
 
       {/* DYNAMIC TOP BANNER */}
-      <div style={styles.topBanner} className="marquee-container">
-        <span className="marquee-text">
+      <div style={styles.topBanner}>
+        <span>
           {topBannerText}
         </span>
       </div>
@@ -165,65 +162,14 @@ export default function StoreLayout({
             <Link href="/contact" className={`nav-link ${pathname === '/contact' ? 'active' : ''}`}>Contact Us</Link>
           </nav>
 
-          <div className="hidden md:block" style={styles.searchForm} ref={searchRef}>
-            <form onSubmit={handleSearchSubmit}>
-              <Search style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={20} />
-              <input
-                type="text"
-                placeholder="Search premium pickles..."
-                className="search-input"
-                style={styles.searchInput}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
-              />
-              {isSearching && (
-                <Loader2 style={{ position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', animation: 'spin 1s linear infinite' }} size={20} />
-              )}
-            </form>
+          <nav className="hidden lg:flex" style={{ alignItems: 'center', gap: '1.25rem' }}>
+            {/* Search Trigger */}
+            <button onClick={() => setIsSearchOpen(!isSearchOpen)} style={styles.actionBtn} title="Search Pickles">
+              <Search size={22} />
+            </button>
 
-            {showResults && (
-              <div style={styles.resultsDropdown}>
-                {searchResults.length > 0 ? (
-                  <div>
-                    <div style={{ padding: '15px 20px', background: 'var(--border)', fontSize: '0.7rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Top Results</div>
-                    {searchResults.map((p) => (
-                      <Link
-                        key={p._id}
-                        href={`/product/${p._id}`}
-                        onClick={() => { setShowResults(false); setSearchQuery(''); }}
-                        className="result-item"
-                        style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px 20px', textDecoration: 'none', transition: '0.2s', borderBottom: '1px solid var(--border)' }}
-                      >
-                        <div style={{ width: '50px', height: '50px', background: 'var(--border)', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-                          <img src={p.image || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: '700', color: 'var(--text-main)', fontSize: '0.9rem' }}>{p.name}</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '800' }}>₹{p.price}</div>
-                        </div>
-                      </Link>
-                    ))}
-                    <Link
-                      href={`/products?search=${searchQuery}`}
-                      onClick={() => setShowResults(false)}
-                      style={{ display: 'block', padding: '15px', textAlign: 'center', fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)', textDecoration: 'none', background: 'var(--secondary)' }}
-                    >
-                      View All Results
-                    </Link>
-                  </div>
-                ) : (
-                  <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: '600' }}>
-                    No results for "{searchQuery}"
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <nav className="hidden lg:flex" style={{ alignItems: 'center', gap: '1.5rem' }}>
             {mounted && (
-              <button onClick={toggleTheme} style={styles.themeBtn} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
+              <button onClick={toggleTheme} style={styles.actionBtn} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
                 {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
               </button>
             )}
@@ -239,14 +185,14 @@ export default function StoreLayout({
               </Link>
             )}
 
-            <Link href="/wishlist" style={styles.wishlistBtn}>
+            <Link href="/wishlist" style={styles.actionBtn}>
               <Heart size={22} />
               {mounted && wishlistCount > 0 && (
                 <span style={styles.badge}>{wishlistCount}</span>
               )}
             </Link>
 
-            <Link href="/cart" style={styles.cartBtn}>
+            <Link href="/cart" style={styles.actionBtn}>
               <ShoppingCart size={22} />
               {mounted && itemCount > 0 && (
                 <span style={styles.badge}>{itemCount}</span>
@@ -256,20 +202,24 @@ export default function StoreLayout({
 
           {/* Mobile Right Nav */}
           <div className="flex lg:!hidden" style={{ alignItems: 'center', gap: '0.75rem' }}>
+            <button onClick={() => setIsSearchOpen(!isSearchOpen)} style={styles.actionBtn} title="Search Pickles">
+              <Search size={22} />
+            </button>
+
             {mounted && (
-              <button onClick={toggleTheme} style={styles.themeBtn} title="Toggle Theme">
+              <button onClick={toggleTheme} style={styles.actionBtn} title="Toggle Theme">
                 {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
               </button>
             )}
 
-            <Link href="/wishlist" style={styles.wishlistBtn}>
+            <Link href="/wishlist" style={styles.actionBtn}>
               <Heart size={22} />
               {mounted && wishlistCount > 0 && (
                 <span style={styles.badge}>{wishlistCount}</span>
               )}
             </Link>
 
-            <Link href="/cart" style={styles.cartBtn}>
+            <Link href="/cart" style={styles.actionBtn}>
               <ShoppingCart size={22} />
               {mounted && itemCount > 0 && (
                 <span style={styles.badge}>{itemCount}</span>
@@ -286,6 +236,100 @@ export default function StoreLayout({
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
+          </div>
+        </div>
+
+        {/* Sliding Search Drawer Panel */}
+        <div style={{
+          maxHeight: isSearchOpen ? '600px' : '0px',
+          opacity: isSearchOpen ? 1 : 0,
+          transform: isSearchOpen ? 'translateY(0)' : 'translateY(-10px)',
+          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+          overflow: 'hidden',
+          background: 'var(--surface)',
+          borderBottom: isSearchOpen ? '1px solid var(--border)' : 'none',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+          position: 'relative',
+          zIndex: 99
+        }} ref={searchRef}>
+          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '30px 20px 40px 20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Search Our Kitchen</span>
+              <button 
+                onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSearchSubmit} style={{ position: 'relative' }}>
+              <Search style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={24} />
+              <input
+                type="text"
+                placeholder="What are you craving today? (e.g. Mango, Gongura, Garlic...)"
+                style={{
+                  width: '100%',
+                  background: 'var(--background)',
+                  border: '2px solid var(--border)',
+                  padding: '1.25rem 1.5rem 1.25rem 4rem',
+                  borderRadius: '20px',
+                  fontSize: '1.2rem',
+                  fontWeight: '600',
+                  outline: 'none',
+                  transition: 'all 0.2s',
+                  color: 'var(--text-main)',
+                  fontFamily: 'Fraunces, serif'
+                }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
+              />
+              {isSearching && (
+                <Loader2 style={{ position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', animation: 'spin 1s linear infinite' }} size={22} />
+              )}
+            </form>
+
+            {/* Results in Drawer */}
+            {showResults && searchQuery.length >= 2 && (
+              <div style={{ marginTop: '25px', background: 'var(--background)', borderRadius: '24px', border: '1px solid var(--border)', overflow: 'hidden' }}>
+                {searchResults.length > 0 ? (
+                  <div>
+                    <div style={{ padding: '15px 20px', background: 'var(--border)', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Top Matches</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px', padding: '20px' }}>
+                      {searchResults.map((p) => (
+                        <Link
+                          key={p._id}
+                          href={`/product/${p._id}`}
+                          onClick={() => { setShowResults(false); setIsSearchOpen(false); setSearchQuery(''); }}
+                          style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px', textDecoration: 'none', borderRadius: '16px', background: 'var(--surface)', border: '1px solid var(--border)', transition: 'all 0.2s' }}
+                          className="result-item"
+                        >
+                          <div style={{ width: '48px', height: '48px', background: 'var(--border)', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
+                            <img src={p.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          </div>
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ fontWeight: '750', color: 'var(--text-main)', fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '800' }}>₹{p.price}</div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                    <Link
+                      href={`/products?search=${searchQuery}`}
+                      onClick={() => { setShowResults(false); setIsSearchOpen(false); }}
+                      style={{ display: 'block', padding: '15px', textAlign: 'center', fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)', textDecoration: 'none', background: 'var(--secondary)', borderTop: '1px solid var(--border)' }}
+                    >
+                      View All Search Results →
+                    </Link>
+                  </div>
+                ) : (
+                  <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: '600' }}>
+                    No premium pickles found for "{searchQuery}"
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -423,12 +467,12 @@ export default function StoreLayout({
         {/* Search Bar in Mobile Menu */}
         <div style={{ position: 'relative' }}>
           <form onSubmit={handleSearchSubmit}>
-            <Search style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={20} />
+            <Search style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={16} />
             <input
               type="text"
               placeholder="Search pickles..."
               className="search-input"
-              style={{ ...styles.searchInput, padding: '0.8rem 1rem 0.8rem 3rem', fontSize: '0.9rem' }}
+              style={{ ...styles.searchInput, padding: '0.8rem 1rem 0.8rem 2.5rem', fontSize: '0.9rem' }}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

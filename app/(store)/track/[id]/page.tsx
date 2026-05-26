@@ -231,6 +231,11 @@ export default function OrderTrackingPage() {
               <p style={{ margin: 0, fontWeight: '800', color: 'var(--text-main)', fontSize: '1.05rem' }}>{order.customerName}</p>
               <p style={{ margin: '8px 0 0 0', fontWeight: '600', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>{order.address}</p>
               <p style={{ margin: '4px 0 0 0', fontWeight: '800', color: 'var(--primary)', fontSize: '0.9rem' }}>Pincode: {order.pincode}</p>
+              {order.expectedDelivery && (
+                <p style={{ margin: '4px 0 0 0', fontWeight: '800', color: 'var(--text-main)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Clock size={16} color="var(--primary)" /> Expected Delivery: {order.expectedDelivery}
+                </p>
+              )}
             </div>
           </div>
         </div>

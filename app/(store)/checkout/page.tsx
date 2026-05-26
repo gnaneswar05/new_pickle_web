@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/authStore';
 import Script from 'next/script';
-import { ShieldCheck, Truck, CreditCard, Wallet, MapPin, ShoppingBag, AlertCircle, CheckCircle2, User as UserIcon } from 'lucide-react';
+import { ShieldCheck, Truck, CreditCard, Wallet, MapPin, ShoppingBag, AlertCircle, CheckCircle2, User as UserIcon, Clock } from 'lucide-react';
 
 import { CheckoutSkeleton } from '../components/Skeleton';
 
@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   const [useWallet, setUseWallet] = useState(false);
   const [isServiceable, setIsServiceable] = useState(false);
   const [cityName, setCityName] = useState('');
+  const [expectedDelivery, setExpectedDelivery] = useState('');
 
   const [form, setForm] = useState({
     customerName: '',
@@ -117,11 +118,13 @@ export default function CheckoutPage() {
           setIsServiceable(true);
           setDeliveryCharge(Number(data.deliveryCharge) || 0);
           setCityName(data.city || '');
+          setExpectedDelivery(data.expectedDelivery || '3-5 Days');
           toast.success(`Delivery available in ${data.city}!`);
         } else {
           setIsServiceable(false);
           setDeliveryCharge(0);
           setCityName('');
+          setExpectedDelivery('');
           toast.error(data.message || 'Sorry, we do not deliver here yet.');
         }
       } catch (e) { console.error(e); }
@@ -129,6 +132,7 @@ export default function CheckoutPage() {
       setIsServiceable(false);
       setDeliveryCharge(0);
       setCityName('');
+      setExpectedDelivery('');
     }
   };
 
@@ -200,6 +204,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           ...form,
           pincode,
+          expectedDelivery,
           products: items.map(i => ({ productId: i.id, name: i.name, quantity: i.quantity, price: i.price })),
           totalAmount: grossTotal,
           paidAmount: finalPayable,
@@ -347,10 +352,35 @@ export default function CheckoutPage() {
                 <span style={{ color: 'var(--text-main)', fontWeight: '700' }}>₹{subtotal.toFixed(2)}</span>
               </div>
 
-              {deliveryCharge > 0 && (
+              {isServiceable ? (
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Truck size={16} /> Delivery Charges {cityName && `(${cityName})`}
+                    </span>
+                    <span style={{ color: deliveryCharge > 0 ? 'var(--primary)' : '#166534', fontWeight: '900' }}>
+                      {deliveryCharge > 0 ? `+ ₹${deliveryCharge.toFixed(2)}` : 'FREE'}
+                    </span>
+                  </div>
+                  {expectedDelivery && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Clock size={16} /> Expected Delivery
+                      </span>
+                      <span style={{ color: 'var(--text-main)', fontWeight: '700' }}>
+                        {expectedDelivery}
+                      </span>
+                    </div>
+                  )}
+                </>
+              ) : (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Truck size={16} /> Free Shipping {cityName && `(${cityName})`}</span>
-                  <span style={{ color: 'var(--primary)', fontWeight: '900' }}>+ ₹{deliveryCharge.toFixed(2)}</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Truck size={16} /> Delivery Charges
+                  </span>
+                  <span style={{ color: 'var(--text-muted)', fontStyle: 'italic', fontSize: '0.85rem' }}>
+                    Enter pincode to calculate
+                  </span>
                 </div>
               )}
 

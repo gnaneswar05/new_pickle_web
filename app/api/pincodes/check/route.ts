@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     }
 
     // Check how many total active pincodes exist
-    const totalActive = await Pincode.countDocuments({ isActive: true });
+    const totalActive = await Pincode.countDocuments({ isActive: { $ne: false } });
 
     // If no pincodes are configured, delivery is allowed everywhere with 0 charge
     if (totalActive === 0) {
@@ -21,17 +21,19 @@ export async function GET(req: Request) {
         available: true,
         city: 'All India',
         deliveryCharge: 0,
+        expectedDelivery: '3-5 Days',
         message: 'Delivery available everywhere (no zones configured)'
       });
     }
 
     // Otherwise, check for a match
-    const pinData = await Pincode.findOne({ code, isActive: true });
+    const pinData = await Pincode.findOne({ code, isActive: { $ne: false } });
     if (pinData) {
       return NextResponse.json({
         available: true,
         city: pinData.city,
-        deliveryCharge: pinData.deliveryCharge
+        deliveryCharge: pinData.deliveryCharge,
+        expectedDelivery: pinData.expectedDelivery || '3-5 Days'
       });
     } else {
       return NextResponse.json({

@@ -18,7 +18,7 @@ function parseCSV(text: string): Record<string, string>[] {
 export default function AdminPincodes() {
   const [pincodes, setPincodes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ code: '', city: '', deliveryCharge: '' });
+  const [form, setForm] = useState({ code: '', city: '', deliveryCharge: '', expectedDelivery: '' });
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [bulkUploading, setBulkUploading] = useState(false);
@@ -53,7 +53,7 @@ export default function AdminPincodes() {
       toast.success(editId ? 'Service area updated' : 'Service area added');
       setShowModal(false);
       setEditId(null);
-      setForm({ code: '', city: '', deliveryCharge: '' });
+      setForm({ code: '', city: '', deliveryCharge: '', expectedDelivery: '' });
       fetchPincodes();
     } else {
       const data = await res.json();
@@ -63,7 +63,7 @@ export default function AdminPincodes() {
 
   const handleEdit = (p: any) => {
     setEditId(p._id);
-    setForm({ code: p.code || '', city: p.city || '', deliveryCharge: (p.deliveryCharge ?? '').toString() });
+    setForm({ code: p.code || '', city: p.city || '', deliveryCharge: (p.deliveryCharge ?? '').toString(), expectedDelivery: p.expectedDelivery || '' });
     setShowModal(true);
   };
 
@@ -78,7 +78,7 @@ export default function AdminPincodes() {
     const res = await fetch(`/api/pincodes/${p._id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: p.code, city: p.city, deliveryCharge: p.deliveryCharge, isActive: !p.isActive })
+      body: JSON.stringify({ code: p.code, city: p.city, deliveryCharge: p.deliveryCharge, expectedDelivery: p.expectedDelivery, isActive: !p.isActive })
     });
     if (res.ok) { toast.success(`${p.city} ${p.isActive ? 'deactivated' : 'activated'}`); fetchPincodes(); }
   };
@@ -87,7 +87,7 @@ export default function AdminPincodes() {
   const inactiveCount = pincodes.filter(p => p.isActive === false).length;
 
   const downloadTemplate = () => {
-    const csv = 'code,city,deliveryCharge,isActive\n530001,Visakhapatnam,50,true\n530002,Vizag,40,true';
+    const csv = 'code,city,deliveryCharge,expectedDelivery,isActive\n530001,Visakhapatnam,50,2-3 Days,true\n530002,Vizag,40,24-48 Hours,true';
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -96,8 +96,8 @@ export default function AdminPincodes() {
   };
 
   const exportPincodes = () => {
-    const csv = 'code,city,deliveryCharge,isActive\n' + pincodes.map(p =>
-      `${p.code},${p.city},${p.deliveryCharge},${p.isActive !== false}`
+    const csv = 'code,city,deliveryCharge,expectedDelivery,isActive\n' + pincodes.map(p =>
+      `${p.code},${p.city},${p.deliveryCharge},${p.expectedDelivery || '3-5 Days'},${p.isActive !== false}`
     ).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -118,6 +118,7 @@ export default function AdminPincodes() {
         code: row.code || row.pincode || '',
         city: row.city || row.region || '',
         deliveryCharge: Number(row.deliverycharge || row.delivery_charge || row.charge || 0),
+        expectedDelivery: row.expecteddelivery || row.expected_delivery || row.deliverytime || row.delivery_time || '3-5 Days',
         isActive: (row.isactive || row.active || 'true') !== 'false'
       }));
       const res = await fetch('/api/pincodes/bulk', {
@@ -161,7 +162,7 @@ export default function AdminPincodes() {
             style={{ background: 'var(--secondary)', color: 'var(--primary)', padding: '12px 20px', borderRadius: '14px', border: '1px solid var(--primary)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', opacity: bulkUploading ? 0.7 : 1 }}>
             <Upload size={16} /> {bulkUploading ? 'Uploading...' : 'Bulk Upload'}
           </button>
-          <button onClick={() => { setEditId(null); setForm({ code: '', city: '', deliveryCharge: '' }); setShowModal(true); }}
+          <button onClick={() => { setEditId(null); setForm({ code: '', city: '', deliveryCharge: '', expectedDelivery: '' }); setShowModal(true); }}
             style={{ background: 'var(--primary)', color: 'white', padding: '12px 20px', borderRadius: '14px', border: 'none', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', boxShadow: '0 10px 15px -3px rgba(220, 38, 38, 0.2)' }}>
             <Plus size={16} /> Add Pincode
           </button>
@@ -201,6 +202,7 @@ export default function AdminPincodes() {
                 <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Pincode</th>
                 <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>City/Region</th>
                 <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Delivery Fee</th>
+                <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Expected Delivery</th>
                 <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Status</th>
                 <th style={{ padding: '25px 30px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'right' }}>Actions</th>
               </tr>
@@ -217,6 +219,9 @@ export default function AdminPincodes() {
                   <td style={{ padding: '25px 30px', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'capitalize' }}>{p.city}</td>
                   <td style={{ padding: '25px 30px' }}>
                     <span style={{ background: 'var(--secondary)', color: 'var(--primary)', padding: '6px 14px', borderRadius: '12px', fontWeight: '900', fontSize: '0.9rem' }}>₹{p.deliveryCharge}</span>
+                  </td>
+                  <td style={{ padding: '25px 30px', color: 'var(--text-muted)', fontWeight: '600' }}>
+                    {p.expectedDelivery || '3-5 Days'}
                   </td>
                   <td style={{ padding: '25px 30px' }}>
                     <div onClick={() => handleToggleActive(p)}
@@ -243,7 +248,7 @@ export default function AdminPincodes() {
       {showModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px', backdropFilter: 'blur(4px)' }}>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: '40px', borderRadius: '40px', width: '100%', maxWidth: '450px', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-            <button onClick={() => setShowModal(false)} style={{ position: 'absolute', right: '30px', top: '30px', background: 'var(--background)', border: 'none', padding: '10px', borderRadius: '12px', cursor: 'pointer', color: 'var(--text-main)' }}><X size={20} /></button>
+            <button onClick={() => { setShowModal(false); setForm({ code: '', city: '', deliveryCharge: '', expectedDelivery: '' }); }} style={{ position: 'absolute', right: '30px', top: '30px', background: 'var(--background)', border: 'none', padding: '10px', borderRadius: '12px', cursor: 'pointer', color: 'var(--text-main)' }}><X size={20} /></button>
             <h2 style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--text-main)', marginBottom: '12px', fontFamily: 'Fraunces, serif' }}>{editId ? 'Edit Delivery Zone' : 'Add Delivery Zone'}</h2>
             <p style={{ color: 'var(--text-muted)', marginBottom: '35px', fontWeight: '500' }}>{editId ? 'Update serviceable details.' : 'Define a new serviceable pincode and fee.'}</p>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -263,6 +268,10 @@ export default function AdminPincodes() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Delivery Fee (₹)</label>
                 <input required type="number" min="0" style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', outline: 'none', fontWeight: '600', color: 'var(--text-main)' }} value={form.deliveryCharge} onChange={e => setForm({...form, deliveryCharge: e.target.value})} placeholder="0" />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Expected Delivery Time</label>
+                <input style={{ padding: '16px', borderRadius: '16px', border: '2px solid var(--border)', background: 'var(--background)', outline: 'none', fontWeight: '600', color: 'var(--text-main)' }} value={form.expectedDelivery} onChange={e => setForm({...form, expectedDelivery: e.target.value})} placeholder="e.g. 2-3 Days or 24 Hours" />
               </div>
               <button type="submit" style={{ marginTop: '10px', background: 'var(--primary)', color: 'white', padding: '20px', borderRadius: '20px', border: 'none', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(220, 38, 38, 0.2)' }}>{editId ? 'Update Delivery Area' : 'Save Delivery Area'}</button>
             </form>

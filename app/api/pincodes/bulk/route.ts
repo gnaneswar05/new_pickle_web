@@ -19,6 +19,7 @@ export async function POST(req: Request) {
       const code = String(item.code || '').trim();
       const city = String(item.city || '').trim();
       const deliveryCharge = Number(item.deliveryCharge) || 0;
+      const expectedDelivery = String(item.expectedDelivery || '').trim() || '3-5 Days';
       const isActive = item.isActive !== false && item.isActive !== 'false';
 
       if (!/^\d{6}$/.test(code)) {
@@ -32,10 +33,10 @@ export async function POST(req: Request) {
 
       const existing = await Pincode.findOne({ code });
       if (existing) {
-        await Pincode.findByIdAndUpdate(existing._id, { city, deliveryCharge, isActive });
+        await Pincode.findByIdAndUpdate(existing._id, { city, deliveryCharge, expectedDelivery, isActive });
         updated++;
       } else {
-        await Pincode.create({ code, city, deliveryCharge, isActive });
+        await Pincode.create({ code, city, deliveryCharge, expectedDelivery, isActive });
         created++;
       }
     }
