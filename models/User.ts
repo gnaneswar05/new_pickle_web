@@ -2,6 +2,7 @@ import mongoose, { Schema, model, models } from 'mongoose';
 
 const userSchema = new Schema({
   phone: { type: String, required: true, unique: true },
+  password: { type: String },
   otp: { type: String },
   otpExpires: { type: Date },
   isVerified: { type: Boolean, default: false },

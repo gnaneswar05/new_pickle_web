@@ -164,13 +164,13 @@ export default function UserDashboard() {
         <>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
             {/* Wallet Card */}
-            <div style={{ background: '#0d0707', borderRadius: '40px', padding: '40px', color: 'white', boxShadow: '0 25px 50px -12px rgba(220, 38, 38, 0.1)', border: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ background: 'white', borderRadius: '40px', padding: '40px', color: 'white', boxShadow: '0 25px 50px -12px rgba(220, 38, 38, 0.1)', border: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '100px', height: '100px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '50%' }}></div>
               <div style={{ width: '56px', height: '56px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '40px' }}>
                 <Wallet size={28} color="#ef4444" />
               </div>
-              <p style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Wallet Balance Amount</p>
-              <h2 style={{ fontSize: '3.5rem', fontWeight: '900', margin: 0 }}>₹{balance.toFixed(2)}</h2>
+              <p style={{ color: '#d81818ff', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Wallet Balance Amount</p>
+              <h2 style={{ color: '#d81818ff', fontSize: '3.5rem', fontWeight: '900', margin: 0 }}>₹{balance.toFixed(2)}</h2>
               <div style={{ marginTop: '40px', display: 'flex', gap: '12px' }}>
                 <button onClick={() => setIsModalOpen(true)} style={{ flex: 1, background: 'var(--primary)', color: 'white', padding: '16px', borderRadius: '18px', border: 'none', fontWeight: '900', cursor: 'pointer', transition: '0.2s' }}>Add Funds</button>
                 <Link href="/wallet" style={{ flex: 1, background: 'rgba(255,255,255,0.05)', color: 'white', padding: '16px', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.1)', fontWeight: '900', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>

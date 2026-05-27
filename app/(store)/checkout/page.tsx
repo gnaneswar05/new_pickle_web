@@ -56,7 +56,7 @@ export default function CheckoutPage() {
       const timer = setTimeout(() => {
         const currentUser = useAuthStore.getState().user;
         if (!currentUser) {
-          router.push('/login');
+          router.push('/login?redirect=/checkout');
         } else {
             setLoading(false);
         }

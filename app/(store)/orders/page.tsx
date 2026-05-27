@@ -23,7 +23,7 @@ export default function CustomerOrders() {
       const timer = setTimeout(() => {
         const currentUser = useAuthStore.getState().user;
         if (!currentUser) {
-          router.push('/login');
+          router.push('/login?redirect=/orders');
         }
       }, 100);
       return () => clearTimeout(timer);
