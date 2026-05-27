@@ -258,7 +258,7 @@ export default function CheckoutPage() {
         <p style={{ color: 'var(--text-muted)', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Finalize your pickle selection.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '50px', alignItems: 'flex-start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(20px, 4vw, 50px)', alignItems: 'flex-start' }}>
 
         {/* Delivery Form */}
         <div style={{ background: 'var(--surface)', padding: '50px', borderRadius: '48px', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>

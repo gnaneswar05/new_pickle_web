@@ -95,7 +95,7 @@ export default function ContactPage() {
         <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto' }}>Have a question about our pickles or an order? We are here to help!</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '60px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(20px, 5vw, 60px)' }}>
         {/* Contact Info */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
           <div style={{ background: 'var(--surface)', padding: '40px', borderRadius: '40px', boxShadow: 'var(--shadow)', border: '1px solid var(--border)' }}>

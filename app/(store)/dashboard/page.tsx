@@ -162,7 +162,7 @@ export default function UserDashboard() {
         <DashboardSkeleton />
       ) : (
         <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
             {/* Wallet Card */}
             <div style={{ background: '#0d0707', borderRadius: '40px', padding: '40px', color: 'white', boxShadow: '0 25px 50px -12px rgba(220, 38, 38, 0.1)', border: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '100px', height: '100px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '50%' }}></div>

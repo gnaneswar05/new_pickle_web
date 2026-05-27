@@ -54,7 +54,7 @@ export default function WishlistPage() {
       </div>
 
       {!mounted ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '30px' }}>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
           {Array.from({ length: 4 }).map((_, idx) => (
             <ProductCardSkeleton key={idx} />
           ))}
@@ -93,7 +93,7 @@ export default function WishlistPage() {
           </div>
 
           {/* Wishlist Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '30px' }}>
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
             {items.map((item) => (
               <div
                 key={item.id}
@@ -106,12 +106,16 @@ export default function WishlistPage() {
                 <Link href={`/product/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <div style={{
                     position: 'relative', borderRadius: '24px', overflow: 'hidden',
-                    backgroundColor: 'var(--border)', marginBottom: '20px', aspectRatio: '1/1',
+                    backgroundColor: '#ffffff', marginBottom: '20px', aspectRatio: '1/1',
                   }}>
                     <img
                       src={item.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'}
                       alt={item.name}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800';
+                      }}
                     />
                     {item.category && (
                       <div style={{
@@ -132,7 +136,19 @@ export default function WishlistPage() {
                       <Heart size={18} fill="var(--primary)" color="var(--primary)" />
                     </div>
                   </div>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '8px', fontFamily: 'Fraunces, serif' }}>
+                  <h3 style={{ 
+                    fontSize: '1.25rem', 
+                    fontWeight: '800', 
+                    color: 'var(--text-main)', 
+                    marginBottom: '8px', 
+                    fontFamily: 'Fraunces, serif',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    minHeight: '2.8rem',
+                    lineHeight: '1.3'
+                  }}>
                     {item.name}
                   </h3>
                   <p style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '16px' }}>

@@ -7,12 +7,12 @@ export async function GET() {
     await dbConnect();
     let settings = await Settings.findOne({});
     if (!settings) {
-      settings = await Settings.create({ 
-        cgst: 0, sgst: 0, igst: 0, platformFee: 0, 
+      settings = await Settings.create({
+        cgst: 0, sgst: 0, igst: 0, platformFee: 0,
         productsPerPage: 8,
-        aboutUs: '', 
+        aboutUs: '',
         ourMission: 'Our mission is to preserve the authentic flavors of Godavari and deliver them to pickle lovers across the globe. We believe in quality without compromise, using only the finest ingredients sourced directly from local farmers.',
-        termsConditions: '', cancellationPolicy: '', refundPolicy: '', privacyPolicy: '', 
+        termsConditions: '', cancellationPolicy: '', refundPolicy: '', privacyPolicy: '',
         maxCodAmount: 2000, razorpayKeyId: '', razorpayKeySecret: '',
         isCodEnabled: true, isRazorpayEnabled: true,
         topBannerText: 'Authentic Godavari • Global Shipping Available',
@@ -41,6 +41,7 @@ export async function GET() {
         bundleDescription: "Choose any 3 of our premium pickles (150g jars) and get them delivered in a handcrafted luxury wooden gift box.",
         welcomePopupEnabled: false,
         welcomePopupImage: '',
+        defaultProductImage: '',
         welcomePopupTitle: '',
         welcomePopupText: ''
       });
@@ -55,11 +56,11 @@ export async function POST(req: Request) {
   try {
     await dbConnect();
     const body = await req.json();
-    
+
     // Efficiently update existing settings or create new ones
     const settings = await Settings.findOneAndUpdate(
-      {}, 
-      { $set: body }, 
+      {},
+      { $set: body },
       { upsert: true, new: true, runValidators: true }
     );
 

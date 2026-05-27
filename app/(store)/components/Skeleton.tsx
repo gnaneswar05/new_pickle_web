@@ -94,7 +94,7 @@ export function ProductDetailSkeleton() {
         <Skeleton width="180px" height="20px" borderRadius="4px" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '80px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '80px' }}>
         {/* Left: Image Skeleton */}
         <div>
           <div style={{ position: 'relative', borderRadius: '40px', overflow: 'hidden', backgroundColor: 'var(--surface)', border: '8px solid var(--surface)', boxShadow: 'var(--shadow)', aspectRatio: '1/1' }}>
@@ -208,7 +208,7 @@ export function DashboardSkeleton() {
         <Skeleton width="220px" height="20px" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
         {/* Wallet Card Skeleton */}
         <div style={{ background: '#0d0707', borderRadius: '40px', padding: '40px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <Skeleton width="56px" height="56px" borderRadius="18px" />
@@ -247,7 +247,7 @@ export function TrackSkeleton() {
         <Skeleton width="120px" height="45px" borderRadius="18px" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '50px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '50px' }}>
         {/* Timeline Skeleton */}
         <div style={{ background: 'var(--surface)', padding: '50px 40px', borderRadius: '40px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '30px' }}>
           <Skeleton width="180px" height="28px" style={{ marginBottom: '10px' }} />
@@ -291,7 +291,7 @@ export function CheckoutSkeleton() {
         <Skeleton width="250px" height="20px" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '50px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '50px' }}>
         {/* Left Form Skeleton */}
         <div style={{ background: 'var(--surface)', padding: '50px', borderRadius: '48px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '30px' }}>
           <Skeleton width="180px" height="30px" />

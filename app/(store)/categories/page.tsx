@@ -31,7 +31,7 @@ export default function CategoriesPage() {
         Discover our authentic, handcrafted Godavari delicacies.
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '50px', justifyItems: 'center' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 'clamp(20px, 4vw, 50px)', justifyItems: 'center' }}>
         {showSkeletons ? (
           Array.from({ length: 6 }).map((_, idx) => (
             <CategoryItemSkeleton key={idx} />
@@ -65,6 +65,10 @@ export default function CategoriesPage() {
                 src={cat.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'} 
                 alt={cat.name} 
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800';
+                }}
               />
             </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', margin: 0, fontFamily: 'Fraunces, serif', textAlign: 'center' }}>{cat.name}</h2>

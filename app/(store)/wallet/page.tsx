@@ -50,7 +50,7 @@ export default function WalletPage() {
           </Link>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px', alignItems: 'flex-start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(20px, 4vw, 40px)', alignItems: 'flex-start' }}>
 
           {/* Balance Card */}
           <div style={{ position: 'sticky', top: '100px' }}>

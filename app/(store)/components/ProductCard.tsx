@@ -9,6 +9,7 @@ import { ShoppingBasket, Star, Check, Heart, Flame } from 'lucide-react';
 
 export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?: string }) {
   const [selectedWeight, setSelectedWeight] = useState('250g');
+  const [isHovered, setIsHovered] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
   const items = useCartStore((state) => state.items);
   const toggleWishlist = useWishlistStore((state) => state.toggleItem);
@@ -74,13 +75,37 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
   const weights = ['250g', '500g', '1kg'];
 
   return (
-    <div style={{ background: 'var(--surface)', borderRadius: '32px', padding: '16px', boxShadow: 'var(--shadow)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', transition: 'all 0.3s' }}>
+    <div 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{ 
+        background: 'var(--surface)', 
+        borderRadius: '32px', 
+        padding: '16px', 
+        boxShadow: isHovered ? 'var(--shadow-hover)' : 'var(--shadow)', 
+        border: `1px solid ${isHovered ? 'var(--primary)' : 'var(--border)'}`, 
+        display: 'flex', 
+        flexDirection: 'column', 
+        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        transform: isHovered ? 'translateY(-8px)' : 'translateY(0)',
+      }}
+    >
       <Link href={`/product/${p._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', backgroundColor: 'var(--border)', marginBottom: '20px', aspectRatio: '1/1' }}>
+        <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', backgroundColor: '#ffffff', marginBottom: '20px', aspectRatio: '1/1' }}>
           <img 
             src={p.image || defaultImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'} 
             alt={p.name} 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ 
+              width: '100%', 
+              height: '100%', 
+              objectFit: 'cover',
+              transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+              transform: isHovered ? 'scale(1.05)' : 'scale(1)'
+            }}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800';
+            }}
           />
           {p.category && (
             <div style={{ position: 'absolute', top: '12px', left: '12px', background: 'var(--surface)', padding: '6px 12px', borderRadius: '99px', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.05em', border: '1px solid var(--border)' }}>
@@ -126,7 +151,19 @@ export default function ProductCard({ p, defaultImage }: { p: any, defaultImage?
             />
           </button>
         </div>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '8px', fontFamily: 'Fraunces, serif' }}>{p.name}</h3>
+        <h3 style={{ 
+          fontSize: '1.25rem', 
+          fontWeight: '800', 
+          color: 'var(--text-main)', 
+          marginBottom: '8px', 
+          fontFamily: 'Fraunces, serif',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          minHeight: '2.8rem',
+          lineHeight: '1.3'
+        }}>{p.name}</h3>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '16px' }}>
           {[1, 2, 3, 4, 5].map((s) => <Star key={s} size={12} fill="#f59e0b" color="#f59e0b" />)}
           <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', marginLeft: '4px' }}>({p.rating || 4.9}/5)</span>

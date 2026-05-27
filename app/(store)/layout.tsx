@@ -103,14 +103,22 @@ export default function StoreLayout({
         setSettings(data);
         if (data.topBannerText) setTopBannerText(data.topBannerText);
 
-        // Welcome Popup: show once per session, keyed by title so new content shows again
+        // Welcome Popup logic — show once per day using localStorage timestamp
         if (data.welcomePopupEnabled) {
-          const popupKey = `welcomeShown_${(data.welcomePopupTitle || 'default').replace(/\s+/g, '_')}`;
-          if (!sessionStorage.getItem(popupKey)) {
-            // Small delay so page renders first
+          // Clear any old stale sessionStorage keys from earlier implementation
+          Object.keys(sessionStorage).forEach(k => {
+            if (k.startsWith('welcomeShown')) sessionStorage.removeItem(k);
+          });
+
+          const popupKey = 'kanvi_welcome_popup_last_shown';
+          const lastShown = localStorage.getItem(popupKey);
+          const now = Date.now();
+          const ONE_DAY = 24 * 60 * 60 * 1000;
+
+          if (!lastShown || now - parseInt(lastShown) > ONE_DAY) {
             setTimeout(() => {
               setShowWelcomePopup(true);
-              sessionStorage.setItem(popupKey, 'true');
+              localStorage.setItem(popupKey, String(now));
             }, 800);
           }
         }
@@ -175,6 +183,18 @@ export default function StoreLayout({
     actionBtn: { position: 'relative' as const, width: '54px', height: '54px', background: 'var(--secondary)', color: 'var(--primary)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', border: '1px solid var(--border)', cursor: 'pointer' },
     searchInput: { width: '100%', background: 'var(--border)', border: '2px solid transparent', padding: '0.7rem 1rem 0.7rem 2.5rem', borderRadius: '16px', fontSize: '0.9rem', fontWeight: '600', outline: 'none', transition: 'all 0.2s', color: 'var(--text-main)', fontFamily: 'Fraunces, serif' },
     badge: { position: 'absolute' as const, top: '-6px', right: '-6px', background: 'var(--primary)', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '900', border: '3px solid var(--surface)', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }
+  };
+
+  const getActionBtnStyle = () => {
+    const isHero = pathname === '/' && !isScrolled;
+    return {
+      ...styles.actionBtn,
+      background: isHero ? 'rgba(255, 255, 255, 0.12)' : 'var(--secondary)',
+      color: isHero ? 'white' : 'var(--primary)',
+      border: isHero ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid var(--border)',
+      backdropFilter: isHero ? 'blur(10px)' : 'none',
+      WebkitBackdropFilter: isHero ? 'blur(10px)' : 'none',
+    };
   };
 
   return (
@@ -296,23 +316,36 @@ export default function StoreLayout({
           100% { transform: translate3d(-100%, 0, 0); }
         }
       `}</style>
-      {/* HEADER WRAPPER – sticky always; transparent on hero, frosted on scroll */}
+      {/* TOP BANNER – static at the very top on all internal pages to prevent scroll layout loops */}
+      {pathname !== '/' && (
+        <div style={styles.topBanner}>
+          <span>{topBannerText}</span>
+        </div>
+      )}
+
+      {/* HEADER WRAPPER – fixed on homepage hero, sticky on other pages */}
       <div style={
-        pathname === '/' && !isScrolled
+        pathname === '/'
           ? { position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200 }
           : { position: 'sticky', top: 0, zIndex: 200 }
       }>
-        {/* TOP BANNER – hide when scrolled for more screen space */}
-        {!isScrolled && (
-          <div style={styles.topBanner}>
+        {/* TOP BANNER – rendered with smooth transitions on homepage */}
+        {pathname === '/' && (
+          <div style={{
+            ...styles.topBanner,
+            maxHeight: isScrolled ? '0px' : '80px',
+            padding: isScrolled ? '0px' : '0.8rem 0',
+            opacity: isScrolled ? 0 : 1,
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            overflow: 'hidden'
+          }}>
             <span>{topBannerText}</span>
           </div>
         )}
 
         <header
-          className={`header-bar${
-            pathname === '/' && !isScrolled ? ' header-hero' : ' scrolled'
-          }`}
+          className={`header-bar${pathname === '/' && !isScrolled ? ' header-hero' : ' scrolled'
+            }`}
           style={{
             ...styles.header,
             background: pathname === '/' && !isScrolled ? 'transparent' : undefined,
@@ -323,232 +356,218 @@ export default function StoreLayout({
         >
           <div style={{ ...styles.container, padding: isScrolled ? '0.8rem 20px' : '1.5rem 20px' }}>
             <Link href="/" style={styles.logo}>
-            {logoUrl ? (
-              <img 
-                src={logoUrl} 
-                alt="Kanvi Pickles" 
-                style={{ 
-                  height: isScrolled ? '55px' : '85px', 
-                  objectFit: 'contain',
-                  transition: 'height 0.3s ease'
-                }} 
-              />
-            ) : (
-              <div style={styles.logoBox}>K</div>
-            )}
-            {!logoUrl && (
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ 
-                  fontSize: isScrolled ? '1.4rem' : '1.8rem', 
-                  fontWeight: '900', 
-                  color: pathname === '/' && !isScrolled ? 'white' : 'var(--text-main)', 
-                  lineHeight: 1, 
-                  fontFamily: 'Playfair Display, Fraunces, Georgia, serif',
-                  transition: 'all 0.3s ease'
-                }}>Kanvi</span>
-                <span style={{ 
-                  fontSize: '10px', 
-                  fontWeight: '700', 
-                  color: pathname === '/' && !isScrolled ? 'rgba(255,255,255,0.75)' : 'var(--primary)', 
-                  textTransform: 'uppercase', 
-                  letterSpacing: '0.18em', 
-                  marginTop: '4px',
-                  fontFamily: 'Lato, sans-serif',
-                  transition: 'all 0.3s ease'
-                }}>The Pickle Hub</span>
-              </div>
-            )}
-          </Link>
-
-          <nav className="hidden lg:flex" style={styles.nav}>
-            <Link href="/" className={`nav-link ${pathname === '/' ? 'active' : ''}`}>Home</Link>
-            <Link href="/products" className={`nav-link ${pathname === '/products' || pathname?.startsWith('/product/') ? 'active' : ''}`}>Pickles</Link>
-            <Link href="/categories" className={`nav-link ${pathname === '/categories' ? 'active' : ''}`}>Categories</Link>
-            <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`}>Our Story</Link>
-            <a href="/contact" onClick={(e) => { e.preventDefault(); setIsContactOpen(true); }} className={`nav-link ${pathname === '/contact' ? 'active' : ''}`}>Contact Us</a>
-          </nav>
-
-          <nav className="hidden lg:flex" style={{ alignItems: 'center', gap: '1.25rem' }}>
-            {/* Search Trigger */}
-            <button 
-              onClick={() => setIsSearchOpen(!isSearchOpen)} 
-              style={{
-                ...styles.actionBtn,
-                background: pathname === '/' && !isScrolled ? 'rgba(255,255,255,0.12)' : 'var(--secondary)',
-                color: pathname === '/' && !isScrolled ? 'white' : 'var(--primary)',
-                border: pathname === '/' && !isScrolled ? '1px solid rgba(255,255,255,0.2)' : '1px solid var(--border)',
-                backdropFilter: pathname === '/' && !isScrolled ? 'blur(10px)' : 'none',
-              }} 
-              title="Search Pickles"
-            >
-              <Search size={22} />
-            </button>
-
-            {mounted && (
-              <button onClick={toggleTheme} style={styles.actionBtn} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
-                {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
-              </button>
-            )}
-
-            {mounted && user ? (
-              <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)', background: 'var(--surface)', padding: '0.7rem 1.4rem', borderRadius: '14px', border: '1px solid var(--border)', textDecoration: 'none', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
-                <UserIcon size={16} color="var(--primary)" />
-                <span>Account</span>
-              </Link>
-            ) : (
-              <Link href="/login" style={{ textDecoration: 'none', color: 'white', background: 'var(--primary)', padding: '0.7rem 1.4rem', borderRadius: '14px', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
-                Sign In
-              </Link>
-            )}
-
-            <Link href="/wishlist" style={styles.actionBtn}>
-              <Heart size={22} />
-              {mounted && wishlistCount > 0 && (
-                <span style={styles.badge}>{wishlistCount}</span>
+              {logoUrl ? (
+                <img src={logoUrl} alt="Kanvi Pickles" style={{ height: '42px', objectFit: 'contain' }} />
+              ) : (
+                <div style={{ ...styles.logoBox, width: '38px', height: '38px', fontSize: '1.25rem' }}>K</div>
+              )}
+              {!logoUrl && (
+                <span style={{ fontSize: '1.5rem', fontWeight: '900', color: pathname === '/' && !isScrolled ? 'white' : 'var(--text-main)', fontFamily: 'var(--font-display)' }}>Kanvi</span>
               )}
             </Link>
 
-            <Link href="/cart" style={styles.actionBtn}>
-              <ShoppingCart size={22} />
-              {mounted && itemCount > 0 && (
-                <span style={styles.badge}>{itemCount}</span>
-              )}
-            </Link>
-          </nav>
+            <nav className="hidden lg:flex" style={styles.nav}>
+              <Link href="/" className={`nav-link ${pathname === '/' ? 'active' : ''}`}>Home</Link>
 
-          {/* Mobile Right Nav */}
-          <div className="flex lg:!hidden" style={{ alignItems: 'center', gap: '0.75rem' }}>
-            <button onClick={() => setIsSearchOpen(!isSearchOpen)} style={styles.actionBtn} title="Search Pickles">
-              <Search size={22} />
-            </button>
+              <Link href="/categories" className={`nav-link ${pathname === '/categories' ? 'active' : ''}`}>Categories</Link>
+              <Link href="/products" className={`nav-link ${pathname === '/products' || pathname?.startsWith('/product/') ? 'active' : ''}`}>Pickles</Link>
+              <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`}>Our Story</Link>
+              <a href="/contact" onClick={(e) => { e.preventDefault(); setIsContactOpen(true); }} className={`nav-link ${pathname === '/contact' ? 'active' : ''}`}>Contact Us</a>
+            </nav>
 
-            {mounted && (
-              <button onClick={toggleTheme} style={styles.actionBtn} title="Toggle Theme">
-                {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
-              </button>
-            )}
-
-            <Link href="/wishlist" style={styles.actionBtn}>
-              <Heart size={22} />
-              {mounted && wishlistCount > 0 && (
-                <span style={styles.badge}>{wishlistCount}</span>
-              )}
-            </Link>
-
-            <Link href="/cart" style={styles.actionBtn}>
-              <ShoppingCart size={22} />
-              {mounted && itemCount > 0 && (
-                <span style={styles.badge}>{itemCount}</span>
-              )}
-            </Link>
-            
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)} 
-              style={{ 
-                width: '54px', height: '54px', background: 'var(--surface)', color: 'var(--text-main)', 
-                borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                border: '1px solid var(--border)', cursor: 'pointer' 
-              }}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Sliding Search Drawer Panel */}
-        <div style={{
-          maxHeight: isSearchOpen ? '600px' : '0px',
-          opacity: isSearchOpen ? 1 : 0,
-          transform: isSearchOpen ? 'translateY(0)' : 'translateY(-10px)',
-          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-          overflow: 'hidden',
-          background: 'var(--surface)',
-          borderBottom: isSearchOpen ? '1px solid var(--border)' : 'none',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-          position: 'relative',
-          zIndex: 99
-        }} ref={searchRef}>
-          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '30px 20px 40px 20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Search Our Kitchen</span>
-              <button 
-                onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
+            <nav className="hidden lg:flex" style={{ alignItems: 'center', gap: '1.25rem' }}>
+              {/* Search Trigger */}
+              <button
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                style={getActionBtnStyle()}
+                title="Search Pickles"
               >
-                <X size={20} />
+                <Search size={22} />
+              </button>
+
+              {mounted && (
+                <button onClick={toggleTheme} style={getActionBtnStyle()} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
+                  {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
+                </button>
+              )}
+
+              {mounted && user ? (
+                <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)', background: 'var(--surface)', padding: '0.7rem 1.4rem', borderRadius: '14px', border: '1px solid var(--border)', textDecoration: 'none', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
+                  <UserIcon size={16} color="var(--primary)" />
+                  <span>Account</span>
+                </Link>
+              ) : (
+                <Link href="/login" style={{ textDecoration: 'none', color: 'white', background: 'var(--primary)', padding: '0.7rem 1.4rem', borderRadius: '14px', fontWeight: '800', fontSize: '0.85rem', fontFamily: 'Fraunces, serif' }}>
+                  Sign In
+                </Link>
+              )}
+
+              <Link href="/wishlist" style={getActionBtnStyle()}>
+                <Heart size={22} />
+                {mounted && wishlistCount > 0 && (
+                  <span style={styles.badge}>{wishlistCount}</span>
+                )}
+              </Link>
+
+              <Link href="/cart" style={getActionBtnStyle()}>
+                <ShoppingCart size={22} />
+                {mounted && itemCount > 0 && (
+                  <span style={styles.badge}>{itemCount}</span>
+                )}
+              </Link>
+            </nav>
+
+            {/* Mobile Right Nav */}
+            <div className="flex lg:!hidden" style={{ alignItems: 'center', gap: '0.75rem' }}>
+              <button onClick={() => setIsSearchOpen(!isSearchOpen)} style={getActionBtnStyle()} title="Search Pickles">
+                <Search size={22} />
+              </button>
+
+              {mounted && (
+                <button onClick={toggleTheme} style={getActionBtnStyle()} title="Toggle Theme">
+                  {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
+                </button>
+              )}
+
+              <Link href="/wishlist" style={getActionBtnStyle()}>
+                <Heart size={22} />
+                {mounted && wishlistCount > 0 && (
+                  <span style={styles.badge}>{wishlistCount}</span>
+                )}
+              </Link>
+
+              <Link href="/cart" style={getActionBtnStyle()}>
+                <ShoppingCart size={22} />
+                {mounted && itemCount > 0 && (
+                  <span style={styles.badge}>{itemCount}</span>
+                )}
+              </Link>
+
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                style={{
+                  width: '54px',
+                  height: '54px',
+                  background: (pathname === '/' && !isScrolled) ? 'rgba(255,255,255,0.12)' : 'var(--surface)',
+                  color: (pathname === '/' && !isScrolled) ? 'white' : 'var(--text-main)',
+                  borderRadius: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: (pathname === '/' && !isScrolled) ? '1px solid rgba(255,255,255,0.2)' : '1px solid var(--border)',
+                  cursor: 'pointer',
+                  backdropFilter: (pathname === '/' && !isScrolled) ? 'blur(10px)' : 'none',
+                  WebkitBackdropFilter: (pathname === '/' && !isScrolled) ? 'blur(10px)' : 'none',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
-
-            <form onSubmit={handleSearchSubmit} style={{ position: 'relative' }}>
-              <Search style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={24} />
-              <input
-                type="text"
-                placeholder="What are you craving today? (e.g. Mango, Gongura, Garlic...)"
-                style={{
-                  width: '100%',
-                  background: 'var(--background)',
-                  border: '2px solid var(--border)',
-                  padding: '1.25rem 1.5rem 1.25rem 4rem',
-                  borderRadius: '20px',
-                  fontSize: '1.2rem',
-                  fontWeight: '600',
-                  outline: 'none',
-                  transition: 'all 0.2s',
-                  color: 'var(--text-main)',
-                  fontFamily: 'Fraunces, serif'
-                }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
-              />
-              {isSearching && (
-                <Loader2 style={{ position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', animation: 'spin 1s linear infinite' }} size={22} />
-              )}
-            </form>
-
-            {/* Results in Drawer */}
-            {showResults && searchQuery.length >= 2 && (
-              <div style={{ marginTop: '25px', background: 'var(--background)', borderRadius: '24px', border: '1px solid var(--border)', overflow: 'hidden' }}>
-                {searchResults.length > 0 ? (
-                  <div>
-                    <div style={{ padding: '15px 20px', background: 'var(--border)', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Top Matches</div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px', padding: '20px' }}>
-                      {searchResults.map((p) => (
-                        <Link
-                          key={p._id}
-                          href={`/product/${p._id}`}
-                          onClick={() => { setShowResults(false); setIsSearchOpen(false); setSearchQuery(''); }}
-                          style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px', textDecoration: 'none', borderRadius: '16px', background: 'var(--surface)', border: '1px solid var(--border)', transition: 'all 0.2s' }}
-                          className="result-item"
-                        >
-                          <div style={{ width: '48px', height: '48px', background: 'var(--border)', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
-                            <img src={p.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          </div>
-                          <div style={{ minWidth: 0 }}>
-                            <div style={{ fontWeight: '750', color: 'var(--text-main)', fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</div>
-                            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '800' }}>₹{p.price}</div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                    <Link
-                      href={`/products?search=${searchQuery}`}
-                      onClick={() => { setShowResults(false); setIsSearchOpen(false); }}
-                      style={{ display: 'block', padding: '15px', textAlign: 'center', fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)', textDecoration: 'none', background: 'var(--secondary)', borderTop: '1px solid var(--border)' }}
-                    >
-                      View All Search Results →
-                    </Link>
-                  </div>
-                ) : (
-                  <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: '600' }}>
-                    No premium pickles found for "{searchQuery}"
-                  </div>
-                )}
-              </div>
-            )}
           </div>
-        </div>
-      </header>
+
+          {/* Sliding Search Drawer Panel */}
+          <div style={{
+            maxHeight: isSearchOpen ? '600px' : '0px',
+            opacity: isSearchOpen ? 1 : 0,
+            transform: isSearchOpen ? 'translateY(0)' : 'translateY(-10px)',
+            transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            overflow: 'hidden',
+            background: 'var(--surface)',
+            borderBottom: isSearchOpen ? '1px solid var(--border)' : 'none',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+            position: 'relative',
+            zIndex: 99
+          }} ref={searchRef}>
+            <div style={{ maxWidth: '800px', margin: '0 auto', padding: '30px 20px 40px 20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Search Our Kitchen</span>
+                <button
+                  onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
+                  style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <form onSubmit={handleSearchSubmit} style={{ position: 'relative' }}>
+                <Search style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={24} />
+                <input
+                  type="text"
+                  placeholder="What are you craving today? (e.g. Mango, Gongura, Garlic...)"
+                  style={{
+                    width: '100%',
+                    background: 'var(--background)',
+                    border: '2px solid var(--border)',
+                    padding: '1.25rem 1.5rem 1.25rem 4rem',
+                    borderRadius: '20px',
+                    fontSize: '1.2rem',
+                    fontWeight: '600',
+                    outline: 'none',
+                    transition: 'all 0.2s',
+                    color: 'var(--text-main)',
+                    fontFamily: 'Fraunces, serif'
+                  }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
+                />
+                {isSearching && (
+                  <Loader2 style={{ position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', animation: 'spin 1s linear infinite' }} size={22} />
+                )}
+              </form>
+
+              {/* Results in Drawer */}
+              {showResults && searchQuery.length >= 2 && (
+                <div style={{ marginTop: '25px', background: 'var(--background)', borderRadius: '24px', border: '1px solid var(--border)', overflow: 'hidden' }}>
+                  {searchResults.length > 0 ? (
+                    <div>
+                      <div style={{ padding: '15px 20px', background: 'var(--border)', fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Top Matches</div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px', padding: '20px' }}>
+                        {searchResults.map((p) => (
+                          <Link
+                            key={p._id}
+                            href={`/product/${p._id}`}
+                            onClick={() => { setShowResults(false); setIsSearchOpen(false); setSearchQuery(''); }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px', textDecoration: 'none', borderRadius: '16px', background: 'var(--surface)', border: '1px solid var(--border)', transition: 'all 0.2s' }}
+                            className="result-item"
+                          >
+                            <div style={{ width: '48px', height: '48px', background: 'var(--border)', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
+                              <img 
+                                src={p.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} 
+                                alt={p.name} 
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.src = 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000';
+                                }}
+                              />
+                            </div>
+                            <div style={{ minWidth: 0 }}>
+                              <div style={{ fontWeight: '750', color: 'var(--text-main)', fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</div>
+                              <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '800' }}>₹{p.price}</div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                      <Link
+                        href={`/products?search=${searchQuery}`}
+                        onClick={() => { setShowResults(false); setIsSearchOpen(false); }}
+                        style={{ display: 'block', padding: '15px', textAlign: 'center', fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)', textDecoration: 'none', background: 'var(--secondary)', borderTop: '1px solid var(--border)' }}
+                      >
+                        View All Search Results →
+                      </Link>
+                    </div>
+                  ) : (
+                    <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: '600' }}>
+                      No premium pickles found for "{searchQuery}"
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
       </div> {/* End Header Wrapper */}
 
       <main style={{ flex: 1 }}>
@@ -569,40 +588,40 @@ export default function StoreLayout({
               )}
             </div>
             <p style={{ color: 'inherit', opacity: 0.8, fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>Bringing the authentic taste of Godavari home. Handcrafted recipes passed down through generations.</p>
-            
+
             {/* Social Media Links */}
             <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
               {(settings?.instagramUrl || 'https://instagram.com/kanvipickles') && (
-                <a 
-                  href={settings?.instagramUrl || 'https://instagram.com/kanvipickles'} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  style={{ 
-                    width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', 
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', transition: 'all 0.2s' 
+                <a
+                  href={settings?.instagramUrl || 'https://instagram.com/kanvipickles'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', transition: 'all 0.2s'
                   }}
                   onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
                   onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" style={{ width: '18px', height: '18px' }}>
-                    <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9s-58-34.5-93.9-36.2c-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.8 9.9 67.6 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2s34.5-58 36.2-93.9c2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                    <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9s-58-34.5-93.9-36.2c-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.8 9.9 67.6 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2s34.5-58 36.2-93.9c2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
                   </svg>
                 </a>
               )}
               {(settings?.whatsappUrl || 'https://wa.me/918247812474') && (
-                <a 
-                  href={settings?.whatsappUrl || 'https://wa.me/918247812474'} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  style={{ 
-                    width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', 
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', transition: 'all 0.2s' 
+                <a
+                  href={settings?.whatsappUrl || 'https://wa.me/918247812474'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'inherit', transition: 'all 0.2s'
                   }}
                   onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
                   onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" style={{ width: '18px', height: '18px' }}>
-                    <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+                    <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
                   </svg>
                 </a>
               )}
@@ -652,29 +671,29 @@ export default function StoreLayout({
 
       {/* Mobile Drawer Overlay */}
       {isMenuOpen && (
-        <div 
+        <div
           onClick={() => setIsMenuOpen(false)}
-          style={{ 
-            position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', 
-            backdropFilter: 'blur(8px)', zIndex: 999 
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)',
+            backdropFilter: 'blur(8px)', zIndex: 999
           }}
         />
       )}
 
       {/* Mobile Navigation Drawer */}
-      <div 
-        style={{ 
-          position: 'fixed', top: 0, right: 0, bottom: 0, width: '300px', 
-          background: 'var(--surface)', zIndex: 1000, boxShadow: '-10px 0 30px rgba(0,0,0,0.1)', 
-          transform: isMenuOpen ? 'translateX(0)' : 'translateX(100%)', 
+      <div
+        style={{
+          position: 'fixed', top: 0, right: 0, bottom: 0, width: '300px',
+          background: 'var(--surface)', zIndex: 1000, boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
+          transform: isMenuOpen ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           display: 'flex', flexDirection: 'column', padding: '40px 30px', gap: '30px'
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-main)', fontFamily: 'Fraunces, serif' }}>Menu</span>
-          <button 
-            onClick={() => setIsMenuOpen(false)} 
+          <button
+            onClick={() => setIsMenuOpen(false)}
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
           >
             <X size={24} />
@@ -706,24 +725,24 @@ export default function StoreLayout({
 
         <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border)', paddingTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
           {mounted && user ? (
-            <Link 
-              href="/dashboard" 
-              onClick={() => setIsMenuOpen(false)} 
-              style={{ 
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', 
-                color: 'var(--text-main)', background: 'var(--surface)', padding: '16px', borderRadius: '16px', 
-                border: '1px solid var(--border)', textDecoration: 'none', fontWeight: '800', fontFamily: 'Fraunces, serif' 
+            <Link
+              href="/dashboard"
+              onClick={() => setIsMenuOpen(false)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                color: 'var(--text-main)', background: 'var(--surface)', padding: '16px', borderRadius: '16px',
+                border: '1px solid var(--border)', textDecoration: 'none', fontWeight: '800', fontFamily: 'Fraunces, serif'
               }}
             >
               <UserIcon size={18} color="var(--primary)" />
               <span>My Account</span>
             </Link>
           ) : (
-            <Link 
-              href="/login" 
-              onClick={() => setIsMenuOpen(false)} 
-              style={{ 
-                textDecoration: 'none', color: 'white', background: 'var(--primary)', padding: '16px', 
+            <Link
+              href="/login"
+              onClick={() => setIsMenuOpen(false)}
+              style={{
+                textDecoration: 'none', color: 'white', background: 'var(--primary)', padding: '16px',
                 borderRadius: '16px', fontWeight: '800', textAlign: 'center', fontFamily: 'Fraunces, serif',
                 display: 'block'
               }}
@@ -736,52 +755,52 @@ export default function StoreLayout({
 
       {/* Contact Us Popup Modal */}
       {isContactOpen && (
-        <div 
-          style={{ 
-            position: 'fixed', 
-            inset: 0, 
-            background: 'rgba(10, 5, 5, 0.6)', 
-            backdropFilter: 'blur(12px)', 
-            zIndex: 1500, 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            padding: '20px' 
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(10, 5, 5, 0.6)',
+            backdropFilter: 'blur(12px)',
+            zIndex: 1500,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
           }}
           onClick={() => setIsContactOpen(false)}
         >
-          <div 
+          <div
             className="contact-scroll"
-            style={{ 
-              background: 'var(--surface)', 
-              border: '1px solid var(--border)', 
-              borderRadius: '32px', 
-              padding: '40px', 
-              width: '100%', 
-              maxWidth: '650px', 
-              boxShadow: '0 30px 60px -15px rgba(0,0,0,0.5)', 
-              position: 'relative', 
-              maxHeight: '90vh', 
+            style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '32px',
+              padding: '40px',
+              width: '100%',
+              maxWidth: '650px',
+              boxShadow: '0 30px 60px -15px rgba(0,0,0,0.5)',
+              position: 'relative',
+              maxHeight: '90vh',
               overflowY: 'auto',
               fontFamily: 'Fraunces, serif'
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button 
-              onClick={() => setIsContactOpen(false)} 
-              style={{ 
-                position: 'absolute', 
-                top: '25px', 
-                right: '25px', 
-                background: 'var(--border)', 
-                border: 'none', 
-                color: 'var(--text-main)', 
-                width: '40px', 
-                height: '40px', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
+            <button
+              onClick={() => setIsContactOpen(false)}
+              style={{
+                position: 'absolute',
+                top: '25px',
+                right: '25px',
+                background: 'var(--border)',
+                border: 'none',
+                color: 'var(--text-main)',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 cursor: 'pointer',
                 transition: 'all 0.2s'
               }}
@@ -807,23 +826,23 @@ export default function StoreLayout({
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Name</label>
-                  <input 
-                    required 
-                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }} 
-                    value={contactForm.name} 
-                    onChange={e => setContactForm({ ...contactForm, name: e.target.value })} 
-                    placeholder="Full Name" 
+                  <input
+                    required
+                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }}
+                    value={contactForm.name}
+                    onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
+                    placeholder="Full Name"
                   />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Email</label>
-                  <input 
-                    required 
-                    type="email" 
-                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }} 
-                    value={contactForm.email} 
-                    onChange={e => setContactForm({ ...contactForm, email: e.target.value })} 
-                    placeholder="email@example.com" 
+                  <input
+                    required
+                    type="email"
+                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }}
+                    value={contactForm.email}
+                    onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
+                    placeholder="email@example.com"
                   />
                 </div>
               </div>
@@ -831,34 +850,34 @@ export default function StoreLayout({
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Phone</label>
-                  <input 
-                    required 
-                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }} 
-                    value={contactForm.phone} 
-                    onChange={e => setContactForm({ ...contactForm, phone: e.target.value })} 
-                    placeholder="Mobile Number" 
+                  <input
+                    required
+                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }}
+                    value={contactForm.phone}
+                    onChange={e => setContactForm({ ...contactForm, phone: e.target.value })}
+                    placeholder="Mobile Number"
                   />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Subject</label>
-                  <input 
-                    required 
-                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }} 
-                    value={contactForm.subject} 
-                    onChange={e => setContactForm({ ...contactForm, subject: e.target.value })} 
-                    placeholder="How can we help?" 
+                  <input
+                    required
+                    style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem' }}
+                    value={contactForm.subject}
+                    onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
+                    placeholder="How can we help?"
                   />
                 </div>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginLeft: '4px' }}>Message</label>
-                <textarea 
-                  required 
-                  style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem', minHeight: '90px', resize: 'none' }} 
-                  value={contactForm.message} 
-                  onChange={e => setContactForm({ ...contactForm, message: e.target.value })} 
-                  placeholder="Your message..." 
+                <textarea
+                  required
+                  style={{ padding: '14px 18px', borderRadius: '14px', border: '2px solid var(--border)', background: 'var(--background)', color: 'var(--text-main)', outline: 'none', fontWeight: '600', fontSize: '0.95rem', minHeight: '90px', resize: 'none' }}
+                  value={contactForm.message}
+                  onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
+                  placeholder="Your message..."
                 />
               </div>
 
@@ -889,23 +908,23 @@ export default function StoreLayout({
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '15px', marginTop: '10px' }}>
-                <button 
-                  disabled={contactLoading} 
+                <button
+                  disabled={contactLoading}
                   type="submit"
-                  style={{ 
-                    background: 'var(--primary)', 
-                    color: 'white', 
-                    padding: '16px', 
-                    borderRadius: '16px', 
-                    border: 'none', 
-                    fontWeight: '900', 
-                    fontSize: '1rem', 
-                    cursor: contactLoading ? 'not-allowed' : 'pointer', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    gap: '10px', 
-                    boxShadow: '0 10px 20px -5px rgba(220, 38, 38, 0.3)', 
+                  style={{
+                    background: 'var(--primary)',
+                    color: 'white',
+                    padding: '16px',
+                    borderRadius: '16px',
+                    border: 'none',
+                    fontWeight: '900',
+                    fontSize: '1rem',
+                    cursor: contactLoading ? 'not-allowed' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    boxShadow: '0 10px 20px -5px rgba(220, 38, 38, 0.3)',
                     opacity: contactLoading ? 0.7 : 1,
                     transition: 'all 0.2s'
                   }}
@@ -922,25 +941,25 @@ export default function StoreLayout({
 
       {/* Welcome Popup Modal */}
       {showWelcomePopup && settings && (
-        <div 
-          style={{ 
-            position: 'fixed', inset: 0, background: 'rgba(10, 5, 5, 0.7)', backdropFilter: 'blur(8px)', 
-            zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' 
+        <div
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(10, 5, 5, 0.7)', backdropFilter: 'blur(8px)',
+            zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
           }}
           onClick={() => setShowWelcomePopup(false)}
         >
-          <div 
-            style={{ 
-              background: 'var(--surface)', borderRadius: '32px', overflow: 'hidden', width: '100%', maxWidth: '450px', 
+          <div
+            style={{
+              background: 'var(--surface)', borderRadius: '32px', overflow: 'hidden', width: '100%', maxWidth: '450px',
               boxShadow: '0 30px 60px -15px rgba(0,0,0,0.5)', position: 'relative', display: 'flex', flexDirection: 'column'
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button 
-              onClick={() => setShowWelcomePopup(false)} 
-              style={{ 
-                position: 'absolute', top: '20px', right: '20px', background: 'rgba(0,0,0,0.4)', border: 'none', 
-                color: 'white', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', 
+            <button
+              onClick={() => setShowWelcomePopup(false)}
+              style={{
+                position: 'absolute', top: '20px', right: '20px', background: 'rgba(0,0,0,0.4)', border: 'none',
+                color: 'white', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center',
                 justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s', zIndex: 10, backdropFilter: 'blur(4px)'
               }}
               onMouseOver={e => e.currentTarget.style.background = 'var(--primary)'}
@@ -954,7 +973,7 @@ export default function StoreLayout({
                 <img src={settings.welcomePopupImage} alt="Welcome" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             )}
-            
+
             <div style={{ padding: '40px 30px', textAlign: 'center', fontFamily: 'Fraunces, serif' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', marginBottom: '15px' }}>
                 <Sparkles size={20} />
@@ -965,11 +984,11 @@ export default function StoreLayout({
               <p style={{ color: 'var(--text-muted)', fontSize: '1rem', fontWeight: '500', margin: '0 0 30px 0', lineHeight: 1.6 }}>
                 {settings.welcomePopupText || 'Discover authentic Godavari pickles.'}
               </p>
-              
-              <button 
+
+              <button
                 onClick={() => setShowWelcomePopup(false)}
-                style={{ 
-                  background: 'var(--primary)', color: 'white', padding: '16px 32px', borderRadius: '16px', 
+                style={{
+                  background: 'var(--primary)', color: 'white', padding: '16px 32px', borderRadius: '16px',
                   border: 'none', fontWeight: '900', fontSize: '1rem', cursor: 'pointer', width: '100%',
                   boxShadow: '0 10px 20px -5px rgba(220, 38, 38, 0.3)', transition: 'all 0.2s'
                 }}

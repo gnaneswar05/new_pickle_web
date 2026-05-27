@@ -50,7 +50,7 @@ export default function AboutPage() {
 
       {/* Story & Mission Section */}
       <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 20px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '80px', alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(20px, 5vw, 80px)', alignItems: 'center' }}>
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--secondary)', color: 'var(--primary)', padding: '8px 16px', borderRadius: '12px', fontWeight: '800', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '25px' }}>
               <Heart size={16} /> Our Story
@@ -61,7 +61,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div style={{ background: 'var(--surface)', padding: '60px', borderRadius: '50px', border: '1px solid var(--border)' }}>
+          <div style={{ background: 'var(--surface)', padding: 'clamp(20px, 5vw, 60px)', borderRadius: '50px', border: '1px solid var(--border)' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--secondary)', color: 'var(--primary)', padding: '8px 16px', borderRadius: '12px', fontWeight: '800', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '25px' }}>
               <Target size={16} /> Our Mission
             </div>

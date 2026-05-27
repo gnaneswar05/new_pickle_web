@@ -124,7 +124,7 @@ export default function OrderTrackingPage() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '50px', alignItems: 'flex-start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(20px, 4vw, 50px)', alignItems: 'flex-start' }}>
         
         {/* Timeline */}
         <div style={{ background: 'var(--surface)', padding: '50px 40px', borderRadius: '40px', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>

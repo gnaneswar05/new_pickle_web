@@ -73,7 +73,7 @@ export default function ProductDetailPage() {
       {loading ? (
         <ProductDetailSkeleton />
       ) : !product ? null : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '80px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(20px, 5vw, 80px)' }}>
         {/* Left: Image Viewport and Thumbnail Gallery */}
         <div>
           <div style={{ position: 'relative', borderRadius: '40px', overflow: 'hidden', backgroundColor: 'var(--surface)', border: '8px solid var(--surface)', boxShadow: 'var(--shadow)' }}>

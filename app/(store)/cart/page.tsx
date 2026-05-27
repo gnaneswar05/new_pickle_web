@@ -48,14 +48,22 @@ export default function CartPage() {
         <p style={{ color: 'var(--text-muted)', marginTop: '12px', fontWeight: '500', fontSize: '1.1rem' }}>Review your items and proceed to checkout.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '50px', alignItems: 'flex-start' }}>
+      <div className="cart-grid">
         
         {/* Left: Items List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', gridColumn: 'span 2' }}>
+        <div className="cart-items-panel">
           {items.map((item) => (
             <div key={item.id} style={{ background: 'var(--surface)', borderRadius: '40px', padding: '25px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '30px', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
               <div style={{ width: '120px', height: '120px', borderRadius: '24px', overflow: 'hidden', flexShrink: 0, border: '4px solid var(--border)' }}>
-                <img src={item.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img 
+                  src={item.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} 
+                  alt={item.name} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000';
+                  }}
+                />
               </div>
               
               <div style={{ flex: 1, minWidth: '200px' }}>
@@ -122,6 +130,25 @@ export default function CartPage() {
         </div>
 
       </div>
+      <style>{`
+        .cart-grid {
+          display: grid;
+          grid-template-columns: 3fr 2fr;
+          gap: 50px;
+          align-items: flex-start;
+        }
+        .cart-items-panel {
+          display: flex;
+          flex-direction: column;
+          gap: 25px;
+        }
+        @media (max-width: 991px) {
+          .cart-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+        }
+      `}</style>
     </div>
   );
 }

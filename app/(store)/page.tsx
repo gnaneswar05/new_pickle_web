@@ -83,29 +83,29 @@ export default function Home() {
   const activeSlide = sliders.length > 0 ? sliders[currentSlideIndex] : null;
 
   // Dynamic Content Declarations
-  const middleTickerTexts = settings?.middleBannerText 
+  const middleTickerTexts = settings?.middleBannerText
     ? settings.middleBannerText.split('•').map((t: string) => t.trim())
     : [
-        '100% Sun-Dried Godavari Recipes',
-        'No Chemical Preservatives',
-        'Cured in Cold-Pressed Oils',
-        'Free Shipping Above ₹999'
-      ];
+      '100% Sun-Dried Godavari Recipes',
+      'No Chemical Preservatives',
+      'Cured in Cold-Pressed Oils',
+      'Free Shipping Above ₹999'
+    ];
 
-  const craftSteps = settings?.craftSteps && settings.craftSteps.length > 0 
-    ? settings.craftSteps 
+  const craftSteps = settings?.craftSteps && settings.craftSteps.length > 0
+    ? settings.craftSteps
     : [
-        { stepNumber: 1, title: 'Godavari Sourcing', description: 'We source fresh green mangoes, aromatic ginger, plump garlic, and local red chillies directly from Godavari farmers at their peak harvest.' },
-        { stepNumber: 2, title: 'Sun-Dried Curing', description: 'Sliced ingredients are dried under natural sunlight to remove excess moisture and preserve their structural goodness and natural tang.' },
-        { stepNumber: 3, title: 'Cold-Pressed Oils', description: 'We cure our pickles in high-quality cold-pressed mustard oil and sesame oil, ensuring they stay preserved naturally and taste richly aromatic.' },
-        { stepNumber: 4, title: 'Hand-Spiced & Sealed', description: 'Each batch is hand-mixed with ancestral spice ratios and sealed in premium glass jars to protect the home-made aroma and taste.' }
-      ];
+      { stepNumber: 1, title: 'Godavari Sourcing', description: 'We source fresh green mangoes, aromatic ginger, plump garlic, and local red chillies directly from Godavari farmers at their peak harvest.' },
+      { stepNumber: 2, title: 'Sun-Dried Curing', description: 'Sliced ingredients are dried under natural sunlight to remove excess moisture and preserve their structural goodness and natural tang.' },
+      { stepNumber: 3, title: 'Cold-Pressed Oils', description: 'We cure our pickles in high-quality cold-pressed mustard oil and sesame oil, ensuring they stay preserved naturally and taste richly aromatic.' },
+      { stepNumber: 4, title: 'Hand-Spiced & Sealed', description: 'Each batch is hand-mixed with ancestral spice ratios and sealed in premium glass jars to protect the home-made aroma and taste.' }
+    ];
 
   // Interactive Gourmet Bundle Selector
   const toggleBundleItem = (product: any) => {
     const isSelected = selectedBundleItems.some(item => item._id === product._id);
     const maxQty = settings?.bundleQuantity || 3;
-    
+
     if (isSelected) {
       setSelectedBundleItems(selectedBundleItems.filter(item => item._id !== product._id));
     } else {
@@ -123,10 +123,10 @@ export default function Home() {
       toast.error(`Please select exactly ${maxQty} pickles to build your box!`);
       return;
     }
-    
+
     const bundleItemsNames = selectedBundleItems.map(item => item.name).join(', ');
     const bundleIdsStr = selectedBundleItems.map(item => item._id).join('-');
-    
+
     addItem({
       id: `bundle-${bundleIdsStr}`,
       name: `${settings?.bundleTitle || 'Gourmet Sample Box'} (${bundleItemsNames})`,
@@ -134,7 +134,7 @@ export default function Home() {
       image: selectedBundleItems[0]?.image || settings?.defaultProductImage || '',
       selectedWeight: `${maxQty} Jars`
     });
-    
+
     toast.success('Custom Gourmet Box added to cart!');
     setSelectedBundleItems([]);
   };
@@ -313,6 +313,66 @@ export default function Home() {
           background: var(--secondary);
           box-shadow: var(--shadow-hover);
         }
+
+        /* Mobile responsive overrides */
+        .bundle-builder-grid {
+          display: grid;
+          grid-template-columns: 3fr 2fr;
+          gap: 40px;
+          align-items: flex-start;
+        }
+        .hero-container {
+          position: relative;
+          z-index: 10;
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding: 80px 20px;
+        }
+        .slider-dots {
+          position: absolute;
+          right: 40px;
+          bottom: 40px;
+          display: flex;
+          gap: 12px;
+          z-index: 30;
+        }
+        .hero-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to right, rgba(10, 5, 5, 0.95) 0%, rgba(10, 5, 5, 0.85) 35%, rgba(10, 5, 5, 0.4) 65%, transparent 100%);
+        }
+        @media (max-width: 991px) {
+          .bundle-builder-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+          }
+        }
+        @media (max-width: 768px) {
+          .hero-container {
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px 20px;
+          }
+          .hero-container p {
+            margin-left: auto;
+            margin-right: auto;
+          }
+          .hero-container div {
+            justify-content: center;
+          }
+          .slider-dots {
+            right: 50% !important;
+            transform: translateX(50%) !important;
+            bottom: 25px !important;
+          }
+          .hero-overlay {
+            background: rgba(10, 5, 5, 0.8) !important;
+          }
+          .spice-floater {
+            display: none !important;
+          }
+        }
       `}</style>
 
       {/* Immersive Luxury Hero */}
@@ -338,13 +398,7 @@ export default function Home() {
                   }}
                 >
                   {/* Left-side dark gradient to create premium "empty space" for readable text overlay */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(to right, rgba(10, 5, 5, 0.95) 0%, rgba(10, 5, 5, 0.85) 35%, rgba(10, 5, 5, 0.4) 65%, transparent 100%)',
-                    }}
-                  />
+                  <div className="hero-overlay" />
                 </div>
               ))
             ) : (
@@ -359,13 +413,7 @@ export default function Home() {
                   zIndex: 2,
                 }}
               >
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(to right, rgba(10, 5, 5, 0.95) 0%, rgba(10, 5, 5, 0.85) 35%, rgba(10, 5, 5, 0.4) 65%, transparent 100%)',
-                  }}
-                />
+                <div className="hero-overlay" />
               </div>
             )}
           </div>
@@ -373,7 +421,7 @@ export default function Home() {
           {/* Subtle Dynamic Gradients overlayed on top of slides */}
           <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(220,38,38,0.2) 0%, transparent 70%)', filter: 'blur(100px)', borderRadius: '50%', zIndex: 3, pointerEvents: 'none' }}></div>
           <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%)', filter: 'blur(100px)', borderRadius: '50%', zIndex: 3, pointerEvents: 'none' }}></div>
-          
+
           {/* Drifting Spice Particles */}
           <div className="spice-floater" style={{ top: '15%', left: '8%', animation: 'float-particle-1 8s infinite ease-in-out', zIndex: 4 }}>
             <Flame size={28} color="#ef4444" style={{ opacity: 0.15, transform: 'rotate(15deg)' }} />
@@ -388,14 +436,14 @@ export default function Home() {
             <Droplet size={24} color="#f59e0b" style={{ opacity: 0.15, transform: 'rotate(45deg)' }} />
           </div>
 
-          <div className="container" style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', width: '100%', padding: '80px 20px' }}>
+          <div className="container hero-container">
             <div style={{ maxWidth: '650px', width: '100%' }} key={activeSlide?._id || 'default'}>
               {activeSlide?.subtitle && (
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'rgba(220, 38, 38, 0.15)', color: '#ef4444', borderRadius: '30px', fontSize: '0.8rem', fontWeight: '900', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '25px', border: '1px solid rgba(220, 38, 38, 0.25)', backdropFilter: 'blur(5px)' }}>
                   <Sparkles size={14} /> {activeSlide.subtitle}
                 </div>
               )}
-              
+
               {activeSlide?.title && (
                 <h1 style={{ fontSize: 'clamp(2.8rem, 5.5vw, 4.8rem)', fontWeight: '900', color: 'white', lineHeight: 1.1, fontFamily: 'Fraunces, serif', marginBottom: '25px' }}>
                   {activeSlide.title.split(' ').length > 2 ? (
@@ -410,13 +458,13 @@ export default function Home() {
                   )}
                 </h1>
               )}
-              
+
               {activeSlide?.description && (
                 <p style={{ fontSize: '1.2rem', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '40px', maxWidth: '550px', fontWeight: '500' }}>
                   {activeSlide.description}
                 </p>
               )}
-              
+
               {activeSlide?.buttonText && (
                 <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '45px' }}>
                   <Link href={activeSlide?.link || "#"} className="hero-btn" style={{ background: 'var(--primary)', color: 'white', padding: '18px 36px', borderRadius: '30px', textDecoration: 'none', fontWeight: '900', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.3s', boxShadow: '0 15px 25px -5px rgba(220, 38, 38, 0.4)' }}>
@@ -428,7 +476,7 @@ export default function Home() {
 
             {/* Slider Dots */}
             {sliders.length > 1 && (
-              <div style={{ position: 'absolute', right: '40px', bottom: '40px', display: 'flex', gap: '12px', zIndex: 30 }}>
+              <div className="slider-dots">
                 {sliders.map((_, idx) => (
                   <button
                     key={idx}
@@ -454,7 +502,7 @@ export default function Home() {
       )}
 
       {/* Brand Announcement Ticker Marquee */}
-      <section style={{ background: '#ef4444', color: 'white', padding: '16px 0', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+      <section style={{ background: '#ef4444', color: 'white', padding: '10px 0', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <div className="marquee-container" style={{ display: 'flex', overflow: 'hidden' }}>
           <div className="animate-marquee">
             {Array.from({ length: 4 }).map((_, repeatIdx) => (
@@ -473,15 +521,15 @@ export default function Home() {
       {/* Dynamic Categories Section */}
       <section className="container" style={{ padding: '8rem 20px 6rem 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <span style={{ fontSize: '0.8rem', fontWeight: '900', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '10px' }}>
-            Culinary Heritage
+          <span style={{ fontSize: '0.8rem', fontWeight: '900', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: '5px' }}>
+
           </span>
           <h2 style={{ fontSize: '3rem', fontWeight: '900', color: 'var(--text-main)', fontFamily: 'Fraunces, serif', margin: 0 }}>
             Shop by <span style={{ color: 'var(--primary)' }}>Category</span>
           </h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '30px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 'clamp(16px, 3vw, 30px)' }}>
           {loading ? (
             Array.from({ length: 4 }).map((_, i) => <CategoryItemSkeleton key={i} />)
           ) : (
@@ -492,21 +540,25 @@ export default function Home() {
                   className="category-card"
                   style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >
-                <div className="category-img-container">
-                  <img
-                    src={cat.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'}
-                    alt={cat.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </div>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 8px 0', fontFamily: 'Fraunces, serif', textAlign: 'center' }}>
-                  {cat.name}
-                </h3>
-                <span style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                  Explore Range →
-                </span>
-              </Link>
-             </ScrollReveal>
+                  <div className="category-img-container">
+                    <img
+                      src={cat.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800'}
+                      alt={cat.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800';
+                      }}
+                    />
+                  </div>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 8px 0', fontFamily: 'Fraunces, serif', textAlign: 'center' }}>
+                    {cat.name}
+                  </h3>
+                  <span style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                    Explore Range →
+                  </span>
+                </Link>
+              </ScrollReveal>
             ))
           )}
         </div>
@@ -575,11 +627,11 @@ export default function Home() {
           {/* Filtered Results Grid */}
           <div>
             {loading ? (
-              <div className="grid grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
                 {Array.from({ length: 4 }).map((_, i) => <ProductCardSkeleton key={i} />)}
               </div>
             ) : filteredPickles.length > 0 ? (
-              <div className="grid grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
                 {filteredPickles.slice(0, 4).map((p: any, idx: number) => (
                   <div key={p._id} className="testimonial-fade">
                     <ScrollReveal direction="up" delay={idx * 100}>
@@ -624,7 +676,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => <ProductCardSkeleton key={i} />)
             ) : (
@@ -653,7 +705,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '30px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'clamp(20px, 3vw, 30px)' }}>
             {craftSteps.map((step: any, idx: number) => (
               <ScrollReveal key={idx} direction={idx % 2 === 0 ? 'left' : 'right'} delay={idx * 100}>
                 <div className="timeline-step" style={{ height: '100%' }}>
@@ -695,26 +747,34 @@ export default function Home() {
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '40px', alignItems: 'flex-start' }}>
-              
+            <div className="bundle-builder-grid">
+
               {/* Left Side: Pickle Selection List */}
               <ScrollReveal direction="left" duration={1000}>
                 <div>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '20px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     🏺 Select Pickles ({selectedBundleItems.length}/{settings?.bundleQuantity || 3})
                   </h3>
-                  
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 'clamp(12px, 3vw, 20px)' }}>
                     {allProducts.map((p: any) => {
                       const isSelected = selectedBundleItems.some(item => item._id === p._id);
                       return (
-                        <div 
-                          key={p._id} 
+                        <div
+                          key={p._id}
                           onClick={() => toggleBundleItem(p)}
                           className={`bundle-builder-card ${isSelected ? 'selected' : ''}`}
                         >
                           <div style={{ position: 'relative', width: '100%', aspectRatio: '1/1', borderRadius: '16px', overflow: 'hidden', marginBottom: '12px', background: 'var(--border)' }}>
-                            <img src={p.image || settings?.defaultProductImage} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img 
+                              src={p.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} 
+                              alt={p.name} 
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000';
+                              }}
+                            />
                             {isSelected && (
                               <div style={{ position: 'absolute', inset: 0, background: 'rgba(220, 38, 38, 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                                 <Check size={36} style={{ strokeWidth: 3 }} />
@@ -738,13 +798,13 @@ export default function Home() {
                   <h3 style={{ fontSize: '1.4rem', fontWeight: '900', fontFamily: 'Fraunces, serif', marginBottom: '20px', textAlign: 'center' }}>
                     Your Custom Gift Box
                   </h3>
-                  
+
                   <div style={{ position: 'relative', width: '100%', maxWidth: '200px', aspectRatio: '1/1', margin: '0 auto 30px auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {/* Decorative Wooden Box Graphic */}
                     <div style={{
-                      width: '100%', height: '100%', borderRadius: '24px', 
-                      background: 'linear-gradient(135deg, #7c2d12 0%, #431407 100%)', 
-                      border: '4px solid #b45309', display: 'flex', flexDirection: 'column', 
+                      width: '100%', height: '100%', borderRadius: '24px',
+                      background: 'linear-gradient(135deg, #7c2d12 0%, #431407 100%)',
+                      border: '4px solid #b45309', display: 'flex', flexDirection: 'column',
                       alignItems: 'center', justifyContent: 'center', color: '#fef3c7', gap: '8px',
                       boxShadow: '0 15px 30px rgba(67, 20, 7, 0.3)'
                     }}>
@@ -758,19 +818,19 @@ export default function Home() {
                     {Array.from({ length: settings?.bundleQuantity || 3 }).map((_, idx) => {
                       const item = selectedBundleItems[idx];
                       return (
-                        <div 
-                          key={idx} 
-                          style={{ 
-                            display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 18px', 
-                            borderRadius: '16px', border: '2px dashed var(--border)', background: item ? 'var(--background)' : 'transparent' 
+                        <div
+                          key={idx}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '15px', padding: '12px 18px',
+                            borderRadius: '16px', border: '2px dashed var(--border)', background: item ? 'var(--background)' : 'transparent'
                           }}
                         >
                           <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: item ? 'var(--primary)' : 'var(--border)' }}></div>
                           {item ? (
                             <>
                               <span style={{ flex: 1, fontSize: '0.9rem', fontWeight: '800', color: 'var(--text-main)' }}>{item.name}</span>
-                              <button 
-                                type="button" 
+                              <button
+                                type="button"
                                 onClick={() => setSelectedBundleItems(selectedBundleItems.filter((_, i) => i !== idx))}
                                 style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex' }}
                               >
