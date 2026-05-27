@@ -357,7 +357,7 @@ export default function StoreLayout({
           <div style={{ ...styles.container, padding: isScrolled ? '0.8rem 20px' : '1.5rem 20px' }}>
             <Link href="/" style={styles.logo}>
               {logoUrl ? (
-                <img src={logoUrl} alt="Kanvi Pickles" style={{ height: '42px', objectFit: 'contain' }} />
+                <img src={logoUrl} alt="Kanvi Pickles" style={{ height: '65px', objectFit: 'contain' }} />
               ) : (
                 <div style={{ ...styles.logoBox, width: '38px', height: '38px', fontSize: '1.25rem' }}>K</div>
               )}
@@ -533,10 +533,10 @@ export default function StoreLayout({
                             className="result-item"
                           >
                             <div style={{ width: '48px', height: '48px', background: 'var(--border)', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
-                              <img 
-                                src={p.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'} 
-                                alt={p.name} 
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                              <img
+                                src={p.image || settings?.defaultProductImage || 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000'}
+                                alt={p.name}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                 onError={(e) => {
                                   e.currentTarget.onerror = null;
                                   e.currentTarget.src = 'https://images.unsplash.com/photo-1599021419847-d8a7a6ac599d?q=80&w=1000';

@@ -266,7 +266,7 @@ function LoginPageInner() {
                   Mobile Number
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid var(--border)', paddingRight: '12px' }}>
+                  <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid var(--border)', paddingRight: '12px', zIndex: 10, pointerEvents: 'none' }}>
                     <Phone size={18} color="var(--primary)" />
                     <span style={{ fontWeight: '800', color: 'var(--text-main)', fontSize: '0.95rem' }}>+91</span>
                   </div>
@@ -296,7 +296,7 @@ function LoginPageInner() {
                   </button>
                 </div>
                 <div style={{ position: 'relative' }}>
-                  <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} size={18} />
+                  <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', zIndex: 10, pointerEvents: 'none' }} size={18} />
                   <input
                     required
                     type={showPassword ? 'text' : 'password'}
@@ -350,7 +350,7 @@ function LoginPageInner() {
                   Mobile Number
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid var(--border)', paddingRight: '12px' }}>
+                  <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid var(--border)', paddingRight: '12px', zIndex: 10, pointerEvents: 'none' }}>
                     <Phone size={18} color="var(--primary)" />
                     <span style={{ fontWeight: '800', color: 'var(--text-main)', fontSize: '0.95rem' }}>+91</span>
                   </div>
@@ -371,7 +371,7 @@ function LoginPageInner() {
                   Password
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} size={18} />
+                  <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', zIndex: 10, pointerEvents: 'none' }} size={18} />
                   <input
                     required
                     type={showPassword ? 'text' : 'password'}
@@ -395,7 +395,7 @@ function LoginPageInner() {
                   Confirm Password
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <Key style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} size={18} />
+                  <Key style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', zIndex: 10, pointerEvents: 'none' }} size={18} />
                   <input
                     required
                     type="password"
@@ -434,7 +434,7 @@ function LoginPageInner() {
                       Registered Mobile Number
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid var(--border)', paddingRight: '12px' }}>
+                      <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid var(--border)', paddingRight: '12px', zIndex: 10, pointerEvents: 'none' }}>
                         <Phone size={18} color="var(--primary)" />
                         <span style={{ fontWeight: '800', color: 'var(--text-main)', fontSize: '0.95rem' }}>+91</span>
                       </div>
@@ -472,7 +472,7 @@ function LoginPageInner() {
                       Verification Code
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} size={20} />
+                      <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', zIndex: 10, pointerEvents: 'none' }} size={20} />
                       <input
                         required
                         maxLength={6}
@@ -489,7 +489,7 @@ function LoginPageInner() {
                       New Password
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <Key style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} size={18} />
+                      <Key style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', zIndex: 10, pointerEvents: 'none' }} size={18} />
                       <input
                         required
                         type={showPassword ? 'text' : 'password'}
@@ -513,7 +513,7 @@ function LoginPageInner() {
                       Confirm New Password
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <Key style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} size={18} />
+                      <Key style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', zIndex: 10, pointerEvents: 'none' }} size={18} />
                       <input
                         required
                         type="password"
@@ -554,7 +554,7 @@ function LoginPageInner() {
                       Mobile Number
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid var(--border)', paddingRight: '12px' }}>
+                      <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', borderRight: '2px solid var(--border)', paddingRight: '12px', zIndex: 10, pointerEvents: 'none' }}>
                         <Phone size={18} color="var(--primary)" />
                         <span style={{ fontWeight: '800', color: 'var(--text-main)', fontSize: '0.95rem' }}>+91</span>
                       </div>
@@ -592,7 +592,7 @@ function LoginPageInner() {
                       Verification Code
                     </label>
                     <div style={{ position: 'relative' }}>
-                      <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} size={20} />
+                      <Lock style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', zIndex: 10, pointerEvents: 'none' }} size={20} />
                       <input
                         required
                         maxLength={6}
@@ -626,7 +626,7 @@ function LoginPageInner() {
           {/* Footer Branding */}
           <div style={{ marginTop: '40px', paddingTop: '30px', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'var(--text-muted)', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              <Sparkles size={14} color="var(--primary)" /> Secured by Kanvi Auth System
+              {/* <Sparkles size={14} color="var(--primary)" /> Secured by Kanvi Auth System */}
             </div>
             <p style={{ marginTop: '12px', fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '600', lineHeight: 1.6 }}>
               By signing in, you agree to our <span style={{ color: 'var(--text-muted)', textDecoration: 'underline' }}>Privacy Policy</span> and <span style={{ color: 'var(--text-muted)', textDecoration: 'underline' }}>Terms of Service</span>.
@@ -641,13 +641,13 @@ function LoginPageInner() {
           </div>
           <div style={{ width: '4px', height: '4px', background: 'var(--border)', borderRadius: '50%' }}></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '700' }}>
-            <Fingerprint size={16} /> Biometric Ready
+
           </div>
         </div>
       </div>
 
       <style>{`
-        input:focus { border-color: var(--primary) !important; box-shadow: 0 10px 20px -5px rgba(220, 38, 38, 0.05); transform: translateY(-2px); }
+        input:focus { border-color: var(--primary) !important; box-shadow: 0 10px 20px -5px rgba(220, 38, 38, 0.05); }
         button:active { transform: scale(0.98); }
       `}</style>
     </div>
